@@ -1,0 +1,18 @@
+onActivityStart(com.bjsm.dungeonlab.ui.activity.HomeActivity)
+	after com.bjsm.dungeonlab.widget.RemoteSettingDialog.onCreate
+		call a_channel_strength_range.setMax();
+		call b_channel_strength_range.setMax();
+
+
+		XposedBridge.hookMethod(XposedHelpers
+                                    .findClass("android.app.Instrumentation", loadPackageParam.classLoader)
+                                            .getDeclaredMethod("newActivity"
+                                                    ,java.lang.ClassLoader.class
+                                                    ,java.lang.String.class
+                                                    ,Intent.class)
+                            ,new XC_MethodHook() {
+                                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                                    if(isOnce)unhooks.remove("onNewActivity").unhook();
+                                    onNewActivity(param);
+                                }
+                            })
