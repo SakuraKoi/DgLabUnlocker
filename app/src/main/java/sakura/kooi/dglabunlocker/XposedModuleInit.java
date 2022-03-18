@@ -9,6 +9,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
 import sakura.kooi.dglabunlocker.hooks.HookUnlockRemoteMax;
 
 public class XposedModuleInit implements IXposedHookLoadPackage {
@@ -33,9 +34,14 @@ public class XposedModuleInit implements IXposedHookLoadPackage {
         Log.i("DgLabUnlocker", "App loaded! Applying hooks...");
         try {
             HookUnlockRemoteMax.apply(context, classLoader);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Log.e("DgLabUnlocker", "Could not apply HookUnlockRemoteMax", e);
         }
-        Toast.makeText(context, "DG-Lab Unlocker 加载成功", Toast.LENGTH_LONG).show();
+        try {
+            HookDoubleBugFix.apply(context, classLoader);
+        } catch (Throwable e) {
+            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
+        }
+        Toast.makeText(context, "DG-Lab Unlocker 加载成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();
     }
 }
