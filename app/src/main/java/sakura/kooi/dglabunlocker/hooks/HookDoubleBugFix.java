@@ -29,11 +29,31 @@ public class HookDoubleBugFix {
 
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.service.BlueToothService$18", classLoader, "a", byte[].class,
                 new XC_MethodHook() {
-                    private AtomicInteger lastStrengthA = new AtomicInteger();
-                    private AtomicInteger lastStrengthB = new AtomicInteger();
-                    
+                    private AtomicInteger lastStrengthA = new AtomicInteger(0);
+                    private AtomicInteger lastStrengthB = new AtomicInteger(0);
+
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        lastStrengthA.set(baseChannelA.getInt(null));
+                        lastStrengthB.set(baseChannelB.getInt(null));
+
+                        Log.d("DgLabUnlocker", "Before A base = " + lastStrengthA.get() +
+                                " total = " + totalA.getInt(null) +
+                                " remote = " + remoteA.getInt(null) +
+                                " | B base = " + lastStrengthB.get() +
+                                " total = " + totalB.getInt(null) +
+                                " remote = " + remoteB.getInt(null));
+                    }
+
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        Log.d("DgLabUnlocker", "After A base = " + baseChannelA.getInt(null) +
+                                " total = " + totalA.getInt(null) +
+                                " remote = " + remoteA.getInt(null) +
+                                " | B base = " + baseChannelB.getInt(null) +
+                                " total = " + totalB.getInt(null) +
+                                " remote = " + remoteB.getInt(null));
+
                         try {
                             boolean fixed;
 
@@ -41,13 +61,10 @@ public class HookDoubleBugFix {
                             fixed = fixed || tryFixDouble(lastStrengthB, baseChannelB, totalB, remoteB);
 
                             if (fixed) {
-                                Toast.makeText(context, "拦截了一次翻倍BUG", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "拦截了一次强度翻倍BUG", Toast.LENGTH_SHORT).show();
                             }
-                           /* int strengthA = baseChannelA.getInt(null);
-                            int strengthB = baseChannelB.getInt(null);
-                            Log.i("DgLabUnlocker", "Before base strength = " + strengthA + " / " + strengthB);*/
                         } catch (Exception e) {
-                            Log.e("DgLabUnlocker", "Cannot apply hook for progress bar ui", e);
+                            Log.e("DgLabUnlocker", "Cannot apply hook for double bug fix", e);
                         }
                     }
 
@@ -56,9 +73,8 @@ public class HookDoubleBugFix {
                             int base = baseChannel.getInt(null);
                             if (base > 10 && /*base != lastStrength.get() && */Math.abs(base - lastStrength.get()) > 1/* && base == total.getInt(null)*/) {
                                 baseChannel.setInt(null, lastStrength.get());
+                                Log.e("DgLabUnlocker", "Double bug blocked, set to " + lastStrength.get());
                                 return true;
-                            } else {
-                                lastStrength.set(base);
                             }
                         }
                         return false;
