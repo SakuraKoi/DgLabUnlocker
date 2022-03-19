@@ -31,7 +31,7 @@ public class HookDoubleBugFix {
                 new XC_MethodHook() {
                     private AtomicInteger lastStrengthA = new AtomicInteger();
                     private AtomicInteger lastStrengthB = new AtomicInteger();
-
+                    
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         try {
@@ -41,11 +41,11 @@ public class HookDoubleBugFix {
                             fixed = fixed || tryFixDouble(lastStrengthB, baseChannelB, totalB, remoteB);
 
                             if (fixed) {
-                                Toast.makeText(context, "拦截了一个翻倍BUG", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "拦截了一次翻倍BUG", Toast.LENGTH_SHORT).show();
                             }
-                            int strengthA = baseChannelA.getInt(null);
+                           /* int strengthA = baseChannelA.getInt(null);
                             int strengthB = baseChannelB.getInt(null);
-                            Log.i("DgLabUnlocker", "Before base strength = " + strengthA + " / " + strengthB);
+                            Log.i("DgLabUnlocker", "Before base strength = " + strengthA + " / " + strengthB);*/
                         } catch (Exception e) {
                             Log.e("DgLabUnlocker", "Cannot apply hook for progress bar ui", e);
                         }
@@ -54,8 +54,9 @@ public class HookDoubleBugFix {
                     private boolean tryFixDouble(AtomicInteger lastStrength, Field baseChannel, Field total, Field remote) throws ReflectiveOperationException {
                         if (remote.getInt(null) == 0) {
                             int base = baseChannel.getInt(null);
-                            if (base != lastStrength.get() && Math.abs(base - lastStrength.get()) != 1 && base == total.getInt(null)) {
+                            if (base > 10 && /*base != lastStrength.get() && */Math.abs(base - lastStrength.get()) > 1/* && base == total.getInt(null)*/) {
                                 baseChannel.setInt(null, lastStrength.get());
+                                return true;
                             } else {
                                 lastStrength.set(base);
                             }
