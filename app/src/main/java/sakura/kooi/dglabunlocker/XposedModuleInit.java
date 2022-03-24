@@ -13,6 +13,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
 import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
+import sakura.kooi.dglabunlocker.injector.InjectStrengthAddButton;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInitPackageResources {
     @Override
@@ -67,7 +68,13 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInit
             Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
         }
 
-        Toast.makeText(context, "DG-Lab Unlocker 加载成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();
+        try {
+            InjectStrengthAddButton.apply(context, classLoader);
+        } catch (Throwable e) {
+            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
+        }
+
+        Toast.makeText(context, "DG-Lab Unlocker 注入成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -84,6 +91,8 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInit
             Log.e("DgLabUnlocker", "Could not apply InjectBugReportDialog", e);
             success = false;
         }
+        if (success)
+            resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "anquanxuzhi2", "模块设置");
         resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "question_feedback", success ? "DG-Lab Unlocker 设置" : "DG-Lab Unlocker 加载失败");
     }
 }

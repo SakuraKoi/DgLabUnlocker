@@ -18,7 +18,7 @@ public class InjectRemoteSettingsDialog {
                     if (GlobalVariables.unlockRemoteMaxStrength)
                         HookUnlockRemoteMax.unlockRemoteMaxStrength(param, context);
                 } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "Failed apply HookUnlockRemoteMax", e);
+                    Log.e("DgLabUnlocker", "An error occurred in unlockRemoteMaxStrength", e);
                 }
             }
         });

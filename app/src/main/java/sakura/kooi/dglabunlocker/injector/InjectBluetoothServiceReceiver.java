@@ -8,67 +8,98 @@ import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
 import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
+import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
 
 public class InjectBluetoothServiceReceiver {
-
     public static void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.service.BlueToothService$18", classLoader, "a", byte[].class,
-                new XC_MethodHook() {;
+                new XC_MethodHook() {
+                    ;
                     private HookDoubleBugFix hookDoubleBugFix = new HookDoubleBugFix();
                     private HookDeviceProtection hookDeviceProtection = new HookDeviceProtection();
+                    private HookEnforceRemoteMaxStrength hookEnforceRemoteMaxStrength = new HookEnforceRemoteMaxStrength();
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        int localStrengthA = GlobalVariables.localStrengthA.getInt(null) ;
-                        int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
-                        int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
-                        int localStrengthB =  GlobalVariables.localStrengthB.getInt(null) ;
-                        int totalStrengthB =  GlobalVariables.totalStrengthB.getInt(null) ;
-                        int remoteStrengthB = GlobalVariables.remoteStrengthB.getInt(null);
+                        try {
+                            int localStrengthA = GlobalVariables.localStrengthA.getInt(null);
+                            int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
+                            int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
+                            int localStrengthB = GlobalVariables.localStrengthB.getInt(null);
+                            int totalStrengthB = GlobalVariables.totalStrengthB.getInt(null);
+                            int remoteStrengthB = GlobalVariables.remoteStrengthB.getInt(null);
 
-                        Log.d("DgLabUnlocker", "BeforeDataUpdate -> A local = " + localStrengthA +
-                                " total = " + totalStrengthA +
-                                " remote = " + remoteStrengthA +
-                                " | B local = " + localStrengthB +
-                                " total = " + totalStrengthB +
-                                " remote = " + remoteStrengthB);
+                            Log.d("DgLabUnlocker", "BeforeDataUpdate -> A local = " + localStrengthA +
+                                    " total = " + totalStrengthA +
+                                    " remote = " + remoteStrengthA +
+                                    " | B local = " + localStrengthB +
+                                    " total = " + totalStrengthB +
+                                    " remote = " + remoteStrengthB);
 
-                        if (GlobalVariables.fixDoubleBug)
-                            hookDoubleBugFix.beforeDataUpdate(context,
-                                    localStrengthA, totalStrengthA, remoteStrengthA,
-                                    localStrengthB, totalStrengthB, remoteStrengthB);
+                            try {
+                                if (GlobalVariables.fixDoubleBug)
+                                    hookDoubleBugFix.beforeDataUpdate(context,
+                                            localStrengthA, totalStrengthA, remoteStrengthA,
+                                            localStrengthB, totalStrengthB, remoteStrengthB);
+                            } catch (Exception e) {
+                                Log.e("DgLabUnlocker", "An error occurred in fixDoubleBug", e);
+                            }
+                        } catch (Exception e) {
+                            Log.e("DgLabUnlocker", "An error occurred", e);
+                        }
                     }
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        int localStrengthA = GlobalVariables.localStrengthA.getInt(null) ;
-                        int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
-                        int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
-                        int localStrengthB =  GlobalVariables.localStrengthB.getInt(null) ;
-                        int totalStrengthB =  GlobalVariables.totalStrengthB.getInt(null) ;
-                        int remoteStrengthB = GlobalVariables.remoteStrengthB.getInt(null);
+                        try {
+                            int localStrengthA = GlobalVariables.localStrengthA.getInt(null);
+                            int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
+                            int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
+                            int localStrengthB = GlobalVariables.localStrengthB.getInt(null);
+                            int totalStrengthB = GlobalVariables.totalStrengthB.getInt(null);
+                            int remoteStrengthB = GlobalVariables.remoteStrengthB.getInt(null);
 
-                        Log.d("DgLabUnlocker", "AfterDataUpdate -> A local = " + localStrengthA +
-                                " total = " + totalStrengthA +
-                                " remote = " + remoteStrengthA +
-                                " | B local = " + localStrengthB +
-                                " total = " + totalStrengthB +
-                                " remote = " + remoteStrengthB);
+                            Log.d("DgLabUnlocker", "AfterDataUpdate -> A local = " + localStrengthA +
+                                    " total = " + totalStrengthA +
+                                    " remote = " + remoteStrengthA +
+                                    " | B local = " + localStrengthB +
+                                    " total = " + totalStrengthB +
+                                    " remote = " + remoteStrengthB);
 
-                        if (GlobalVariables.fixDoubleBug)
-                            hookDoubleBugFix.afterDataUpdate(context,
-                                    localStrengthA, totalStrengthA, remoteStrengthA,
-                                    localStrengthB, totalStrengthB, remoteStrengthB);
-                        if (GlobalVariables.deviceProtection)
-                            hookDeviceProtection.afterDataUpdate(context,
-                                    localStrengthA, totalStrengthA, remoteStrengthA,
-                                    localStrengthB, totalStrengthB, remoteStrengthB);
+                            try {
+                                if (GlobalVariables.fixDoubleBug)
+                                    hookDoubleBugFix.afterDataUpdate(context,
+                                            localStrengthA, totalStrengthA, remoteStrengthA,
+                                            localStrengthB, totalStrengthB, remoteStrengthB);
+                            } catch (Exception e) {
+                                Log.e("DgLabUnlocker", "An error occurred in fixDoubleBug", e);
+                            }
+                            try {
+                                if (GlobalVariables.deviceProtection)
+                                    hookDeviceProtection.afterDataUpdate(context,
+                                            localStrengthA, totalStrengthA, remoteStrengthA,
+                                            localStrengthB, totalStrengthB, remoteStrengthB);
+                            } catch (Exception e) {
+                                Log.e("DgLabUnlocker", "An error occurred in deviceProtection", e);
+                            }
+                            try {
+                                if (GlobalVariables.enforceRemoteMaxStrength)
+                                    hookEnforceRemoteMaxStrength.afterDataUpdate(context,
+                                            localStrengthA, totalStrengthA, remoteStrengthA,
+                                            localStrengthB, totalStrengthB, remoteStrengthB);
+                            } catch (Exception e) {
+                                Log.e("DgLabUnlocker", "An error occurred in enforceRemoteMaxStrength", e);
+                            }
+                        } catch (Exception e) {
+                            Log.e("DgLabUnlocker", "An error occurred", e);
+                        }
                     }
                 });
     }
 
     public interface BluetoothServiceDataHandler {
         void beforeDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
+
         void afterDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
     }
 }

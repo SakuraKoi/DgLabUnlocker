@@ -1,5 +1,10 @@
 package sakura.kooi.dglabunlocker;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.util.Log;
+
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 public class GlobalVariables {
@@ -20,23 +25,54 @@ public class GlobalVariables {
     public static Field maxStrengthA;
     public static Field maxStrengthB;
 
-    public static void initDgLabFields(ClassLoader classLoader) throws ReflectiveOperationException {
-        Class<?> globalVariable = Class.forName("com.bjsm.dungeonlab.global.b", true, classLoader);
-        localStrengthA = lookupField(globalVariable, "ab");
-        localStrengthA = lookupField(globalVariable, "ab");
-        totalStrengthA = lookupField(globalVariable, "V");
-        remoteStrengthA = lookupField(globalVariable, "X");
-        localStrengthB = lookupField(globalVariable, "ac");
-        totalStrengthB = lookupField(globalVariable, "W");
-        remoteStrengthB = lookupField(globalVariable, "Y");
+    public static Field isRemote;
 
-        maxStrengthA = lookupField(globalVariable, "Z");
-        maxStrengthB = lookupField(globalVariable, "aa");
+    public static Field fieldHomeActivityBluetoothService;
+    public static Field fieldBluetoothServiceIsController;
+
+    private static Constructor<?> constBugDialog;
+
+    public static boolean isRemote(Object homeActivity) throws IllegalAccessException {
+        return (isRemote.getBoolean(null) && fieldBluetoothServiceIsController.getInt(fieldHomeActivityBluetoothService.get(homeActivity)) == 1);
+    }
+
+    public static void showSettingsDialog(Context context) throws ReflectiveOperationException {
+        Dialog dialog = (Dialog) constBugDialog.newInstance(context);
+        dialog.show();
+    }
+
+    public static void initDgLabFields(ClassLoader classLoader) throws ReflectiveOperationException {
+        Class<?> clsGlobalVariable = Class.forName("com.bjsm.dungeonlab.global.b", true, classLoader);
+        localStrengthA = lookupField(clsGlobalVariable, "ab");
+        totalStrengthA = lookupField(clsGlobalVariable, "V");
+        remoteStrengthA = lookupField(clsGlobalVariable, "X");
+
+        localStrengthB = lookupField(clsGlobalVariable, "ac");
+        totalStrengthB = lookupField(clsGlobalVariable, "W");
+        remoteStrengthB = lookupField(clsGlobalVariable, "Y");
+
+        maxStrengthA = lookupField(clsGlobalVariable, "Z");
+        maxStrengthB = lookupField(clsGlobalVariable, "aa");
+
+        isRemote = lookupField(clsGlobalVariable, "aZ");
+
+
+        Class<?> clsHomeActivity = Class.forName("com.bjsm.dungeonlab.ui.activity.HomeActivity", true, classLoader);
+        fieldHomeActivityBluetoothService = lookupField(clsHomeActivity, "aR");
+        Class<?> clsBluetoothService = Class.forName("com.bjsm.dungeonlab.service.BlueToothService", true, classLoader);
+        fieldBluetoothServiceIsController = lookupField(clsBluetoothService, "S");
+        Class<?> clsBugDialog = Class.forName("com.bjsm.dungeonlab.widget.BugDialog", true, classLoader);
+        constBugDialog = clsBugDialog.getDeclaredConstructor(Context.class);
     }
 
     private static Field lookupField(Class<?> clazz, String name) throws ReflectiveOperationException {
-        Field field = clazz.getDeclaredField(name);
-        field.setAccessible(true);
-        return field;
+        try {
+            Field field = clazz.getDeclaredField(name);
+            field.setAccessible(true);
+            return field;
+        } catch (ReflectiveOperationException e) {
+            Log.e("DgLabUnlocker", "Failed lookup field " + clazz.getName() + " : " + name, e);
+            throw e;
+        }
     }
 }
