@@ -18,7 +18,7 @@ public class InjectBugReportDialog {
     public static void apply(XC_InitPackageResources.InitPackageResourcesParam resparam) {
         resparam.res.hookLayout("com.bjsm.dungeonlab", "layout", "bug_dialog_layout", new XC_LayoutInflated() {
             @Override
-            public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+            public void handleLayoutInflated(LayoutInflatedParam liparam) {
                 if (liparam.view instanceof android.support.v7.widget.CardView) {
                     CardView card = (CardView) liparam.view;
                     card.removeAllViews();
@@ -58,6 +58,37 @@ public class InjectBugReportDialog {
                 GlobalVariables.fixDoubleBug = view.isSelected();
             });
             view.setSelected(GlobalVariables.fixDoubleBug);
+            return view;
+        }).get());
+        layout.addView(((Supplier<View>)() -> {
+            Switch view = new Switch(card.getContext());
+            view.setPadding(0, 8, 0, 0);
+            view.setText("拦截非法超高强度");
+            view.setOnClickListener(e -> {
+                GlobalVariables.deviceProtection = view.isSelected();
+            });
+            view.setSelected(GlobalVariables.deviceProtection);
+            return view;
+        }).get());
+        layout.addView(((Supplier<View>)() -> {
+            Switch view = new Switch(card.getContext());
+            view.setPadding(0, 8, 0, 0);
+            view.setText("强制限制远程最大强度");
+            view.setOnClickListener(e -> {
+                GlobalVariables.enforceRemoteMaxStrength = view.isSelected();
+            });
+            view.setSelected(GlobalVariables.enforceRemoteMaxStrength);
+            return view;
+        }).get());
+        layout.addView(((Supplier<View>)() -> {
+            Switch view = new Switch(card.getContext());
+            view.setPadding(0, 8, 0, 0);
+            view.setText("无视远程最大强度限制");
+            view.setEnabled(false);
+            view.setOnClickListener(e -> {
+                GlobalVariables.bypassRemoteMaxStrength = view.isSelected();
+            });
+            view.setSelected(GlobalVariables.bypassRemoteMaxStrength);
             return view;
         }).get());
         return layout;
