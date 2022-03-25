@@ -33,7 +33,7 @@ public class HookDoubleBugFix implements InjectBluetoothServiceReceiver.Bluetoot
         if (remoteStrength == 0) {
             if (localStrength > 10 && Math.abs(localStrength - lastStrength.get()) > 1) {
                 localStrengthField.setInt(null, lastStrength.get());
-                Log.e("DgLabUnlocker", "Double bug blocked, set to " + lastStrength.get());
+                Log.w("DgLabUnlocker", "Double bug blocked, set to " + lastStrength.get());
                 return true;
             }
         }

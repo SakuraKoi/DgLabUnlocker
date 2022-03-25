@@ -1,32 +1,34 @@
 package sakura.kooi.dglabunlocker.hooks;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import sakura.kooi.dglabunlocker.GlobalVariables;
-import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
+import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 
-public class HookEnforceRemoteMaxStrength implements InjectBluetoothServiceReceiver.BluetoothServiceDataHandler {
+public class HookEnforceRemoteMaxStrength implements InjectProtocolStrengthDecode.ProtocolStrengthHandler {
     @Override
-    public void beforeDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException {
-
+    public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {
+        int max = GlobalVariables.maxStrengthA.getInt(null) + 30;
+        Log.d("DgLabUnlocker", "Bluetooth sending A " + strength + " " + max);
+        if (strength > max) {
+            Log.w("DgLabUnlocker", "Enforced max strength A: " + strength + " > " + max);
+            strength = max;
+            Toast.makeText(context, "强制限制了一次远程最大强度", Toast.LENGTH_SHORT).show();
+        }
+        return strength;
     }
 
     @Override
-    public void afterDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException {
-        boolean blocked = false;
-        int maxA = GlobalVariables.maxStrengthA.getInt(null);
-        if (totalStrengthA > maxA + 20) {
-            GlobalVariables.totalStrengthA.setInt(null, maxA);
-            blocked = true;
-        }
-        int maxB = GlobalVariables.maxStrengthB.getInt(null);
-        if (totalStrengthB > maxB + 20) {
-            GlobalVariables.totalStrengthB.setInt(null, maxB);
-            blocked = true;
-        }
-        if (blocked) {
+    public int handleStrengthB(Context context, int strength) throws ReflectiveOperationException {
+        int max = GlobalVariables.maxStrengthB.getInt(null) + 30;
+        Log.d("DgLabUnlocker", "Bluetooth sending B " + strength + " " + max);
+        if (strength > max) {
+            Log.w("DgLabUnlocker", "Enforced max strength B: " + strength + " > " + max);
+            strength = max;
             Toast.makeText(context, "强制限制了一次远程最大强度", Toast.LENGTH_SHORT).show();
         }
+        return strength;
     }
 }

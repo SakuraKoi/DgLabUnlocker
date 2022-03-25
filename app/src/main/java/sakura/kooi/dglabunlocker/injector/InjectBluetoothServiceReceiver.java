@@ -6,18 +6,13 @@ import android.util.Log;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
-import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
 import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
-import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
 
 public class InjectBluetoothServiceReceiver {
     public static void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.service.BlueToothService$18", classLoader, "a", byte[].class,
                 new XC_MethodHook() {
-                    ;
                     private HookDoubleBugFix hookDoubleBugFix = new HookDoubleBugFix();
-                    private HookDeviceProtection hookDeviceProtection = new HookDeviceProtection();
-                    private HookEnforceRemoteMaxStrength hookEnforceRemoteMaxStrength = new HookEnforceRemoteMaxStrength();
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -74,22 +69,6 @@ public class InjectBluetoothServiceReceiver {
                             } catch (Exception e) {
                                 Log.e("DgLabUnlocker", "An error occurred in fixDoubleBug", e);
                             }
-                            try {
-                                if (GlobalVariables.deviceProtection)
-                                    hookDeviceProtection.afterDataUpdate(context,
-                                            localStrengthA, totalStrengthA, remoteStrengthA,
-                                            localStrengthB, totalStrengthB, remoteStrengthB);
-                            } catch (Exception e) {
-                                Log.e("DgLabUnlocker", "An error occurred in deviceProtection", e);
-                            }
-                            try {
-                                if (GlobalVariables.enforceRemoteMaxStrength)
-                                    hookEnforceRemoteMaxStrength.afterDataUpdate(context,
-                                            localStrengthA, totalStrengthA, remoteStrengthA,
-                                            localStrengthB, totalStrengthB, remoteStrengthB);
-                            } catch (Exception e) {
-                                Log.e("DgLabUnlocker", "An error occurred in enforceRemoteMaxStrength", e);
-                            }
                         } catch (Exception e) {
                             Log.e("DgLabUnlocker", "An error occurred", e);
                         }
@@ -99,7 +78,6 @@ public class InjectBluetoothServiceReceiver {
 
     public interface BluetoothServiceDataHandler {
         void beforeDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
-
         void afterDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
     }
 }

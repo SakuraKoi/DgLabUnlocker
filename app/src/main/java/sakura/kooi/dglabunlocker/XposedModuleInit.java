@@ -1,26 +1,31 @@
 package sakura.kooi.dglabunlocker;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.XModuleResources;
 import android.util.Log;
 import android.widget.Toast;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
+import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthAddButton;
 
-public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInitPackageResources {
+public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.bjsm.dungeonlab"))
             return;
-        Log.i("DgLabUnlocker", "Loading: found target app " + lpparam.packageName);
+        Log.i("DgLabUnlocker", "Init Loading: found target app " + lpparam.packageName);
         try {
             Class.forName("com.wrapper.proxyapplication.WrapperProxyApplication", false, lpparam.classLoader);
 
@@ -47,9 +52,10 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInit
     }
 
     private void onAppLoaded(Context context, ClassLoader classLoader) {
-        Log.i("DgLabUnlocker", "App loaded! Applying hooks...");
+        Log.i("DgLabUnlocker", "Hook Loading: App loaded! Applying hooks...");
         try {
-            GlobalVariables.initDgLabFields(classLoader);
+            GlobalVariables.initDgLabFields(classLoader, context);
+            Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
         } catch (Throwable e) {
             Log.e("DgLabUnlocker", "An error occurred while initDgLabFields()", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
@@ -58,18 +64,35 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInit
 
         try {
             InjectRemoteSettingsDialog.apply(context, classLoader);
+            Log.i("DgLabUnlocker", "Hook Loading: RemoteSettingsDialog hooked");
         } catch (Throwable e) {
             Log.e("DgLabUnlocker", "Could not apply InjectRemoteSettingsDialog", e);
         }
 
         try {
             InjectBluetoothServiceReceiver.apply(context, classLoader);
+            Log.i("DgLabUnlocker", "Hook Loading: BluetoothService hooked");
+        } catch (Throwable e) {
+            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
+        }
+
+        try {
+            InjectProtocolStrengthDecode.apply(context, classLoader);
+            Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
         } catch (Throwable e) {
             Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
         }
 
         try {
             InjectStrengthAddButton.apply(context, classLoader);
+            Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
+        } catch (Throwable e) {
+            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
+        }
+
+        try {
+            InjectBugReportDialog.apply(context, classLoader);
+            Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
         } catch (Throwable e) {
             Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
         }
@@ -78,21 +101,29 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookInit
     }
 
     @Override
+    public void initZygote(StartupParam startupParam) {
+        GlobalVariables.modulePath = startupParam.modulePath;
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
         if (!resparam.packageName.equals("com.bjsm.dungeonlab"))
             return;
-        Log.i("DgLabUnlocker", "Loading resource: found target app " + resparam.packageName);
+        Log.i("DgLabUnlocker", "Resource Loading: found target app " + resparam.packageName);
 
-        boolean success = true;
-
+        XModuleResources modRes = XModuleResources.createInstance(GlobalVariables.modulePath, resparam.res);
         try {
-            InjectBugReportDialog.apply(resparam);
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "Could not apply InjectBugReportDialog", e);
-            success = false;
+            GlobalVariables.resInjectSettingsBackground = modRes.getDrawable(R.drawable.settings_bg);
+            GlobalVariables.resInjectSwitchCloseThumb = modRes.getDrawable(R.drawable.switch_close_thumb);
+            GlobalVariables.resInjectSwitchOpenThumb = modRes.getDrawable(R.drawable.switch_open_thumb);
+            GlobalVariables.resInjectSwitchCloseTrack = modRes.getDrawable(R.drawable.switch_close_track);
+            GlobalVariables.resInjectSwitchOpenTrack = modRes.getDrawable(R.drawable.switch_open_track);
+        } catch (Resources.NotFoundException e) {
+            Log.e("DgLabUnlocker", "settings_bg cannot be found from XModuleResources, still try inject...");
         }
-        if (success)
-            resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "anquanxuzhi2", "模块设置");
-        resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "question_feedback", success ? "DG-Lab Unlocker 设置" : "DG-Lab Unlocker 加载失败");
+
+        resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "anquanxuzhi2", "模块设置");
+        resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "question_feedback", "DG-Lab Unlocker 设置");
     }
 }

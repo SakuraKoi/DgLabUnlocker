@@ -2,15 +2,19 @@ package sakura.kooi.dglabunlocker;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 public class GlobalVariables {
+    public static String modulePath;
+    public static Drawable resInjectSettingsBackground;
+
     public static boolean unlockRemoteMaxStrength = false;
     public static boolean fixDoubleBug = false;
-
     public static boolean deviceProtection = true;
     public static boolean enforceRemoteMaxStrength = false;
     public static boolean bypassRemoteMaxStrength = false;
@@ -29,8 +33,14 @@ public class GlobalVariables {
 
     public static Field fieldHomeActivityBluetoothService;
     public static Field fieldBluetoothServiceIsController;
+    public static Drawable resInjectSwitchCloseThumb;
+    public static Drawable resInjectSwitchOpenThumb;
+    public static Drawable resInjectSwitchCloseTrack;
+    public static Drawable resInjectSwitchOpenTrack;
 
     private static Constructor<?> constBugDialog;
+
+    public static SharedPreferences sharedPref;
 
     public static boolean isRemote(Object homeActivity) throws IllegalAccessException {
         return (isRemote.getBoolean(null) && fieldBluetoothServiceIsController.getInt(fieldHomeActivityBluetoothService.get(homeActivity)) == 1);
@@ -41,7 +51,7 @@ public class GlobalVariables {
         dialog.show();
     }
 
-    public static void initDgLabFields(ClassLoader classLoader) throws ReflectiveOperationException {
+    public static void initDgLabFields(ClassLoader classLoader, Context context) throws ReflectiveOperationException {
         Class<?> clsGlobalVariable = Class.forName("com.bjsm.dungeonlab.global.b", true, classLoader);
         localStrengthA = lookupField(clsGlobalVariable, "ab");
         totalStrengthA = lookupField(clsGlobalVariable, "V");
@@ -63,6 +73,14 @@ public class GlobalVariables {
         fieldBluetoothServiceIsController = lookupField(clsBluetoothService, "S");
         Class<?> clsBugDialog = Class.forName("com.bjsm.dungeonlab.widget.BugDialog", true, classLoader);
         constBugDialog = clsBugDialog.getDeclaredConstructor(Context.class);
+
+        sharedPref = context.getSharedPreferences("dglabunlocker", Context.MODE_PRIVATE);
+
+        unlockRemoteMaxStrength = sharedPref.getBoolean("unlockRemoteMaxStrength", false);
+        fixDoubleBug = sharedPref.getBoolean("fixDoubleBug", false);
+        deviceProtection = sharedPref.getBoolean("deviceProtection", false);
+        enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
+        bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
     }
 
     private static Field lookupField(Class<?> clazz, String name) throws ReflectiveOperationException {
