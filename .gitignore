@@ -16,4 +16,3 @@ local.properties
 /.idea/
 /app/release/
 *.apk
-*.java

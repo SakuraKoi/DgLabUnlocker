@@ -18,7 +18,7 @@ import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
 import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
-import sakura.kooi.dglabunlocker.injector.InjectStrengthAddButton;
+import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
     @Override
@@ -84,7 +84,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         }
 
         try {
-            InjectStrengthAddButton.apply(context, classLoader);
+            InjectStrengthButton.apply(context, classLoader);
             Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
         } catch (Throwable e) {
             Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);

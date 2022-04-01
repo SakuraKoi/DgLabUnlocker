@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import sakura.kooi.dglabunlocker.injector.InjectStrengthAddButton;
+import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 
-public class HookBypassRemoteMaxStrength implements InjectStrengthAddButton.StrengthAddHandler {
+public class HookBypassRemoteMaxStrength implements InjectStrengthButton.StrengthAddHandler {
     private final AtomicInteger realMaxA = new AtomicInteger();
     private final AtomicInteger realMaxB = new AtomicInteger();
     @Override
