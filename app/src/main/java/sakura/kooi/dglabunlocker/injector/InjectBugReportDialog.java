@@ -79,18 +79,23 @@ public class InjectBugReportDialog {
             view.setPadding(0, 0, 0, dpToPx(layout, 16));
             return view;
         }).get());
-        createSwitch(layout, "解除远程最大强度限制", "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val, true);
-        createSwitch(layout, "拦截强度翻倍BUG", "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val, true);
-        createSwitch(layout, "屏蔽非法超高强度", "deviceProtection", val -> GlobalVariables.deviceProtection = val, true);
-        createSwitch(layout, "强制限制远程最大强度", "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val, true);
-        createSwitch(layout, "无视远程最大强度限制 (禁用)", "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val, false);
+        createSwitch(layout, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
+                "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val, true);
+        createSwitch(layout, "被控 | 拦截强度翻倍BUG","有效避免突然惨遭弹射起飞",
+                "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val, true);
+        createSwitch(layout, "被控 | 屏蔽非法超高强度","避免恶意用户烧掉你的设备",
+                "deviceProtection", val -> GlobalVariables.deviceProtection = val, true);
+        createSwitch(layout, "被控 | 强制限制远程强度","避免魔改客户端搞事情",
+                "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val, true);
+        createSwitch(layout, "主控 | 无视强度上限设置 (禁用)","想拉多高拉多高 (坏.jpg",
+                "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val, false);
         return layout;
     }
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private static void createSwitch(LinearLayout container, String title, String config, Consumer<Boolean> handler, boolean enable) {
+    private static void createSwitch(LinearLayout container, String title, String desc, String config, Consumer<Boolean> handler, boolean enable) {
         LinearLayout layout = new LinearLayout(container.getContext());
-        layout.setPadding(0, dpToPx(layout, 6), 0, dpToPx(layout, 4));
+        layout.setPadding(0, dpToPx(layout, 6), 0, 0);
         TextView text = new TextView(container.getContext());
         text.setText(title);
         text.setTextColor(0xffffe99d);
@@ -117,6 +122,13 @@ public class InjectBugReportDialog {
         });
         layout.addView(swi);
         container.addView(layout);
+
+        TextView descT = new TextView(container.getContext());
+        descT.setText(desc);
+        descT.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
+        descT.setPadding(0, dpToPx(layout, 1), 0, dpToPx(layout, 4));
+        descT.setTextColor(0xdfd2a5);
+        container.addView(descT);
     }
 
     private static int dpToPx(View view, float dp) {
