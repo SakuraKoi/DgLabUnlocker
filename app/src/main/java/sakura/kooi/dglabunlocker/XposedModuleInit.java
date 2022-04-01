@@ -40,7 +40,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                     });
         } catch (ClassNotFoundException e) {
             Log.i("DgLabUnlocker", "Possible unpacked app, try hook activity directly");
-            XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity", lpparam.classLoader, "onCreate", new XC_MethodHook() {
+            XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.global.BaseLocalApplication", lpparam.classLoader, "onCreate", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Context context = (Context) param.thisObject;

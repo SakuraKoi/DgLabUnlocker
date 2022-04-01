@@ -87,7 +87,7 @@ public class InjectBugReportDialog {
                 "deviceProtection", val -> GlobalVariables.deviceProtection = val, true);
         createSwitch(layout, "被控 | 强制限制远程强度","避免魔改客户端搞事情",
                 "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val, true);
-        createSwitch(layout, "主控 | 无视强度上限设置 (禁用)","想拉多高拉多高 (坏.jpg",
+        createSwitch(layout, "主控 | 无视强度上限设置","想拉多高拉多高 (坏.jpg [禁用]",
                 "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val, false);
         return layout;
     }
@@ -127,7 +127,7 @@ public class InjectBugReportDialog {
         descT.setText(desc);
         descT.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         descT.setPadding(0, dpToPx(layout, 1), 0, dpToPx(layout, 4));
-        descT.setTextColor(0xdfd2a5);
+        descT.setTextColor(0xffdfd2a5);
         container.addView(descT);
     }
 
