@@ -22,6 +22,7 @@ public class HookBypassRemoteMaxStrength implements InjectStrengthAddButton.Stre
     public void beforeStrengthA(Context context) throws IllegalAccessException { // totalStrengthA >= localStrengthA + maxStrengthA
         if (isRemote.getBoolean(null)) {
             realMaxA.set(maxStrengthA.getInt(null));
+            realMaxB.set(maxStrengthB.getInt(null));
             maxStrengthA.setInt(null, 276);
         }
     }
@@ -29,6 +30,7 @@ public class HookBypassRemoteMaxStrength implements InjectStrengthAddButton.Stre
     @Override
     public void beforeStrengthB(Context context) throws IllegalAccessException { // totalStrengthB >= localStrengthB + maxStrengthB
         if (isRemote.getBoolean(null)) {
+            realMaxA.set(maxStrengthA.getInt(null));
             realMaxB.set(maxStrengthB.getInt(null));
             maxStrengthB.setInt(null, 276);
         }
@@ -40,6 +42,7 @@ public class HookBypassRemoteMaxStrength implements InjectStrengthAddButton.Stre
             if (totalStrengthA.getInt(null) >= localStrengthA.getInt(null) + realMaxA.get())
                 Toast.makeText(context, "绕过远程最大强度 A: " + realMaxA.get(), Toast.LENGTH_SHORT).show();
             maxStrengthA.setInt(null, realMaxA.get());
+            maxStrengthB.setInt(null, realMaxB.get());
         }
     }
 
@@ -48,6 +51,7 @@ public class HookBypassRemoteMaxStrength implements InjectStrengthAddButton.Stre
         if (isRemote.getBoolean(null)) {
             if (totalStrengthB.getInt(null) >= localStrengthB.getInt(null) + realMaxB.get())
                 Toast.makeText(context, "绕过远程最大强度 B: " + realMaxB.get(), Toast.LENGTH_SHORT).show();
+            maxStrengthA.setInt(null, realMaxA.get());
             maxStrengthB.setInt(null, realMaxB.get());
         }
     }
