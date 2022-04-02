@@ -5,15 +5,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import sakura.kooi.dglabunlocker.GlobalVariables;
-import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 
-public class HookEnforceRemoteMaxStrength implements InjectProtocolStrengthDecode.ProtocolStrengthHandler {
+public class HookEnforceRemoteMaxStrength {
     public static final HookEnforceRemoteMaxStrength INSTANCE = new HookEnforceRemoteMaxStrength();
 
     private HookEnforceRemoteMaxStrength() {
     }
 
-    @Override
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {
         int max = GlobalVariables.maxStrengthA.getInt(null) + 30;
         Log.d("DgLabUnlocker", "Bluetooth sending A " + strength + " " + max);
@@ -25,7 +23,6 @@ public class HookEnforceRemoteMaxStrength implements InjectProtocolStrengthDecod
         return strength;
     }
 
-    @Override
     public int handleStrengthB(Context context, int strength) throws ReflectiveOperationException {
         int max = GlobalVariables.maxStrengthB.getInt(null) + 30;
         Log.d("DgLabUnlocker", "Bluetooth sending B " + strength + " " + max);
