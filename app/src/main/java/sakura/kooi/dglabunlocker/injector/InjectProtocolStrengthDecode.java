@@ -8,6 +8,7 @@ import android.util.Log;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
+import sakura.kooi.dglabunlocker.hooks.HookBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
 
@@ -31,6 +32,10 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                                         param.args[1] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
                                 });
+                                withCatch("HookBypassRemoteMaxStrength", () -> {
+                                    if (GlobalVariables.bypassRemoteMaxStrength)
+                                        HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
+                                });
                             }
                         });
                     }
@@ -38,6 +43,14 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         Log.d("DgLabUnlocker", "Bluetooth sent " + param.args[0] + " " + param.args[1]);
+                        withCatch("InjectProtocolStrengthDecode", () -> {
+                            if (GlobalVariables.isRemote.getBoolean(null)) {
+                                withCatch("HookBypassRemoteMaxStrength", () -> {
+                                    if (GlobalVariables.bypassRemoteMaxStrength)
+                                        HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
+                                });
+                            }
+                        });
                     }
                 });
     }

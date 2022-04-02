@@ -17,18 +17,18 @@ public class InjectStrengthButton implements IHookPointInjector {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$15", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void beforeHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                         });
                     }
 
                     @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                         });
                     }
                 });
@@ -36,18 +36,18 @@ public class InjectStrengthButton implements IHookPointInjector {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$16", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void beforeHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                         });
                     }
 
                     @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                         });
                     }
                 });
@@ -55,18 +55,18 @@ public class InjectStrengthButton implements IHookPointInjector {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$17", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void beforeHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                         });
                     }
 
                     @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                         });
                     }
                 });
@@ -74,30 +74,20 @@ public class InjectStrengthButton implements IHookPointInjector {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$18", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void beforeHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                         });
                     }
 
                     @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
                             if (GlobalVariables.bypassRemoteMaxStrength)
-                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context);
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                         });
                     }
                 });
-    }
-
-    public interface StrengthAddHandler {
-        void beforeStrengthA(Context context) throws IllegalAccessException;
-
-        void beforeStrengthB(Context context) throws IllegalAccessException;
-
-        void afterStrengthA(Context context) throws IllegalAccessException;
-
-        void afterStrengthB(Context context) throws IllegalAccessException;
     }
 }

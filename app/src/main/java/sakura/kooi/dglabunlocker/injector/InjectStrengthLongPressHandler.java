@@ -21,12 +21,9 @@ public class InjectStrengthLongPressHandler implements IHookPointInjector {
                             Message msg = (Message) param.args[0];
                             if (msg != null) {
                                 int what = msg.what;
-                                if (what == 10 || what == 11) {
+                                if (what == 10 || what == 11 || what == 12 || what == 13) {
                                     if (GlobalVariables.bypassRemoteMaxStrength)
-                                        withCatch("HookBypassRemoteMaxStrength", () -> HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context));
-                                } else if (what == 12 || what == 13) {
-                                    if (GlobalVariables.bypassRemoteMaxStrength)
-                                        withCatch("HookBypassRemoteMaxStrength", () -> HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context));
+                                        withCatch("HookBypassRemoteMaxStrength", () -> HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context));
                                 }
                             }
                         });
@@ -38,12 +35,9 @@ public class InjectStrengthLongPressHandler implements IHookPointInjector {
                             Message msg = (Message) param.args[0];
                             if (msg != null) {
                                 int what = msg.what;
-                                if (what == 10 || what == 11) {
+                                if (what == 10 || what == 11 || what == 12 || what == 13) {
                                     if (GlobalVariables.bypassRemoteMaxStrength)
-                                        withCatch("HookBypassRemoteMaxStrength", () -> HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context));
-                                } else if (what == 12 || what == 13) {
-                                    if (GlobalVariables.bypassRemoteMaxStrength)
-                                        withCatch("HookBypassRemoteMaxStrength", () -> HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context));
+                                        withCatch("HookBypassRemoteMaxStrength", () -> HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context));
                                 }
                             }
                         });
