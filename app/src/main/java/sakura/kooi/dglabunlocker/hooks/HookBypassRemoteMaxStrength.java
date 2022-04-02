@@ -31,13 +31,8 @@ public class HookBypassRemoteMaxStrength {
 
     public void afterStrength(Context context) throws IllegalAccessException {
         if (isRemote.getBoolean(null)) {
-            boolean bypassedA = false;
-            if (totalStrengthA.getInt(null) >= localStrengthA.getInt(null) + realMaxA.get())
-                bypassedA = true;
-
-            boolean bypassedB = false;
-            if (totalStrengthB.getInt(null) >= localStrengthB.getInt(null) + realMaxB.get())
-                bypassedB = true;
+            boolean bypassedA = totalStrengthA.getInt(null) >= localStrengthA.getInt(null) + realMaxA.get();
+            boolean bypassedB = totalStrengthB.getInt(null) >= localStrengthB.getInt(null) + realMaxB.get();
 
             if (bypassedA || bypassedB) {
                 StringBuilder sb = new StringBuilder();

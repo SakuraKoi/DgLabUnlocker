@@ -32,9 +32,7 @@ public class InjectBugReportDialog implements IHookPointInjector {
                                 return;
                             }
 
-                            btn.setOnClickListener(e -> {
-                                withCatch("SettingDialog open", () -> GlobalVariables.showSettingsDialog(btn.getContext()));
-                            });
+                            btn.setOnClickListener(e -> withCatch("SettingDialog open", () -> GlobalVariables.showSettingsDialog(btn.getContext())));
                         });
                     }
                 });
