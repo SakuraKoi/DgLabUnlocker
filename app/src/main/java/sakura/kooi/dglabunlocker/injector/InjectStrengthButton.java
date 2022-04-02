@@ -1,7 +1,8 @@
 package sakura.kooi.dglabunlocker.injector;
 
+import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
+
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,101 +16,88 @@ public class InjectStrengthButton implements IHookPointInjector {
         // Add A
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$15", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength A", e);
-                }
-            }
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context);
+                        });
+                    }
 
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength A", e);
-                }
-            }
-        });
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context);
+                        });
+                    }
+                });
         // Add B
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$16", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength B", e);
-                }
-            }
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context);
+                        });
+                    }
 
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength B", e);
-                }
-            }
-        });
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context);
+                        });
+                    }
+                });
         // Sub A
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$17", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength A", e);
-                }
-            }
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthA(context);
+                        });
+                    }
 
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength A", e);
-                }
-            }
-        });
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthA(context);
+                        });
+                    }
+                });
         // Sub B
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.ui.activity.HomeActivity$18", classLoader,
                 "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength B", e);
-                }
-            }
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.beforeStrengthB(context);
+                        });
+                    }
 
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    if (GlobalVariables.bypassRemoteMaxStrength)
-                        HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in bypassRemoteMaxStrength B", e);
-                }
-            }
-        });
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        withCatch("HookBypassRemoteMaxStrength", () -> {
+                            if (GlobalVariables.bypassRemoteMaxStrength)
+                                HookBypassRemoteMaxStrength.INSTANCE.afterStrengthB(context);
+                        });
+                    }
+                });
     }
 
     public interface StrengthAddHandler {
         void beforeStrengthA(Context context) throws IllegalAccessException;
+
         void beforeStrengthB(Context context) throws IllegalAccessException;
+
         void afterStrengthA(Context context) throws IllegalAccessException;
+
         void afterStrengthB(Context context) throws IllegalAccessException;
     }
 }

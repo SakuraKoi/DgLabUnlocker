@@ -1,5 +1,7 @@
 package sakura.kooi.dglabunlocker.injector;
 
+import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,39 +21,33 @@ public class InjectBugReportDialog implements IHookPointInjector {
                 "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
+                withCatch("InjectBugReportDialog FuncSelectDialog", () -> {
                     Log.i("DgLabUnlocker", "SafeButtonHook: replacing onClickListener");
                     Dialog dialog = (Dialog) param.thisObject;
                     Field btnField = dialog.getClass().getDeclaredField("safe_button");
                     btnField.setAccessible(true);
                     View btn = (View) btnField.get(dialog);
-                    if (btn != null) {
-                        btn.setOnClickListener(e -> {
-                            try {
-                                GlobalVariables.showSettingsDialog(btn.getContext());
-                            } catch (ReflectiveOperationException ex) {
-                                Log.e("DgLabUnlocker", "Failed open settings dialog", ex);
-                            }
-                        });
-                    } else {
-                        Log.e("DgLabUnlocker", "SafeButtonHook: button is null");
+                    if (btn == null) {
+                        Log.e("DgLabUnlocker", "SettingDialog: Inject failed, button is null");
+                        return;
                     }
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in InjectBugReportDialog FuncSelectDialog", e);
-                }
+
+                    btn.setOnClickListener(e -> {
+                        withCatch("SettingDialog open", () -> GlobalVariables.showSettingsDialog(btn.getContext()));
+                    });
+                });
             }
         });
+
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.BugDialog", classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
-                try {
-                    Log.i("DgLabUnlocker", "BugDialogHook: replacing layout");
+                withCatch("InjectBugReportDialog BugDialog", () -> {
+                    Log.i("DgLabUnlocker", "SettingDialog: replacing layout of BugDialog");
                     Dialog dialog = (Dialog) param.thisObject;
                     dialog.setContentView(ConfigurationDialog.createSettingsPanel(dialog.getContext()));
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in InjectBugReportDialog BugDialog", e);
-                }
+                });
             }
         });
     }

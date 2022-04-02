@@ -1,5 +1,7 @@
 package sakura.kooi.dglabunlocker.injector;
 
+import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -15,28 +17,22 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (GlobalVariables.isRemote.getBoolean(null)) {
-                            try {
-                                try {
+                        withCatch("InjectProtocolStrengthDecode", () -> {
+                            if (GlobalVariables.isRemote.getBoolean(null)) {
+                                withCatch("HookDeviceProtection", () -> {
                                     if (GlobalVariables.deviceProtection) {
                                         param.args[0] = HookDeviceProtection.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
                                         param.args[1] = HookDeviceProtection.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
-                                } catch (Exception e) {
-                                    Log.e("DgLabUnlocker", "An error occurred in deviceProtection", e);
-                                }
-                                try {
+                                });
+                                withCatch("HookEnforceRemoteMaxStrength", () -> {
                                     if (GlobalVariables.enforceRemoteMaxStrength) {
                                         param.args[0] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
                                         param.args[1] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
-                                } catch (Exception e) {
-                                    Log.e("DgLabUnlocker", "An error occurred in enforceRemoteMaxStrength", e);
-                                }
-                            } catch (Exception e) {
-                                Log.e("DgLabUnlocker", "An error occurred", e);
+                                });
                             }
-                        }
+                        });
                     }
 
                     @Override

@@ -1,8 +1,9 @@
 package sakura.kooi.dglabunlocker.injector;
 
+import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
+
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -15,12 +16,10 @@ public class InjectRemoteSettingsDialog implements IHookPointInjector {
                 "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
+                withCatch("HookUnlockRemoteMax", () -> {
                     if (GlobalVariables.unlockRemoteMaxStrength)
                         HookUnlockRemoteMax.INSTANCE.unlockRemoteMaxStrength(param, context);
-                } catch (Exception e) {
-                    Log.e("DgLabUnlocker", "An error occurred in unlockRemoteMaxStrength", e);
-                }
+                });
             }
         });
     }

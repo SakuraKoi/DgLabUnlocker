@@ -17,11 +17,15 @@ public class HookDoubleBugFix implements InjectBluetoothServiceReceiver.Bluetoot
     private AtomicInteger lastStrengthA = new AtomicInteger(0);
     private AtomicInteger lastStrengthB = new AtomicInteger(0);
 
-    public void beforeDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException{
+    public void beforeDataUpdate(Context context,
+                                 int localStrengthA, int totalStrengthA, int remoteStrengthA,
+                                 int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException{
         lastStrengthA.set(localStrengthA);
         lastStrengthB.set(localStrengthB);
     }
-    public void afterDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException {
+    public void afterDataUpdate(Context context,
+                                int localStrengthA, int totalStrengthA, int remoteStrengthA,
+                                int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException {
         boolean fixed;
 
         fixed = tryFixDouble(lastStrengthA, GlobalVariables.localStrengthA, localStrengthA, remoteStrengthA);
@@ -31,6 +35,7 @@ public class HookDoubleBugFix implements InjectBluetoothServiceReceiver.Bluetoot
             Toast.makeText(context, "拦截了一次强度翻倍BUG", Toast.LENGTH_SHORT).show();
         }
     }
+
     private boolean tryFixDouble(AtomicInteger lastStrength, Field localStrengthField, int localStrength, int remoteStrength) throws ReflectiveOperationException {
         if (remoteStrength == 0) {
             if (localStrength > 10 && Math.abs(localStrength - lastStrength.get()) > 1) {
