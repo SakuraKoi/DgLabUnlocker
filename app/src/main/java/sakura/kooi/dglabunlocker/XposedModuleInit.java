@@ -14,6 +14,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import sakura.kooi.dglabunlocker.injector.IHookPointInjector;
 import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
 import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
@@ -51,6 +52,14 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         }
     }
 
+    private final Class<IHookPointInjector>[] injectorClasses = new Class[] {
+            InjectRemoteSettingsDialog.class,
+            InjectBluetoothServiceReceiver.class,
+            InjectProtocolStrengthDecode.class,
+            InjectStrengthButton.class,
+            InjectBugReportDialog.class
+    };
+
     private void onAppLoaded(Context context, ClassLoader classLoader) {
         Log.i("DgLabUnlocker", "Hook Loading: App loaded! Applying hooks...");
         try {
@@ -62,39 +71,13 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             return;
         }
 
-        try {
-            InjectRemoteSettingsDialog.apply(context, classLoader);
-            Log.i("DgLabUnlocker", "Hook Loading: RemoteSettingsDialog hooked");
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "Could not apply InjectRemoteSettingsDialog", e);
-        }
-
-        try {
-            InjectBluetoothServiceReceiver.apply(context, classLoader);
-            Log.i("DgLabUnlocker", "Hook Loading: BluetoothService hooked");
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
-        }
-
-        try {
-            InjectProtocolStrengthDecode.apply(context, classLoader);
-            Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
-        }
-
-        try {
-            InjectStrengthButton.apply(context, classLoader);
-            Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
-        }
-
-        try {
-            InjectBugReportDialog.apply(context, classLoader);
-            Log.i("DgLabUnlocker", "Hook Loading: StrengthAddButton hooked");
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "Could not apply HookDoubleBugFix", e);
+        for (Class<IHookPointInjector> injectorClass : injectorClasses) {
+            try {
+                injectorClass.newInstance().apply(context, classLoader);
+                Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getName());
+            } catch (Throwable e) {
+                Log.e("DgLabUnlocker", "Could not apply " + injectorClass.getName(), e);
+            }
         }
 
         Toast.makeText(context, "DG-Lab Unlocker 注入成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();

@@ -8,15 +8,14 @@ import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
 
-public class InjectBluetoothServiceReceiver {
-    public static void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException {
+public class InjectBluetoothServiceReceiver implements IHookPointInjector {
+    public void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.service.BlueToothService$18", classLoader, "a", byte[].class,
                 new XC_MethodHook() {
-                    private HookDoubleBugFix hookDoubleBugFix = new HookDoubleBugFix();
-
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         try {
+                            // region Read strength field and print log
                             int localStrengthA = GlobalVariables.localStrengthA.getInt(null);
                             int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
                             int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
@@ -30,10 +29,10 @@ public class InjectBluetoothServiceReceiver {
                                     " | B local = " + localStrengthB +
                                     " total = " + totalStrengthB +
                                     " remote = " + remoteStrengthB);
-
+                            // endregion
                             try {
                                 if (GlobalVariables.fixDoubleBug)
-                                    hookDoubleBugFix.beforeDataUpdate(context,
+                                    HookDoubleBugFix.INSTANCE.beforeDataUpdate(context,
                                             localStrengthA, totalStrengthA, remoteStrengthA,
                                             localStrengthB, totalStrengthB, remoteStrengthB);
                             } catch (Exception e) {
@@ -47,6 +46,7 @@ public class InjectBluetoothServiceReceiver {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         try {
+                            // region Read strength field and print log
                             int localStrengthA = GlobalVariables.localStrengthA.getInt(null);
                             int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
                             int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
@@ -60,10 +60,10 @@ public class InjectBluetoothServiceReceiver {
                                     " | B local = " + localStrengthB +
                                     " total = " + totalStrengthB +
                                     " remote = " + remoteStrengthB);
-
+                            // endregion
                             try {
                                 if (GlobalVariables.fixDoubleBug)
-                                    hookDoubleBugFix.afterDataUpdate(context,
+                                    HookDoubleBugFix.INSTANCE.afterDataUpdate(context,
                                             localStrengthA, totalStrengthA, remoteStrengthA,
                                             localStrengthB, totalStrengthB, remoteStrengthB);
                             } catch (Exception e) {
@@ -78,6 +78,7 @@ public class InjectBluetoothServiceReceiver {
 
     public interface BluetoothServiceDataHandler {
         void beforeDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
+
         void afterDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
     }
 }

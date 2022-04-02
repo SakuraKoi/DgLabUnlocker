@@ -6,6 +6,9 @@ import android.util.Log;
 import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 
 public class HookDeviceProtection implements InjectProtocolStrengthDecode.ProtocolStrengthHandler {
+    public static final HookDeviceProtection INSTANCE = new HookDeviceProtection();
+    private HookDeviceProtection() {}
+
     @Override
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {
         if (strength > 306) {

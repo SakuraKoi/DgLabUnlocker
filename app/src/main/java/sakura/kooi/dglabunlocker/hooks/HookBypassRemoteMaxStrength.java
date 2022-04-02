@@ -16,6 +16,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 
 public class HookBypassRemoteMaxStrength implements InjectStrengthButton.StrengthAddHandler {
+    public static final HookBypassRemoteMaxStrength INSTANCE = new HookBypassRemoteMaxStrength();
+    private HookBypassRemoteMaxStrength() {}
+    
     private final AtomicInteger realMaxA = new AtomicInteger();
     private final AtomicInteger realMaxB = new AtomicInteger();
     @Override

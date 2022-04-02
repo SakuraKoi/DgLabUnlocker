@@ -9,14 +9,15 @@ import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookUnlockRemoteMax;
 
-public class InjectRemoteSettingsDialog {
-    public static void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.RemoteSettingDialog", classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
+public class InjectRemoteSettingsDialog implements IHookPointInjector {
+    public void apply(Context context, ClassLoader classLoader) {
+        XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.RemoteSettingDialog", classLoader,
+                "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 try {
                     if (GlobalVariables.unlockRemoteMaxStrength)
-                        HookUnlockRemoteMax.unlockRemoteMaxStrength(param, context);
+                        HookUnlockRemoteMax.INSTANCE.unlockRemoteMaxStrength(param, context);
                 } catch (Exception e) {
                     Log.e("DgLabUnlocker", "An error occurred in unlockRemoteMaxStrength", e);
                 }

@@ -11,13 +11,15 @@ import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 
 public class HookDoubleBugFix implements InjectBluetoothServiceReceiver.BluetoothServiceDataHandler {
+    public static final HookDoubleBugFix INSTANCE = new HookDoubleBugFix();
+    private HookDoubleBugFix() {}
+
     private AtomicInteger lastStrengthA = new AtomicInteger(0);
     private AtomicInteger lastStrengthB = new AtomicInteger(0);
 
     public void beforeDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException{
         lastStrengthA.set(localStrengthA);
         lastStrengthB.set(localStrengthB);
-
     }
     public void afterDataUpdate(Context context, int localStrengthA, int totalStrengthA, int remoteStrengthA, int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException {
         boolean fixed;
