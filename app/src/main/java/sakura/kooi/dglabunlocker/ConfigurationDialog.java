@@ -19,15 +19,15 @@ import androidx.core.util.Supplier;
 public class ConfigurationDialog {
     private static void createSettingSwitches(LinearLayout layout) {
         createSwitch(layout, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
-                "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val, true);
+                "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val);
         createSwitch(layout, "被控 | 拦截强度翻倍BUG", "有效避免突然惨遭弹射起飞",
-                "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val, true);
+                "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val);
         createSwitch(layout, "被控 | 屏蔽非法超高强度", "避免恶意用户烧掉你的设备",
-                "deviceProtection", val -> GlobalVariables.deviceProtection = val, true);
+                "deviceProtection", val -> GlobalVariables.deviceProtection = val);
         createSwitch(layout, "被控 | 强制限制远程强度", "避免魔改客户端搞事情",
-                "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val, true);
-        createSwitch(layout, "主控 | 无视强度上限设置", "想拉多高拉多高 (坏.jpg [禁用]",
-                "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val, false);
+                "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val);
+        createSwitch(layout, "主控 | 无视强度上限设置", "想拉多高拉多高 (坏.jpg",
+                "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val);
     }
 
     @SuppressLint({"UseSwitchCompatOrMaterialCode", "SetTextI18n", "UseCompatLoadingForDrawables"})
@@ -49,7 +49,7 @@ public class ConfigurationDialog {
     }
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private static void createSwitch(LinearLayout container, String title, String desc, String config, Consumer<Boolean> handler, boolean enable) {
+    private static void createSwitch(LinearLayout container, String title, String desc, String config, Consumer<Boolean> handler) {
         LinearLayout layout = new LinearLayout(container.getContext());
         layout.setPadding(0, dpToPx(layout, 6), 0, 0);
         TextView text = new TextView(container.getContext());
@@ -69,7 +69,6 @@ public class ConfigurationDialog {
         swi.setThumbDrawable(thumbSelector);
         swi.setTextOff("");
         swi.setTextOn("");
-        swi.setEnabled(enable);
         swi.setChecked(GlobalVariables.sharedPref.getBoolean(config, false));
         swi.setOnClickListener(e -> {
             handler.accept(swi.isChecked());
