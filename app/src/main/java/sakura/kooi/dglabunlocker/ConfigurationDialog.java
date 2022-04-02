@@ -17,6 +17,19 @@ import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
 public class ConfigurationDialog {
+    private static void createSettingSwitches(LinearLayout layout) {
+        createSwitch(layout, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
+                "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val, true);
+        createSwitch(layout, "被控 | 拦截强度翻倍BUG", "有效避免突然惨遭弹射起飞",
+                "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val, true);
+        createSwitch(layout, "被控 | 屏蔽非法超高强度", "避免恶意用户烧掉你的设备",
+                "deviceProtection", val -> GlobalVariables.deviceProtection = val, true);
+        createSwitch(layout, "被控 | 强制限制远程强度", "避免魔改客户端搞事情",
+                "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val, true);
+        createSwitch(layout, "主控 | 无视强度上限设置", "想拉多高拉多高 (坏.jpg [禁用]",
+                "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val, false);
+    }
+
     @SuppressLint({"UseSwitchCompatOrMaterialCode", "SetTextI18n", "UseCompatLoadingForDrawables"})
     public static View createSettingsPanel(Context context) {
         LinearLayout layout = new LinearLayout(context);
@@ -30,17 +43,8 @@ public class ConfigurationDialog {
             view.setPadding(0, 0, 0, dpToPx(layout, 16));
             return view;
         }).get());
-        createSwitch(layout, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
-                "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val, true);
-        createSwitch(layout, "被控 | 拦截强度翻倍BUG", "有效避免突然惨遭弹射起飞",
-                "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val, true);
-        createSwitch(layout, "被控 | 屏蔽非法超高强度", "避免恶意用户烧掉你的设备",
-                "deviceProtection", val -> GlobalVariables.deviceProtection = val, true);
-        createSwitch(layout, "被控 | 强制限制远程强度", "避免魔改客户端搞事情",
-                "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val, true);
-        createSwitch(layout, "主控 | 无视强度上限设置", "想拉多高拉多高 (坏.jpg",
-                "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val, true);
 
+        createSettingSwitches(layout);
         return layout;
     }
 
