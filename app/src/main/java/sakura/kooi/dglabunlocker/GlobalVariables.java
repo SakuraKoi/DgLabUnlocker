@@ -37,10 +37,8 @@ public class GlobalVariables {
     public static Drawable resInjectSwitchOpenThumb;
     public static Drawable resInjectSwitchCloseTrack;
     public static Drawable resInjectSwitchOpenTrack;
-
-    private static Constructor<?> constBugDialog;
-
     public static SharedPreferences sharedPref;
+    private static Constructor<?> constBugDialog;
 
     public static boolean isRemote(Object homeActivity) throws IllegalAccessException {
         return (isRemote.getBoolean(null) && fieldBluetoothServiceIsController.getInt(fieldHomeActivityBluetoothService.get(homeActivity)) == 1);

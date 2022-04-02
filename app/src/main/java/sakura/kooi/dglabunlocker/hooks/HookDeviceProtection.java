@@ -7,7 +7,9 @@ import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 
 public class HookDeviceProtection implements InjectProtocolStrengthDecode.ProtocolStrengthHandler {
     public static final HookDeviceProtection INSTANCE = new HookDeviceProtection();
-    private HookDeviceProtection() {}
+
+    private HookDeviceProtection() {
+    }
 
     @Override
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {

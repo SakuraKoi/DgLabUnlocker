@@ -11,7 +11,9 @@ import de.robv.android.xposed.XC_MethodHook;
 
 public class HookUnlockRemoteMax {
     public static final HookUnlockRemoteMax INSTANCE = new HookUnlockRemoteMax();
-    private HookUnlockRemoteMax() {}
+
+    private HookUnlockRemoteMax() {
+    }
 
     public void unlockRemoteMaxStrength(XC_MethodHook.MethodHookParam param, Context context) throws ReflectiveOperationException {
         Object thisObject = param.thisObject;

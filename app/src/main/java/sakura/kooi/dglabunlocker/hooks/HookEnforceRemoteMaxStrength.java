@@ -9,7 +9,9 @@ import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 
 public class HookEnforceRemoteMaxStrength implements InjectProtocolStrengthDecode.ProtocolStrengthHandler {
     public static final HookEnforceRemoteMaxStrength INSTANCE = new HookEnforceRemoteMaxStrength();
-    private HookEnforceRemoteMaxStrength() {}
+
+    private HookEnforceRemoteMaxStrength() {
+    }
 
     @Override
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {

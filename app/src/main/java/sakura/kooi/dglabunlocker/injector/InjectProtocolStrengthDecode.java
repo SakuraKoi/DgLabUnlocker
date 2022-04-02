@@ -44,6 +44,7 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
 
     public interface ProtocolStrengthHandler {
         int handleStrengthA(Context context, int strength) throws ReflectiveOperationException;
+
         int handleStrengthB(Context context, int strength) throws ReflectiveOperationException;
     }
 }

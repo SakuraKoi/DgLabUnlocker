@@ -17,10 +17,11 @@ import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 
 public class HookBypassRemoteMaxStrength implements InjectStrengthButton.StrengthAddHandler {
     public static final HookBypassRemoteMaxStrength INSTANCE = new HookBypassRemoteMaxStrength();
-    private HookBypassRemoteMaxStrength() {}
-    
     private final AtomicInteger realMaxA = new AtomicInteger();
     private final AtomicInteger realMaxB = new AtomicInteger();
+    private HookBypassRemoteMaxStrength() {
+    }
+
     @Override
     public void beforeStrengthA(Context context) throws IllegalAccessException { // totalStrengthA >= localStrengthA + maxStrengthA
         if (isRemote.getBoolean(null)) {

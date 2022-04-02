@@ -26,6 +26,15 @@ import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthLongPressHandler;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
+    private final List<Class<? extends IHookPointInjector>> injectorClasses = Arrays.asList(
+            InjectRemoteSettingsDialog.class,
+            InjectBluetoothServiceReceiver.class,
+            InjectProtocolStrengthDecode.class,
+            InjectStrengthButton.class,
+            InjectStrengthLongPressHandler.class,
+            InjectBugReportDialog.class
+    );
+
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.bjsm.dungeonlab"))
@@ -55,15 +64,6 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             });
         }
     }
-
-    private final List<Class<? extends IHookPointInjector>> injectorClasses = Arrays.asList(
-            InjectRemoteSettingsDialog.class,
-            InjectBluetoothServiceReceiver.class,
-            InjectProtocolStrengthDecode.class,
-            InjectStrengthButton.class,
-            InjectStrengthLongPressHandler.class,
-            InjectBugReportDialog.class
-    );
 
     private void onAppLoaded(Context context, ClassLoader classLoader) {
         Log.i("DgLabUnlocker", "Hook Loading: App loaded! Applying hooks...");

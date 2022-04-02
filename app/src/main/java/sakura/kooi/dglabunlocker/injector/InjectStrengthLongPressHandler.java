@@ -19,7 +19,7 @@ public class InjectStrengthLongPressHandler implements IHookPointInjector {
                     protected void beforeHookedMethod(MethodHookParam param) {
                         withCatch("InjectStrengthLongPressHandler", () -> {
                             Message msg = (Message) param.args[0];
-                            if  (msg != null) {
+                            if (msg != null) {
                                 int what = msg.what;
                                 if (what == 10 || what == 11) {
                                     if (GlobalVariables.bypassRemoteMaxStrength)
@@ -36,7 +36,7 @@ public class InjectStrengthLongPressHandler implements IHookPointInjector {
                     protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("InjectStrengthLongPressHandler", () -> {
                             Message msg = (Message) param.args[0];
-                            if  (msg != null) {
+                            if (msg != null) {
                                 int what = msg.what;
                                 if (what == 10 || what == 11) {
                                     if (GlobalVariables.bypassRemoteMaxStrength)

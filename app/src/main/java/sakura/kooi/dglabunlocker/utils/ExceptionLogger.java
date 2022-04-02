@@ -10,6 +10,7 @@ public class ExceptionLogger {
             Log.e("DgLabUnlocker", "An error occurred in " + doing, e);
         }
     }
+
     public interface ThrowableRunnable {
         void run() throws Exception;
     }
