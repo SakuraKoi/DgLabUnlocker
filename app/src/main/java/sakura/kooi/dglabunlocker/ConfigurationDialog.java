@@ -22,9 +22,9 @@ public class ConfigurationDialog {
                 "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val);
         createSwitch(layout, "被控 | 拦截强度翻倍BUG", "有效避免突然惨遭弹射起飞",
                 "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val);
-        createSwitch(layout, "被控 | 屏蔽非法超高强度", "避免恶意用户烧掉你的设备",
+        createSwitch(layout, "被控 | 屏蔽非法超高强度", "防止恶意用户烧掉你的设备",
                 "deviceProtection", val -> GlobalVariables.deviceProtection = val);
-        createSwitch(layout, "被控 | 强制限制远程强度", "避免魔改客户端搞事情",
+        createSwitch(layout, "被控 | 强制限制远程强度", "下面那个功能的防御",
                 "enforceRemoteMaxStrength", val -> GlobalVariables.enforceRemoteMaxStrength = val);
         createSwitch(layout, "主控 | 无视强度上限设置", "想拉多高拉多高 (坏.jpg",
                 "bypassRemoteMaxStrength", val -> GlobalVariables.bypassRemoteMaxStrength = val);
