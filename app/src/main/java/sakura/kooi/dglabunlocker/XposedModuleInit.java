@@ -7,6 +7,9 @@ import android.content.res.XModuleResources;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.List;
+
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -20,6 +23,7 @@ import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
 import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
+import sakura.kooi.dglabunlocker.injector.InjectStrengthLongPressHandler;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
     @Override
@@ -52,13 +56,14 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         }
     }
 
-    private final Class<IHookPointInjector>[] injectorClasses = new Class[] {
+    private final List<Class<? extends IHookPointInjector>> injectorClasses = Arrays.asList(
             InjectRemoteSettingsDialog.class,
             InjectBluetoothServiceReceiver.class,
             InjectProtocolStrengthDecode.class,
             InjectStrengthButton.class,
+            InjectStrengthLongPressHandler.class,
             InjectBugReportDialog.class
-    };
+    );
 
     private void onAppLoaded(Context context, ClassLoader classLoader) {
         Log.i("DgLabUnlocker", "Hook Loading: App loaded! Applying hooks...");
@@ -71,7 +76,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             return;
         }
 
-        for (Class<IHookPointInjector> injectorClass : injectorClasses) {
+        for (Class<? extends IHookPointInjector> injectorClass : injectorClasses) {
             try {
                 injectorClass.newInstance().apply(context, classLoader);
                 Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getName());
