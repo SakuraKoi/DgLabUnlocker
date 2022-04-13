@@ -10,11 +10,13 @@ import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
+import sakura.kooi.dglabunlocker.hooks.HookEnforceLocalStrength;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
 
 public class InjectProtocolStrengthDecode implements IHookPointInjector {
+
     public void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.service.BlueToothService", classLoader, "a", int.class, int.class,
+        XposedHelpers.findAndHookMethod(GlobalVariables.classBluetoothService, classLoader, GlobalVariables.methodBluetoothServiceUpdateStrength, int.class, int.class,
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -50,6 +52,10 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                                         HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                                 });
                             }
+                                withCatch("HookEnforceLocalStrength", () -> {
+                                    if (GlobalVariables.enforceLocalStrength)
+                                        HookEnforceLocalStrength.INSTANCE.afterStrengthDecode(context);
+                                });
                         });
                     }
                 });

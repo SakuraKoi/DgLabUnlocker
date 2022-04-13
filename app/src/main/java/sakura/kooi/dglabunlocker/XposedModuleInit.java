@@ -1,5 +1,7 @@
 package sakura.kooi.dglabunlocker;
 
+import static sakura.kooi.dglabunlocker.utils.MapUtils.entry;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,8 +9,7 @@ import android.content.res.XModuleResources;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -20,19 +21,21 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import sakura.kooi.dglabunlocker.injector.IHookPointInjector;
 import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
+import sakura.kooi.dglabunlocker.injector.InjectControlledStrengthButton;
 import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
-import sakura.kooi.dglabunlocker.injector.InjectStrengthLongPressHandler;
+import sakura.kooi.dglabunlocker.ui.StatusDialog;
+import sakura.kooi.dglabunlocker.utils.MapUtils;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
-    private final List<Class<? extends IHookPointInjector>> injectorClasses = Arrays.asList(
-            InjectRemoteSettingsDialog.class,
-            InjectBluetoothServiceReceiver.class,
-            InjectProtocolStrengthDecode.class,
-            InjectStrengthButton.class,
-            InjectStrengthLongPressHandler.class,
-            InjectBugReportDialog.class
+
+    private final Map<Class<? extends IHookPointInjector>, Runnable> injectorClasses = MapUtils.of(
+            entry(InjectRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),
+            entry(InjectBluetoothServiceReceiver.class, () -> StatusDialog.bluetoothDecoderInject = true),
+            entry(InjectProtocolStrengthDecode.class, () -> StatusDialog.protocolStrengthDecodeInject = true),
+            entry(InjectStrengthButton.class, () -> StatusDialog.strengthButtonInject = true),
+            entry(InjectControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true)
     );
 
     @Override
@@ -68,20 +71,32 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
     private void onAppLoaded(Context context, ClassLoader classLoader) {
         Log.i("DgLabUnlocker", "Hook Loading: App loaded! Applying hooks...");
         try {
+            new InjectBugReportDialog().apply(context, classLoader);
+            Log.i("DgLabUnlocker", "Hook Loading: Settings dialog loaded");
+            StatusDialog.moduleSettingsDialogInject = true;
+        } catch (Throwable e) {
+            Log.e("DgLabUnlocker", "An error occurred while InjectBugReportDialog", e);
+            Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        try {
             GlobalVariables.initDgLabFields(classLoader, context);
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
+            StatusDialog.fieldsLookup = true;
         } catch (Throwable e) {
             Log.e("DgLabUnlocker", "An error occurred while initDgLabFields()", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
 
-        for (Class<? extends IHookPointInjector> injectorClass : injectorClasses) {
+        for (Map.Entry<Class<? extends IHookPointInjector>, Runnable> injectorClass : injectorClasses.entrySet()) {
             try {
-                injectorClass.newInstance().apply(context, classLoader);
-                Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getName());
+                injectorClass.getKey().newInstance().apply(context, classLoader);
+                injectorClass.getValue().run();
+                Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getKey().getName());
             } catch (Throwable e) {
-                Log.e("DgLabUnlocker", "Could not apply " + injectorClass.getName(), e);
+                Log.e("DgLabUnlocker", "Could not apply " + injectorClass.getKey().getName(), e);
             }
         }
 
@@ -107,6 +122,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             GlobalVariables.resInjectSwitchOpenThumb = modRes.getDrawable(R.drawable.switch_open_thumb);
             GlobalVariables.resInjectSwitchCloseTrack = modRes.getDrawable(R.drawable.switch_close_track);
             GlobalVariables.resInjectSwitchOpenTrack = modRes.getDrawable(R.drawable.switch_open_track);
+            GlobalVariables.resInjectButtonBackground = modRes.getDrawable(R.drawable.button_yellow);
         } catch (Resources.NotFoundException e) {
             Log.e("DgLabUnlocker", "settings_bg cannot be found from XModuleResources, still try inject...");
         }

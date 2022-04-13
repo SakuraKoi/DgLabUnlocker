@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker;
+package sakura.kooi.dglabunlocker.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,18 +9,22 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.function.Consumer;
 
+import sakura.kooi.dglabunlocker.GlobalVariables;
+import sakura.kooi.dglabunlocker.utils.UiUtils;
+
 public class ConfigurationDialog {
     private static void createSettingSwitches(LinearLayout container) {
         createSwitch(container, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
                 "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val);
-        createSwitch(container, "被控 | 拦截强度翻倍BUG", "有效避免突然惨遭弹射起飞",
-                "fixDoubleBug", val -> GlobalVariables.fixDoubleBug = val);
+        createSwitch(container, "被控 | 强制锁定本地强度", "暴力锁死本地强度",
+                "enforceLocalStrength", val -> GlobalVariables.enforceLocalStrength = val);
         createSwitch(container, "被控 | 屏蔽非法超高强度", "防止恶意用户烧掉你的设备",
                 "deviceProtection", val -> GlobalVariables.deviceProtection = val);
         createSwitch(container, "被控 | 强制限制远程强度", "下面那个功能的防御",
@@ -32,30 +36,41 @@ public class ConfigurationDialog {
     @SuppressLint({"UseSwitchCompatOrMaterialCode", "SetTextI18n", "UseCompatLoadingForDrawables"})
     public static View createSettingsPanel(Context context) {
         LinearLayout container = new LinearLayout(context);
-        container.setPadding(dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16));
+        container.setPadding(UiUtils.dpToPx(container, 16), UiUtils.dpToPx(container, 16), UiUtils.dpToPx(container, 16), UiUtils.dpToPx(container, 16));
         container.setBackground(GlobalVariables.resInjectSettingsBackground);
         container.setOrientation(LinearLayout.VERTICAL);
         TextView header = new TextView(context);
         header.setText("DG-Lab Unlocker 设置");
         header.setGravity(Gravity.CENTER);
-        header.setPadding(0, 0, 0, dpToPx(container, 16));
+        header.setPadding(0, 0, 0, UiUtils.dpToPx(container, 16));
         container.addView(header);
 
         createSettingSwitches(container);
+
+        Button btnStatus = new Button(container.getContext());
+        btnStatus.setPadding(0, UiUtils.dpToPx(btnStatus, 6), 0, 0);
+        btnStatus.setBackground(GlobalVariables.resInjectButtonBackground);
+        btnStatus.setText("模块注入状态");
+        btnStatus.setTextColor(0xffffe99d);
+        btnStatus.setOnClickListener(e -> {
+            new StatusDialog(context).show();
+        });
+        container.addView(btnStatus);
+
         return container;
     }
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private static void createSwitch(LinearLayout container, String title, String desc, String config, Consumer<Boolean> handler) {
         LinearLayout layout = new LinearLayout(container.getContext());
-        layout.setPadding(0, dpToPx(layout, 6), 0, 0);
+        layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = new TextView(container.getContext());
         textTitle.setText(title);
         textTitle.setTextColor(0xffffe99d);
         textTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         layout.addView(textTitle);
         Switch settingSwitch = new Switch(container.getContext());
-        settingSwitch.setPadding(dpToPx(layout, 10), 0, 0, 0);
+        settingSwitch.setPadding(UiUtils.dpToPx(layout, 10), 0, 0, 0);
         StateListDrawable trackSelector = new StateListDrawable();
         trackSelector.addState(new int[]{android.R.attr.state_checked}, GlobalVariables.resInjectSwitchOpenTrack);
         trackSelector.addState(StateSet.WILD_CARD, GlobalVariables.resInjectSwitchCloseTrack);
@@ -78,12 +93,9 @@ public class ConfigurationDialog {
         TextView textDesc = new TextView(container.getContext());
         textDesc.setText(desc);
         textDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
-        textDesc.setPadding(0, dpToPx(layout, 1), 0, dpToPx(layout, 4));
+        textDesc.setPadding(0, UiUtils.dpToPx(layout, 1), 0, UiUtils.dpToPx(layout, 4));
         textDesc.setTextColor(0xffdfd2a5);
         container.addView(textDesc);
     }
 
-    private static int dpToPx(View view, float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, view.getContext().getResources().getDisplayMetrics());
-    }
 }

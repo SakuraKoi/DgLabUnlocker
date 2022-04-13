@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.ConfigurationDialog;
+import sakura.kooi.dglabunlocker.ui.ConfigurationDialog;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 
 public class InjectBugReportDialog implements IHookPointInjector {
