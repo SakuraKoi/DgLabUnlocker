@@ -13,11 +13,12 @@ import java.lang.reflect.Field;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.ui.ConfigurationDialog;
+import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectBugReportDialog implements IHookPointInjector {
     public void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.FuncSelectDialog", classLoader,
+        XposedHelpers.findAndHookMethod(InjectPoints.class_FuncSelectDialog, classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -37,7 +38,7 @@ public class InjectBugReportDialog implements IHookPointInjector {
                     }
                 });
 
-        XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.BugDialog", classLoader,
+        XposedHelpers.findAndHookMethod(InjectPoints.class_BugDialog, classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {

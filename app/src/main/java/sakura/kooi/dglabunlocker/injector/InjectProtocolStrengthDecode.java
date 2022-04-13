@@ -18,7 +18,7 @@ import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 public class InjectProtocolStrengthDecode implements IHookPointInjector {
 
     public void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod(InjectPoints.classBluetoothService, classLoader, InjectPoints.methodBluetoothServiceUpdateStrength, int.class, int.class,
+        XposedHelpers.findAndHookMethod(InjectPoints.class_BluetoothService, classLoader, InjectPoints.method_BluetoothService_updateStrength, int.class, int.class,
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {

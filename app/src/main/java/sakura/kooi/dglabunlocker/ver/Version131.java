@@ -1,16 +1,16 @@
 package sakura.kooi.dglabunlocker.ver;
 
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.*;
+
 import java.util.Arrays;
 
-import sakura.kooi.dglabunlocker.variables.InjectPoints;
-
-public class Version131 extends AbstractVersionedCompatibilityProvider{
+public class Version131 extends AbstractVersionedCompatibilityProvider {
     @Override
     protected void initializeNames() {
         classGlobalVariables = "com.bjsm.dungeonlab.global.b";
         totalStrengthA = "as";
         localStrengthA = "ay";
-        remoteStrengthA ="aw";
+        remoteStrengthA = "aw";
         maxStrengthA = "aw";
 
         totalStrengthB = "at";
@@ -22,24 +22,30 @@ public class Version131 extends AbstractVersionedCompatibilityProvider{
 
         classBugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
 
-        InjectPoints.classBluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
-        InjectPoints.methodBluetoothServiceDecoder_Decode = "a";
+        class_BluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
+        method_BluetoothServiceDecoder_decode = "a";
 
-        InjectPoints.classBluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
-        InjectPoints.methodBluetoothServiceUpdateStrength = "b";
+        class_BluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
+        method_BluetoothService_updateStrength = "b";
 
-        InjectPoints.classTouchListeners = Arrays.asList(
+        class_StrengthTouchListeners = Arrays.asList(
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$15",
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$16",
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$17",
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$18"
         );
 
-        InjectPoints.classControlledTouchListeners = Arrays.asList(
+        class_ControlledStrengthTouchListeners = Arrays.asList(
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$24",
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$2",
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$25",
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$3"
         );
+
+        class_FuncSelectDialog = "com.bjsm.dungeonlab.widget.FuncSelectDialog";
+        class_BugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
+        class_RemoteSettingDialog = "com.bjsm.dungeonlab.widget.RemoteSettingDialog";
+        field_RemoteSettingDialog_strengthA = "a_channel_strength_range";
+        field_RemoteSettingDialog_strengthB = "b_channel_strength_range";
     }
 }

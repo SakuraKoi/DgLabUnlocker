@@ -13,9 +13,8 @@ import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectBluetoothServiceReceiver implements IHookPointInjector {
-
     public void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod(InjectPoints.classBluetoothServiceDecoder, classLoader, InjectPoints.methodBluetoothServiceDecoder_Decode, byte[].class,
+        XposedHelpers.findAndHookMethod(InjectPoints.class_BluetoothServiceDecoder, classLoader, InjectPoints.method_BluetoothServiceDecoder_decode, byte[].class,
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {

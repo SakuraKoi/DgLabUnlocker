@@ -13,9 +13,8 @@ import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectControlledStrengthButton implements IHookPointInjector {
-
     public void apply(Context context, ClassLoader classLoader) {
-        InjectPoints.classTouchListeners.forEach(classTouchListener -> {
+        InjectPoints.class_StrengthTouchListeners.forEach(classTouchListener -> {
             XposedHelpers.findAndHookMethod(classTouchListener, classLoader,
                     "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
                         @Override

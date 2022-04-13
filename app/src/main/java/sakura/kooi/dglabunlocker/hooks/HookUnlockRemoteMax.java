@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
+import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
 public class HookUnlockRemoteMax {
     public static final HookUnlockRemoteMax INSTANCE = new HookUnlockRemoteMax();
@@ -17,8 +18,8 @@ public class HookUnlockRemoteMax {
 
     public void unlockRemoteMaxStrength(XC_MethodHook.MethodHookParam param, Context context) throws ReflectiveOperationException {
         Object thisObject = param.thisObject;
-        Field fieldChannelA = thisObject.getClass().getDeclaredField("a_channel_strength_range");
-        Field fieldChannelB = thisObject.getClass().getDeclaredField("b_channel_strength_range");
+        Field fieldChannelA = thisObject.getClass().getDeclaredField(InjectPoints.field_RemoteSettingDialog_strengthA);
+        Field fieldChannelB = thisObject.getClass().getDeclaredField(InjectPoints.field_RemoteSettingDialog_strengthB);
         fieldChannelA.setAccessible(true);
         fieldChannelB.setAccessible(true);
 
