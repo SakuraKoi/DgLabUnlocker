@@ -2,6 +2,7 @@ package sakura.kooi.dglabunlocker.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
 import android.util.Log;
 import android.util.StateSet;
@@ -9,7 +10,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,7 +23,7 @@ public class ConfigurationDialog {
     private static void createSettingSwitches(LinearLayout container) {
         createSwitch(container, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
                 "unlockRemoteMaxStrength", val -> GlobalVariables.unlockRemoteMaxStrength = val);
-        createSwitch(container, "被控 | 强制锁定本地强度", "暴力锁死本地强度",
+        createSwitch(container, "被控 | 强制锁定本地强度", "暴力锁死本地强度 (不优雅实现)",
                 "enforceLocalStrength", val -> GlobalVariables.enforceLocalStrength = val);
         createSwitch(container, "被控 | 屏蔽非法超高强度", "防止恶意用户烧掉你的设备",
                 "deviceProtection", val -> GlobalVariables.deviceProtection = val);
@@ -37,7 +37,7 @@ public class ConfigurationDialog {
     public static View createSettingsPanel(Context context) {
         LinearLayout container = new LinearLayout(context);
         container.setPadding(UiUtils.dpToPx(container, 16), UiUtils.dpToPx(container, 16), UiUtils.dpToPx(container, 16), UiUtils.dpToPx(container, 16));
-        container.setBackground(GlobalVariables.resInjectSettingsBackground);
+        container.setBackground(GlobalVariables.resInjectSettingsBackground.getConstantState().newDrawable());
         container.setOrientation(LinearLayout.VERTICAL);
         TextView header = new TextView(context);
         header.setText("DG-Lab Unlocker 设置");
@@ -47,14 +47,18 @@ public class ConfigurationDialog {
 
         createSettingSwitches(container);
 
-        Button btnStatus = new Button(container.getContext());
-        btnStatus.setPadding(0, UiUtils.dpToPx(btnStatus, 6), 0, 0);
-        btnStatus.setBackground(GlobalVariables.resInjectButtonBackground);
-        btnStatus.setText("模块注入状态");
-        btnStatus.setTextColor(0xffffe99d);
-        btnStatus.setOnClickListener(e -> {
-            new StatusDialog(context).show();
-        });
+        TextView space = new TextView(context);
+        space.setPadding(0, UiUtils.dpToPx(space, 4), 0, 0);
+        container.addView(space);
+
+        TextView btnStatus = new TextView(context);
+        btnStatus.setPadding(0, UiUtils.dpToPx(btnStatus, 3), 0, UiUtils.dpToPx(btnStatus, 3));
+        btnStatus.setBackground(GlobalVariables.resInjectButtonBackground.getConstantState().newDrawable());
+        btnStatus.setText("模块运行状态");
+        btnStatus.setTextColor(Color.BLACK);
+        //btnStatus.setTextColor(0xffe99d);
+        btnStatus.setGravity(Gravity.CENTER);
+        btnStatus.setOnClickListener(e -> new StatusDialog(context).show());
         container.addView(btnStatus);
 
         return container;
@@ -72,12 +76,12 @@ public class ConfigurationDialog {
         Switch settingSwitch = new Switch(container.getContext());
         settingSwitch.setPadding(UiUtils.dpToPx(layout, 10), 0, 0, 0);
         StateListDrawable trackSelector = new StateListDrawable();
-        trackSelector.addState(new int[]{android.R.attr.state_checked}, GlobalVariables.resInjectSwitchOpenTrack);
-        trackSelector.addState(StateSet.WILD_CARD, GlobalVariables.resInjectSwitchCloseTrack);
+        trackSelector.addState(new int[]{android.R.attr.state_checked}, GlobalVariables.resInjectSwitchOpenTrack.getConstantState().newDrawable());
+        trackSelector.addState(StateSet.WILD_CARD, GlobalVariables.resInjectSwitchCloseTrack.getConstantState().newDrawable());
         settingSwitch.setTrackDrawable(trackSelector);
         StateListDrawable thumbSelector = new StateListDrawable();
-        thumbSelector.addState(new int[]{android.R.attr.state_checked}, GlobalVariables.resInjectSwitchOpenThumb);
-        thumbSelector.addState(StateSet.WILD_CARD, GlobalVariables.resInjectSwitchCloseThumb);
+        thumbSelector.addState(new int[]{android.R.attr.state_checked}, GlobalVariables.resInjectSwitchOpenThumb.getConstantState().newDrawable());
+        thumbSelector.addState(StateSet.WILD_CARD, GlobalVariables.resInjectSwitchCloseThumb.getConstantState().newDrawable());
         settingSwitch.setThumbDrawable(thumbSelector);
         settingSwitch.setTextOff("");
         settingSwitch.setTextOn("");

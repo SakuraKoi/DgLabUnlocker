@@ -32,7 +32,7 @@ public class StatusDialog extends Dialog {
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         LinearLayout container = new LinearLayout(context);
         container.setPadding(dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16));
-        container.setBackground(GlobalVariables.resInjectSettingsBackground);
+        container.setBackground(GlobalVariables.resInjectSettingsBackground.getConstantState().newDrawable());
         container.setOrientation(LinearLayout.VERTICAL);
         TextView header = new TextView(context);
         header.setText("DG-Lab Unlocker 日志");
@@ -41,8 +41,8 @@ public class StatusDialog extends Dialog {
         container.addView(header);
 
         container.addView(addCurrentVersion(context));
-        container.addView(addStatus(context, "[替换] 模块设置界面", moduleSettingsDialogInject));
-        container.addView(addStatus(context, "[数据] 应用字段初始化", fieldsLookup));
+        container.addView(addStatus(context, "[加载] 模块设置界面", moduleSettingsDialogInject));
+        container.addView(addStatus(context, "[加载] 应用字段初始化", fieldsLookup));
         container.addView(addStatus(context, "[注入] 远程控制设置", remoteSettingsDialogInject));
         container.addView(addStatus(context, "[注入] 蓝牙命令接收", bluetoothDecoderInject));
         container.addView(addStatus(context, "[注入] 强度协议解码", protocolStrengthDecodeInject));
@@ -56,7 +56,7 @@ public class StatusDialog extends Dialog {
         LinearLayout layout = new LinearLayout(context);
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = new TextView(context);
-        textTitle.setText("[数据] 版本适配结果");
+        textTitle.setText("[数据] 版本适配参数");
         textTitle.setTextColor(0xffffe99d);
         textTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         layout.addView(textTitle);
