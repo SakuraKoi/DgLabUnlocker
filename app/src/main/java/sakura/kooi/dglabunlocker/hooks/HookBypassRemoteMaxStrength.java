@@ -26,8 +26,8 @@ public class HookBypassRemoteMaxStrength {
         if (isRemote.get()) {
             realMaxA.set(maxStrengthA.get());
             realMaxB.set(maxStrengthB.get());
-            maxStrengthA.get(276);
-            maxStrengthB.get(276);
+            maxStrengthA.set(276);
+            maxStrengthB.set(276);
         }
     }
 
@@ -46,8 +46,8 @@ public class HookBypassRemoteMaxStrength {
                 Toast.makeText(context, sb.toString(), Toast.LENGTH_SHORT).show();
             }
 
-            maxStrengthA.get(realMaxA.get());
-            maxStrengthB.get(realMaxB.get());
+            maxStrengthA.set(realMaxA.get());
+            maxStrengthB.set(realMaxB.get());
         }
     }
 }
