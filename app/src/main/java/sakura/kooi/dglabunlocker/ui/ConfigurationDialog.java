@@ -24,7 +24,7 @@ public class ConfigurationDialog {
     private static void createSettingSwitches(LinearLayout container) {
         createSwitch(container, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",
                 "unlockRemoteMaxStrength", val -> ModuleSettings.unlockRemoteMaxStrength = val);
-        createSwitch(container, "被控 | 强制锁定本地强度", "暴力锁死本地强度 (不优雅实现)",
+        createSwitch(container, "被控 | 强制锁定本地强度", "暴力锁死本地强度",
                 "enforceLocalStrength", val -> ModuleSettings.enforceLocalStrength = val);
         createSwitch(container, "被控 | 屏蔽非法超高强度", "防止恶意用户烧掉你的设备",
                 "deviceProtection", val -> ModuleSettings.deviceProtection = val);

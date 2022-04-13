@@ -42,8 +42,6 @@ public class Version131 extends AbstractVersionedCompatibilityProvider {
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$3"
         );
 
-        class_FuncSelectDialog = "com.bjsm.dungeonlab.widget.FuncSelectDialog";
-        class_BugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
         class_RemoteSettingDialog = "com.bjsm.dungeonlab.widget.RemoteSettingDialog";
         field_RemoteSettingDialog_strengthA = "a_channel_strength_range";
         field_RemoteSettingDialog_strengthB = "b_channel_strength_range";
