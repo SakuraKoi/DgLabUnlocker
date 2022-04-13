@@ -12,6 +12,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceLocalStrength;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectControlledStrengthButton implements IHookPointInjector {
 
@@ -23,7 +24,7 @@ public class InjectControlledStrengthButton implements IHookPointInjector {
                         @Override
                         protected void afterHookedMethod(MethodHookParam param) {
                             withCatch("HookEnforceLocalStrength", () -> {
-                                if (GlobalVariables.enforceLocalStrength)
+                                if (ModuleSettings.enforceLocalStrength)
                                     HookEnforceLocalStrength.INSTANCE.handleLocalStrengthChange(context);
                             });
                         }

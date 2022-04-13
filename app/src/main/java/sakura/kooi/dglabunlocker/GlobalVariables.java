@@ -2,9 +2,7 @@ package sakura.kooi.dglabunlocker;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 
@@ -18,15 +16,6 @@ import sakura.kooi.dglabunlocker.ver.Version126;
 import sakura.kooi.dglabunlocker.ver.Version131;
 
 public class GlobalVariables {
-    public static String modulePath;
-    public static Drawable resInjectSettingsBackground;
-
-    public static boolean unlockRemoteMaxStrength = false;
-    public static boolean deviceProtection = true;
-    public static boolean enforceRemoteMaxStrength = false;
-    public static boolean enforceLocalStrength = false;
-    public static boolean bypassRemoteMaxStrength = false;
-    public static boolean fixDoubleBug = false;
 
     public static Field localStrengthA;
     public static Field totalStrengthA;
@@ -42,12 +31,6 @@ public class GlobalVariables {
 
     public static Field fieldHomeActivityBluetoothService;
     public static Field fieldBluetoothServiceIsController;
-    public static Drawable resInjectSwitchCloseThumb;
-    public static Drawable resInjectSwitchOpenThumb;
-    public static Drawable resInjectSwitchCloseTrack;
-    public static Drawable resInjectSwitchOpenTrack;
-    public static Drawable resInjectButtonBackground;
-    public static SharedPreferences sharedPref;
 
     public static Constructor<?> constBugDialog;
 
@@ -71,14 +54,6 @@ public class GlobalVariables {
         IDgLabField versionedFieldInitializer;
         versionedFieldInitializer = detectDgLabVersion(context);
         versionedFieldInitializer.initDgLabFields(classLoader, context);
-
-        sharedPref = context.getSharedPreferences("dglabunlocker", Context.MODE_PRIVATE);
-
-        unlockRemoteMaxStrength = sharedPref.getBoolean("unlockRemoteMaxStrength", false);
-        enforceLocalStrength = sharedPref.getBoolean("enforceLocalStrength", false);
-        deviceProtection = sharedPref.getBoolean("deviceProtection", false);
-        enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
-        bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
 
         testFieldWorks();
     }

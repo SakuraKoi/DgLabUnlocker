@@ -9,6 +9,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectBluetoothServiceReceiver implements IHookPointInjector {
 
@@ -34,7 +35,7 @@ public class InjectBluetoothServiceReceiver implements IHookPointInjector {
                                     " remote = " + remoteStrengthB);
                             // endregion
 
-                            if (GlobalVariables.fixDoubleBug)
+                            if (ModuleSettings.fixDoubleBug)
                                 withCatch("HookDoubleBugFix", () -> HookDoubleBugFix.INSTANCE.beforeDataUpdate(context,
                                         localStrengthA, totalStrengthA, remoteStrengthA,
                                         localStrengthB, totalStrengthB, remoteStrengthB));
@@ -62,7 +63,7 @@ public class InjectBluetoothServiceReceiver implements IHookPointInjector {
                                     " remote = " + remoteStrengthB);
                             // endregion
 
-                            if (GlobalVariables.fixDoubleBug)
+                            if (ModuleSettings.fixDoubleBug)
                                 withCatch("HookDoubleBugFix", () -> HookDoubleBugFix.INSTANCE.afterDataUpdate(context,
                                         localStrengthA, totalStrengthA, remoteStrengthA,
                                         localStrengthB, totalStrengthB, remoteStrengthB));

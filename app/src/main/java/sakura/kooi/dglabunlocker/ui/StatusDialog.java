@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
+import sakura.kooi.dglabunlocker.variables.ResourceInject;
 
 public class StatusDialog extends Dialog {
     public static String currentLoadedVersion = "";
@@ -32,7 +32,7 @@ public class StatusDialog extends Dialog {
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         LinearLayout container = new LinearLayout(context);
         container.setPadding(dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16));
-        container.setBackground(GlobalVariables.resInjectSettingsBackground.getConstantState().newDrawable());
+        container.setBackground(ResourceInject.dialogSettingsBackground.getConstantState().newDrawable());
         container.setOrientation(LinearLayout.VERTICAL);
         TextView header = new TextView(context);
         header.setText("DG-Lab Unlocker 日志");

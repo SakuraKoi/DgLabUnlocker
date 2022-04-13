@@ -7,8 +7,8 @@ import android.os.Bundle;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookUnlockRemoteMax;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectRemoteSettingsDialog implements IHookPointInjector {
     public void apply(Context context, ClassLoader classLoader) {
@@ -17,7 +17,7 @@ public class InjectRemoteSettingsDialog implements IHookPointInjector {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         withCatch("HookUnlockRemoteMax", () -> {
-                            if (GlobalVariables.unlockRemoteMaxStrength)
+                            if (ModuleSettings.unlockRemoteMaxStrength)
                                 HookUnlockRemoteMax.INSTANCE.unlockRemoteMaxStrength(param, context);
                         });
                     }

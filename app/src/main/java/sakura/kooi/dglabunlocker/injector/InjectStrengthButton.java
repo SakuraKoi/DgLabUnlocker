@@ -12,6 +12,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookBypassRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectStrengthButton implements IHookPointInjector {
 
@@ -22,7 +23,7 @@ public class InjectStrengthButton implements IHookPointInjector {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
-                            if (GlobalVariables.bypassRemoteMaxStrength)
+                            if (ModuleSettings.bypassRemoteMaxStrength)
                                 HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                         });
                     }
@@ -30,7 +31,7 @@ public class InjectStrengthButton implements IHookPointInjector {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("HookBypassRemoteMaxStrength", () -> {
-                            if (GlobalVariables.bypassRemoteMaxStrength)
+                            if (ModuleSettings.bypassRemoteMaxStrength)
                                 HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                         });
                     }

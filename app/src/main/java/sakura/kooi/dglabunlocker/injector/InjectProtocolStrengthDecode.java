@@ -12,6 +12,7 @@ import sakura.kooi.dglabunlocker.hooks.HookBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceLocalStrength;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectProtocolStrengthDecode implements IHookPointInjector {
 
@@ -23,19 +24,19 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                         withCatch("InjectProtocolStrengthDecode", () -> {
                             if (GlobalVariables.isRemote.getBoolean(null)) {
                                 withCatch("HookDeviceProtection", () -> {
-                                    if (GlobalVariables.deviceProtection) {
+                                    if (ModuleSettings.deviceProtection) {
                                         param.args[0] = HookDeviceProtection.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
                                         param.args[1] = HookDeviceProtection.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
                                 });
                                 withCatch("HookEnforceRemoteMaxStrength", () -> {
-                                    if (GlobalVariables.enforceRemoteMaxStrength) {
+                                    if (ModuleSettings.enforceRemoteMaxStrength) {
                                         param.args[0] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
                                         param.args[1] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
                                 });
                                 withCatch("HookBypassRemoteMaxStrength", () -> {
-                                    if (GlobalVariables.bypassRemoteMaxStrength)
+                                    if (ModuleSettings.bypassRemoteMaxStrength)
                                         HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                                 });
                             }
@@ -48,12 +49,12 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                         withCatch("InjectProtocolStrengthDecode", () -> {
                             if (GlobalVariables.isRemote.getBoolean(null)) {
                                 withCatch("HookBypassRemoteMaxStrength", () -> {
-                                    if (GlobalVariables.bypassRemoteMaxStrength)
+                                    if (ModuleSettings.bypassRemoteMaxStrength)
                                         HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                                 });
                             }
                                 withCatch("HookEnforceLocalStrength", () -> {
-                                    if (GlobalVariables.enforceLocalStrength)
+                                    if (ModuleSettings.enforceLocalStrength)
                                         HookEnforceLocalStrength.INSTANCE.afterStrengthDecode(context);
                                 });
                         });

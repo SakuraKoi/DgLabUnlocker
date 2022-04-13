@@ -2,10 +2,7 @@ package sakura.kooi.dglabunlocker;
 
 import static sakura.kooi.dglabunlocker.utils.MapUtils.entry;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.XModuleResources;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,6 +24,8 @@ import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.utils.MapUtils;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
+import sakura.kooi.dglabunlocker.variables.ResourceInject;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
 
@@ -69,65 +68,68 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
     }
 
     private void onAppLoaded(Context context, ClassLoader classLoader) {
-        Log.i("DgLabUnlocker", "Hook Loading: App loaded! Applying hooks...");
+        Log.i("DgLabUnlocker", "Hook Loading: App loaded! Trying to take over the world...");
+
+        // region load configuration
+        Log.i("DgLabUnlocker", "Hook Loading: Loading configuration...");
+        try {
+            ModuleSettings.loadConfiguration(context);
+            Log.i("DgLabUnlocker", "Hook Loading: Configuration loaded");
+        } catch (Exception e) {
+            Log.e("DgLabUnlocker", "An error occurred in loadConfiguration()", e);
+            Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // endregion
+
+        // region inject setting dialog
         try {
             new InjectBugReportDialog().apply(context, classLoader);
             Log.i("DgLabUnlocker", "Hook Loading: Settings dialog loaded");
             StatusDialog.moduleSettingsDialogInject = true;
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "An error occurred while InjectBugReportDialog", e);
+        } catch (Exception e) {
+            Log.e("DgLabUnlocker", "An error occurred in InjectBugReportDialog", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
+        // endregion
 
+        // region detect app version and initialize reflection
         try {
             GlobalVariables.initDgLabFields(classLoader, context);
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
             StatusDialog.fieldsLookup = true;
-        } catch (Throwable e) {
-            Log.e("DgLabUnlocker", "An error occurred while initDgLabFields()", e);
+        } catch (Exception e) {
+            Log.e("DgLabUnlocker", "An error occurred in initDgLabFields()", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
+        // endregion
 
+        // region hooks
         for (Map.Entry<Class<? extends IHookPointInjector>, Runnable> injectorClass : injectorClasses.entrySet()) {
             try {
                 injectorClass.getKey().newInstance().apply(context, classLoader);
                 injectorClass.getValue().run();
                 Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getKey().getName());
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Log.e("DgLabUnlocker", "Could not apply " + injectorClass.getKey().getName(), e);
             }
         }
+        // endregion
 
         Toast.makeText(context, "DG-Lab Unlocker 注入成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void initZygote(StartupParam startupParam) {
-        GlobalVariables.modulePath = startupParam.modulePath;
+        ResourceInject.modulePath = startupParam.modulePath;
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
-    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) {
         if (!resparam.packageName.equals("com.bjsm.dungeonlab"))
             return;
-        Log.i("DgLabUnlocker", "Resource Loading: found target app " + resparam.packageName);
-
-        XModuleResources modRes = XModuleResources.createInstance(GlobalVariables.modulePath, resparam.res);
-        try {
-            GlobalVariables.resInjectSettingsBackground = modRes.getDrawable(R.drawable.settings_bg);
-            GlobalVariables.resInjectSwitchCloseThumb = modRes.getDrawable(R.drawable.switch_close_thumb);
-            GlobalVariables.resInjectSwitchOpenThumb = modRes.getDrawable(R.drawable.switch_open_thumb);
-            GlobalVariables.resInjectSwitchCloseTrack = modRes.getDrawable(R.drawable.switch_close_track);
-            GlobalVariables.resInjectSwitchOpenTrack = modRes.getDrawable(R.drawable.switch_open_track);
-            GlobalVariables.resInjectButtonBackground = modRes.getDrawable(R.drawable.button_yellow);
-        } catch (Resources.NotFoundException e) {
-            Log.e("DgLabUnlocker", "settings_bg cannot be found from XModuleResources, still try inject...");
-        }
-
-        resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "anquanxuzhi2", "模块设置");
-        resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "question_feedback", "DG-Lab Unlocker 设置");
+        ResourceInject.doResourceInject(resparam);
     }
 }
