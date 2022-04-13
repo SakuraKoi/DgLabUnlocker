@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import sakura.kooi.dglabunlocker.GlobalVariables;
+import sakura.kooi.dglabunlocker.variables.Accessors;
 
 public class HookEnforceRemoteMaxStrength {
     public static final HookEnforceRemoteMaxStrength INSTANCE = new HookEnforceRemoteMaxStrength();
@@ -13,7 +13,7 @@ public class HookEnforceRemoteMaxStrength {
     }
 
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {
-        int max = GlobalVariables.maxStrengthA.getInt(null) + 30;
+        int max = Accessors.maxStrengthA.get() + 30;
         Log.d("DgLabUnlocker", "Bluetooth sending A " + strength + " " + max);
         if (strength > max) {
             Log.w("DgLabUnlocker", "Enforced max strength A: " + strength + " > " + max);
@@ -24,7 +24,7 @@ public class HookEnforceRemoteMaxStrength {
     }
 
     public int handleStrengthB(Context context, int strength) throws ReflectiveOperationException {
-        int max = GlobalVariables.maxStrengthB.getInt(null) + 30;
+        int max = Accessors.maxStrengthB.get() + 30;
         Log.d("DgLabUnlocker", "Bluetooth sending B " + strength + " " + max);
         if (strength > max) {
             Log.w("DgLabUnlocker", "Enforced max strength B: " + strength + " > " + max);

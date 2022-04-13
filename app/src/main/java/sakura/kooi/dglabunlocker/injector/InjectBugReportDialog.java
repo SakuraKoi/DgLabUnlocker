@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.ui.ConfigurationDialog;
-import sakura.kooi.dglabunlocker.GlobalVariables;
+import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectBugReportDialog implements IHookPointInjector {
     public void apply(Context context, ClassLoader classLoader) {
@@ -32,7 +32,7 @@ public class InjectBugReportDialog implements IHookPointInjector {
                                 return;
                             }
 
-                            btn.setOnClickListener(e -> withCatch("SettingDialog open", () -> GlobalVariables.showSettingsDialog(btn.getContext())));
+                            btn.setOnClickListener(e -> withCatch("SettingDialog open", () -> ModuleSettings.showSettingsDialog(btn.getContext())));
                         });
                     }
                 });

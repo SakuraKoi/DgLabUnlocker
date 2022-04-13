@@ -7,25 +7,26 @@ import android.util.Log;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
+import sakura.kooi.dglabunlocker.variables.Accessors;
+import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectBluetoothServiceReceiver implements IHookPointInjector {
 
     public void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod(GlobalVariables.classBluetoothServiceDecoder, classLoader, GlobalVariables.methodBluetoothServiceDecoder_Decode, byte[].class,
+        XposedHelpers.findAndHookMethod(InjectPoints.classBluetoothServiceDecoder, classLoader, InjectPoints.methodBluetoothServiceDecoder_Decode, byte[].class,
                 new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void beforeHookedMethod(MethodHookParam param) {
                         try {
                             // region Read strength field and print log
-                            int localStrengthA = GlobalVariables.localStrengthA.getInt(null);
-                            int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
-                            int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
-                            int localStrengthB = GlobalVariables.localStrengthB.getInt(null);
-                            int totalStrengthB = GlobalVariables.totalStrengthB.getInt(null);
-                            int remoteStrengthB = GlobalVariables.remoteStrengthB.getInt(null);
+                            int localStrengthA = Accessors.localStrengthA.get();
+                            int totalStrengthA = Accessors.totalStrengthA.get();
+                            int remoteStrengthA = Accessors.remoteStrengthA.get();
+                            int localStrengthB = Accessors.localStrengthB.get();
+                            int totalStrengthB = Accessors.totalStrengthB.get();
+                            int remoteStrengthB = Accessors.remoteStrengthB.get();
 
                             Log.d("DgLabUnlocker", "BeforeDataUpdate -> A local = " + localStrengthA +
                                     " total = " + totalStrengthA +
@@ -48,12 +49,12 @@ public class InjectBluetoothServiceReceiver implements IHookPointInjector {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         try {
                             // region Read strength field and print log
-                            int localStrengthA = GlobalVariables.localStrengthA.getInt(null);
-                            int totalStrengthA = GlobalVariables.totalStrengthA.getInt(null);
-                            int remoteStrengthA = GlobalVariables.remoteStrengthA.getInt(null);
-                            int localStrengthB = GlobalVariables.localStrengthB.getInt(null);
-                            int totalStrengthB = GlobalVariables.totalStrengthB.getInt(null);
-                            int remoteStrengthB = GlobalVariables.remoteStrengthB.getInt(null);
+                            int localStrengthA = Accessors.localStrengthA.get();
+                            int totalStrengthA = Accessors.totalStrengthA.get();
+                            int remoteStrengthA = Accessors.remoteStrengthA.get();
+                            int localStrengthB = Accessors.localStrengthB.get();
+                            int totalStrengthB = Accessors.totalStrengthB.get();
+                            int remoteStrengthB = Accessors.remoteStrengthB.get();
 
                             Log.d("DgLabUnlocker", "AfterDataUpdate -> A local = " + localStrengthA +
                                     " total = " + totalStrengthA +
@@ -74,13 +75,4 @@ public class InjectBluetoothServiceReceiver implements IHookPointInjector {
                 });
     }
 
-    public interface BluetoothServiceDataHandler {
-        void beforeDataUpdate(Context context,
-                              int localStrengthA, int totalStrengthA, int remoteStrengthA,
-                              int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
-
-        void afterDataUpdate(Context context,
-                             int localStrengthA, int totalStrengthA, int remoteStrengthA,
-                             int localStrengthB, int totalStrengthB, int remoteStrengthB) throws ReflectiveOperationException;
-    }
 }

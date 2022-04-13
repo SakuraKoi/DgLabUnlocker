@@ -1,12 +1,13 @@
 package sakura.kooi.dglabunlocker.hooks;
 
-import static sakura.kooi.dglabunlocker.GlobalVariables.isRemote;
-import static sakura.kooi.dglabunlocker.GlobalVariables.localStrengthA;
-import static sakura.kooi.dglabunlocker.GlobalVariables.localStrengthB;
-import static sakura.kooi.dglabunlocker.GlobalVariables.maxStrengthA;
-import static sakura.kooi.dglabunlocker.GlobalVariables.maxStrengthB;
-import static sakura.kooi.dglabunlocker.GlobalVariables.totalStrengthA;
-import static sakura.kooi.dglabunlocker.GlobalVariables.totalStrengthB;
+
+import static sakura.kooi.dglabunlocker.variables.Accessors.isRemote;
+import static sakura.kooi.dglabunlocker.variables.Accessors.localStrengthA;
+import static sakura.kooi.dglabunlocker.variables.Accessors.localStrengthB;
+import static sakura.kooi.dglabunlocker.variables.Accessors.maxStrengthA;
+import static sakura.kooi.dglabunlocker.variables.Accessors.maxStrengthB;
+import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthA;
+import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthB;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -17,22 +18,23 @@ public class HookBypassRemoteMaxStrength {
     public static final HookBypassRemoteMaxStrength INSTANCE = new HookBypassRemoteMaxStrength();
     private final AtomicInteger realMaxA = new AtomicInteger();
     private final AtomicInteger realMaxB = new AtomicInteger();
+
     private HookBypassRemoteMaxStrength() {
     }
 
-    public void beforeStrength(Context context) throws IllegalAccessException { // totalStrengthA >= localStrengthA + maxStrengthA
-        if (isRemote.getBoolean(null)) {
-            realMaxA.set(maxStrengthA.getInt(null));
-            realMaxB.set(maxStrengthB.getInt(null));
-            maxStrengthA.setInt(null, 276);
-            maxStrengthB.setInt(null, 276);
+    public void beforeStrength(Context context) throws ReflectiveOperationException { // totalStrengthA >= localStrengthA + maxStrengthA
+        if (isRemote.get()) {
+            realMaxA.set(maxStrengthA.get());
+            realMaxB.set(maxStrengthB.get());
+            maxStrengthA.get(276);
+            maxStrengthB.get(276);
         }
     }
 
-    public void afterStrength(Context context) throws IllegalAccessException {
-        if (isRemote.getBoolean(null)) {
-            boolean bypassedA = totalStrengthA.getInt(null) >= localStrengthA.getInt(null) + realMaxA.get();
-            boolean bypassedB = totalStrengthB.getInt(null) >= localStrengthB.getInt(null) + realMaxB.get();
+    public void afterStrength(Context context) throws ReflectiveOperationException {
+        if (isRemote.get()) {
+            boolean bypassedA = totalStrengthA.get() >= localStrengthA.get() + realMaxA.get();
+            boolean bypassedB = totalStrengthB.get() >= localStrengthB.get() + realMaxB.get();
 
             if (bypassedA || bypassedB) {
                 StringBuilder sb = new StringBuilder();
@@ -44,8 +46,8 @@ public class HookBypassRemoteMaxStrength {
                 Toast.makeText(context, sb.toString(), Toast.LENGTH_SHORT).show();
             }
 
-            maxStrengthA.setInt(null, realMaxA.get());
-            maxStrengthB.setInt(null, realMaxB.get());
+            maxStrengthA.get(realMaxA.get());
+            maxStrengthB.get(realMaxB.get());
         }
     }
 }

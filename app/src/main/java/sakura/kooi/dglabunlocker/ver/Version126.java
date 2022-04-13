@@ -1,49 +1,41 @@
 package sakura.kooi.dglabunlocker.ver;
 
-import static sakura.kooi.dglabunlocker.GlobalVariables.*;
-
-import android.content.Context;
-
 import java.util.Arrays;
 
-public class Version126 implements IDgLabField {
+import sakura.kooi.dglabunlocker.variables.InjectPoints;
+
+public class Version126 extends AbstractVersionedCompatibilityProvider {
     @Override
-    public void initDgLabFields(ClassLoader classLoader, Context context) throws ReflectiveOperationException {
-        Class<?> clsGlobalVariable = Class.forName("com.bjsm.dungeonlab.global.b", true, classLoader);
-        totalStrengthA = lookupField(clsGlobalVariable, "V");
-        localStrengthA = lookupField(clsGlobalVariable, "ab");
-        maxStrengthA = lookupField(clsGlobalVariable, "Z");
+    protected void initializeNames() {
+        classGlobalVariables = "com.bjsm.dungeonlab.global.b";
+        totalStrengthA = "V";
+        localStrengthA = "ab";
+        remoteStrengthA ="X";
+        maxStrengthA = "Z";
 
-        totalStrengthB = lookupField(clsGlobalVariable, "W");
-        localStrengthB = lookupField(clsGlobalVariable, "ac");
-        maxStrengthB = lookupField(clsGlobalVariable, "aa");
+        totalStrengthB = "W";
+        localStrengthB = "ac";
+        remoteStrengthB = "Y";
+        maxStrengthB = "aa";
 
-        remoteStrengthA = lookupField(clsGlobalVariable, "X");
-        remoteStrengthB = lookupField(clsGlobalVariable, "Y");
+        isRemote = "aZ";
 
-        isRemote = lookupField(clsGlobalVariable, "aZ");
+        classBugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
 
-        Class<?> clsHomeActivity = Class.forName("com.bjsm.dungeonlab.ui.activity.HomeActivity", true, classLoader);
-        fieldHomeActivityBluetoothService = lookupField(clsHomeActivity, "aR");
-        Class<?> clsBluetoothService = Class.forName("com.bjsm.dungeonlab.service.BlueToothService", true, classLoader);
-        fieldBluetoothServiceIsController = lookupField(clsBluetoothService, "S");
-        Class<?> clsBugDialog = Class.forName("com.bjsm.dungeonlab.widget.BugDialog", true, classLoader);
-        constBugDialog = clsBugDialog.getDeclaredConstructor(Context.class);
+        InjectPoints.classBluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
+        InjectPoints.methodBluetoothServiceDecoder_Decode = "a";
 
-        classBluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
-        methodBluetoothServiceDecoder_Decode = "a";
+        InjectPoints.classBluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
+        InjectPoints.methodBluetoothServiceUpdateStrength = "a";
 
-        classBluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
-        methodBluetoothServiceUpdateStrength = "a";
-
-        classTouchListeners = new String[]{
+        InjectPoints.classTouchListeners =Arrays.asList(
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$15",
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$16",
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$17",
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$18"
-        };
+        );
 
-        classControlledTouchListeners = Arrays.asList(
+        InjectPoints.classControlledTouchListeners = Arrays.asList(
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$24",
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$2",
                 "com.bjsm.dungeonlab.ui.activity.ControlledActivity$25",

@@ -7,22 +7,23 @@ import android.util.Log;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.GlobalVariables;
 import sakura.kooi.dglabunlocker.hooks.HookBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceLocalStrength;
 import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.variables.Accessors;
+import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class InjectProtocolStrengthDecode implements IHookPointInjector {
 
     public void apply(Context context, ClassLoader classLoader) {
-        XposedHelpers.findAndHookMethod(GlobalVariables.classBluetoothService, classLoader, GlobalVariables.methodBluetoothServiceUpdateStrength, int.class, int.class,
+        XposedHelpers.findAndHookMethod(InjectPoints.classBluetoothService, classLoader, InjectPoints.methodBluetoothServiceUpdateStrength, int.class, int.class,
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         withCatch("InjectProtocolStrengthDecode", () -> {
-                            if (GlobalVariables.isRemote.getBoolean(null)) {
+                            if (Accessors.isRemote.get()) {
                                 withCatch("HookDeviceProtection", () -> {
                                     if (ModuleSettings.deviceProtection) {
                                         param.args[0] = HookDeviceProtection.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
@@ -47,7 +48,7 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         Log.d("DgLabUnlocker", "Bluetooth sent " + param.args[0] + " " + param.args[1]);
                         withCatch("InjectProtocolStrengthDecode", () -> {
-                            if (GlobalVariables.isRemote.getBoolean(null)) {
+                            if (Accessors.isRemote.get()) {
                                 withCatch("HookBypassRemoteMaxStrength", () -> {
                                     if (ModuleSettings.bypassRemoteMaxStrength)
                                         HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);

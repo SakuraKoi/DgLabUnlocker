@@ -6,6 +6,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import java.util.Map;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
@@ -24,11 +26,14 @@ import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
 import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.utils.MapUtils;
+import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 import sakura.kooi.dglabunlocker.variables.ResourceInject;
+import sakura.kooi.dglabunlocker.ver.AbstractVersionedCompatibilityProvider;
+import sakura.kooi.dglabunlocker.ver.Version126;
+import sakura.kooi.dglabunlocker.ver.Version131;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
-
     private final Map<Class<? extends IHookPointInjector>, Runnable> injectorClasses = MapUtils.of(
             entry(InjectRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),
             entry(InjectBluetoothServiceReceiver.class, () -> StatusDialog.bluetoothDecoderInject = true),
@@ -36,6 +41,26 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             entry(InjectStrengthButton.class, () -> StatusDialog.strengthButtonInject = true),
             entry(InjectControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true)
     );
+
+    @NonNull
+    private static AbstractVersionedCompatibilityProvider detectAppVersion(Context context) {
+        AbstractVersionedCompatibilityProvider versionedFieldInitializer;
+        int versionCode = ModuleUtils.getAppVersion(context);
+        switch (versionCode) {
+            case 21:
+                versionedFieldInitializer = new Version131();
+                StatusDialog.currentLoadedVersion = "1.3.1";
+                break;
+            case 19:
+                versionedFieldInitializer = new Version126();
+                StatusDialog.currentLoadedVersion = "1.2.6";
+                break;
+            default:
+                versionedFieldInitializer = new Version126();
+                StatusDialog.currentLoadedVersion = null;
+        }
+        return versionedFieldInitializer;
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -96,7 +121,9 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
 
         // region detect app version and initialize reflection
         try {
-            GlobalVariables.initDgLabFields(classLoader, context);
+            detectAppVersion(context).initializeAccessors(classLoader, context);
+            ModuleUtils.testFieldWorks();
+
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
             StatusDialog.fieldsLookup = true;
         } catch (Exception e) {
@@ -132,4 +159,5 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             return;
         ResourceInject.doResourceInject(resparam);
     }
+
 }

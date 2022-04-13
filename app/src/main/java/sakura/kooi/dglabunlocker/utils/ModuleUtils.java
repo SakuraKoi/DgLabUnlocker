@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker;
+package sakura.kooi.dglabunlocker.utils;
 
 import static sakura.kooi.dglabunlocker.variables.Accessors.isRemote;
 import static sakura.kooi.dglabunlocker.variables.Accessors.localStrengthA;
@@ -13,13 +13,24 @@ import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthB;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import androidx.annotation.NonNull;
+public class ModuleUtils {
+    public static int getAppVersion(Context context) {
+        int versionCode = 0;
+        try {
+            versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException ignored) {}
+        return versionCode;
+    }
 
-import sakura.kooi.dglabunlocker.ui.StatusDialog;
-import sakura.kooi.dglabunlocker.ver.AbstractVersionedCompatibilityProvider;
-import sakura.kooi.dglabunlocker.ver.Version126;
-import sakura.kooi.dglabunlocker.ver.Version131;
-
-public class GlobalVariables {
-
+    public static void testFieldWorks() throws ReflectiveOperationException {
+        localStrengthA.get();
+        totalStrengthA.get();
+        remoteStrengthA.get();
+        localStrengthB.get();
+        totalStrengthB.get();
+        remoteStrengthB.get();
+        maxStrengthA.get();
+        maxStrengthB.get();
+        isRemote.get();
+    }
 }

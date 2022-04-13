@@ -1,5 +1,6 @@
 package sakura.kooi.dglabunlocker.variables;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -21,5 +22,13 @@ public class ModuleSettings {
         deviceProtection = sharedPref.getBoolean("deviceProtection", false);
         enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
         bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
+    }
+
+    public static void showSettingsDialog(Context context) throws ReflectiveOperationException {
+        try {
+            ((Dialog) Accessors.constructorBugDialog.invoke(context)).show();
+        } catch (Throwable throwable) {
+            throw new ReflectiveOperationException(throwable);
+        }
     }
 }
