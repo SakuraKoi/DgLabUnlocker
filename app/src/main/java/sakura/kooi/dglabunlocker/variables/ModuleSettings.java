@@ -11,6 +11,7 @@ public class ModuleSettings {
     public static boolean enforceLocalStrength = false;
     public static boolean bypassRemoteMaxStrength = false;
     public static boolean fixDoubleBug = false;
+    public static boolean randomQrCode = false;
 
     public static SharedPreferences sharedPref;
 
@@ -22,6 +23,7 @@ public class ModuleSettings {
         deviceProtection = sharedPref.getBoolean("deviceProtection", true);
         enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
         bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
+        randomQrCode = sharedPref.getBoolean("randomQrCode", false);
     }
 
     public static void showSettingsDialog(Context context) throws ReflectiveOperationException {

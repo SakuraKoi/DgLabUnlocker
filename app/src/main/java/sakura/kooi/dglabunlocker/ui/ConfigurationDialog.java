@@ -21,6 +21,10 @@ import sakura.kooi.dglabunlocker.variables.ResourceInject;
 
 public class ConfigurationDialog {
     private static void createSettingSwitches(LinearLayout container) {
+        if (XposedModuleInit.ENABLE_DEV_FEATURE) // 目前还没用
+            createSwitch(container, "被控 | 游客随机二维码", "每次进游客都会刷一个新的二维码",
+                "randomQrCode", val -> ModuleSettings.randomQrCode = val);
+
         createSwitch(container, "被控 | 屏蔽非法超高强度", "防止恶意用户烧掉你的设备",
                 "deviceProtection", val -> ModuleSettings.deviceProtection = val);
         createSwitch(container, "被控 | 解锁远程强度上限", "最高100完全不够用好吧",

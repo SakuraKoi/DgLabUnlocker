@@ -21,6 +21,7 @@ public class StatusDialog extends Dialog {
     public static boolean strengthButtonInject = false;
     public static boolean localStrengthHandlerInject = false;
     public static boolean moduleSettingsDialogInject = false;
+    public static boolean guestLogin;
 
     @SuppressLint("ResourceType")
     public StatusDialog(@NonNull Context context) {
@@ -36,6 +37,7 @@ public class StatusDialog extends Dialog {
         container.addView(addStatus(context, "[注入] 强度协议解码", protocolStrengthDecodeInject));
         container.addView(addStatus(context, "[注入] 强度调整按钮", strengthButtonInject));
         container.addView(addStatus(context, "[注入] 基础强度回调", localStrengthHandlerInject));
+        container.addView(addStatus(context, "[注入] 游客设备哈希", guestLogin));
 
         this.setContentView(container);
     }

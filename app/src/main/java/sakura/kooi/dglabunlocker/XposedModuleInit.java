@@ -21,6 +21,7 @@ import sakura.kooi.dglabunlocker.injector.IHookPointInjector;
 import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
 import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
 import sakura.kooi.dglabunlocker.injector.InjectControlledStrengthButton;
+import sakura.kooi.dglabunlocker.injector.InjectGuestLogin;
 import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
 import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
@@ -35,14 +36,15 @@ import sakura.kooi.dglabunlocker.ver.Version131;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
     // 调试用的实验性功能菜单开关
-    public static final boolean ENABLE_DEV_FEATURE = true;
+    public static final boolean ENABLE_DEV_FEATURE = false;
 
     private final Map<Class<? extends IHookPointInjector>, Runnable> injectorClasses = MapUtils.of(
             entry(InjectRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),
             entry(InjectBluetoothServiceReceiver.class, () -> StatusDialog.bluetoothDecoderInject = true),
             entry(InjectProtocolStrengthDecode.class, () -> StatusDialog.protocolStrengthDecodeInject = true),
             entry(InjectStrengthButton.class, () -> StatusDialog.strengthButtonInject = true),
-            entry(InjectControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true)
+            entry(InjectControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true),
+            entry(InjectGuestLogin.class, () -> StatusDialog.guestLogin = true)
     );
 
     @NonNull
@@ -67,8 +69,11 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals("com.bjsm.dungeonlab"))
+        Log.i("DgLabUnlocker", "Init Loading: running on app " + lpparam.packageName);
+        if (!lpparam.packageName.equals("com.bjsm.dungeonlab")) {
+            Log.e("DgLabUnlocker", "Init Loading: app not match! " + lpparam.packageName);
             return;
+        }
         Log.i("DgLabUnlocker", "Init Loading: found target app " + lpparam.packageName);
         try {
             Class.forName("com.wrapper.proxyapplication.WrapperProxyApplication", false, lpparam.classLoader);
@@ -86,7 +91,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             Log.i("DgLabUnlocker", "Possible unpacked app, try hook activity directly");
             XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.global.BaseLocalApplication", lpparam.classLoader, "onCreate", new XC_MethodHook() {
                 @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                protected void afterHookedMethod(MethodHookParam param) {
                     Context context = (Context) param.thisObject;
                     ClassLoader classLoader = context.getClassLoader();
                     onAppLoaded(context, classLoader);
