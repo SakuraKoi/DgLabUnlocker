@@ -1,11 +1,8 @@
 package sakura.kooi.dglabunlocker.ui;
 
-import static sakura.kooi.dglabunlocker.utils.UiUtils.dpToPx;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -14,10 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import sakura.kooi.dglabunlocker.utils.UiUtils;
-import sakura.kooi.dglabunlocker.variables.ResourceInject;
 
 public class StatusDialog extends Dialog {
-    public static String currentLoadedVersion = "";
+    public static String currentLoadedVersion = null;
     public static boolean fieldsLookup = false;
     public static boolean remoteSettingsDialogInject = false;
     public static boolean bluetoothDecoderInject = false;
@@ -30,15 +26,7 @@ public class StatusDialog extends Dialog {
     public StatusDialog(@NonNull Context context) {
         super(context);
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        LinearLayout container = new LinearLayout(context);
-        container.setPadding(dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16));
-        container.setBackground(ResourceInject.dialogSettingsBackground.getConstantState().newDrawable());
-        container.setOrientation(LinearLayout.VERTICAL);
-        TextView header = new TextView(context);
-        header.setText("DG-Lab Unlocker 日志");
-        header.setGravity(Gravity.CENTER);
-        header.setPadding(0, 0, 0, dpToPx(container, 16));
-        container.addView(header);
+        LinearLayout container = UiUtils.makeDialogContainer(context, "DG-Lab Unlocker 日志");
 
         container.addView(addCurrentVersion(context));
         container.addView(addStatus(context, "[加载] 模块设置界面", moduleSettingsDialogInject));

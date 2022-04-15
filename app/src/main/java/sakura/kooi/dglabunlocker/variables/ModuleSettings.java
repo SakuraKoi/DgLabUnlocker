@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 public class ModuleSettings {
     public static boolean unlockRemoteMaxStrength = false;
-    public static boolean deviceProtection = true;
+    public static boolean deviceProtection = false;
     public static boolean enforceRemoteMaxStrength = false;
     public static boolean enforceLocalStrength = false;
     public static boolean bypassRemoteMaxStrength = false;
@@ -19,7 +19,7 @@ public class ModuleSettings {
 
         unlockRemoteMaxStrength = sharedPref.getBoolean("unlockRemoteMaxStrength", false);
         enforceLocalStrength = sharedPref.getBoolean("enforceLocalStrength", false);
-        deviceProtection = sharedPref.getBoolean("deviceProtection", false);
+        deviceProtection = sharedPref.getBoolean("deviceProtection", true);
         enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
         bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
     }
