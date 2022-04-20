@@ -38,5 +38,6 @@ public class ResourceInject {
 
         resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "anquanxuzhi2", "模块设置");
         resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "question_feedback", "DG-Lab Unlocker 设置");
+        resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "email_con", "模块设置替换失败, 请检查Logcat日志");
     }
 }
