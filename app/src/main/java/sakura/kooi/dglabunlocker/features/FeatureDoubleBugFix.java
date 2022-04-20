@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.features;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,11 +9,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
-public class HookDoubleBugFix {
-    public static final HookDoubleBugFix INSTANCE = new HookDoubleBugFix();
+public class FeatureDoubleBugFix {
+    public static final FeatureDoubleBugFix INSTANCE = new FeatureDoubleBugFix();
     private final AtomicInteger lastStrengthA = new AtomicInteger(0);
     private final AtomicInteger lastStrengthB = new AtomicInteger(0);
-    private HookDoubleBugFix() {
+    private FeatureDoubleBugFix() {
     }
 
     public void beforeDataUpdate(Context context,

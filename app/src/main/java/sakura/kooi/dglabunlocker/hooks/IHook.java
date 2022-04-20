@@ -1,7 +1,7 @@
-package sakura.kooi.dglabunlocker.injector;
+package sakura.kooi.dglabunlocker.hooks;
 
 import android.content.Context;
 
-public interface IHookPointInjector {
+public interface IHook {
     void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException;
 }

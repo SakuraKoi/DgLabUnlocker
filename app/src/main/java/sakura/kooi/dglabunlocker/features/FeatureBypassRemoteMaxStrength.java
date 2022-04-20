@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.features;
 
 
 import static sakura.kooi.dglabunlocker.variables.Accessors.isRemote;
@@ -14,12 +14,12 @@ import android.widget.Toast;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class HookBypassRemoteMaxStrength {
-    public static final HookBypassRemoteMaxStrength INSTANCE = new HookBypassRemoteMaxStrength();
+public class FeatureBypassRemoteMaxStrength {
+    public static final FeatureBypassRemoteMaxStrength INSTANCE = new FeatureBypassRemoteMaxStrength();
     private final AtomicInteger realMaxA = new AtomicInteger();
     private final AtomicInteger realMaxB = new AtomicInteger();
 
-    private HookBypassRemoteMaxStrength() {
+    private FeatureBypassRemoteMaxStrength() {
     }
 
     public void beforeStrength(Context context) throws ReflectiveOperationException { // totalStrengthA >= localStrengthA + maxStrengthA

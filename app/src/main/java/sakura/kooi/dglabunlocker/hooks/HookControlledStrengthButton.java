@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.injector;
+package sakura.kooi.dglabunlocker.hooks;
 
 import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 
@@ -8,20 +8,20 @@ import android.view.View;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.hooks.HookEnforceLocalStrength;
+import sakura.kooi.dglabunlocker.features.FeatureEnforceLocalStrength;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class InjectControlledStrengthButton implements IHookPointInjector {
+public class HookControlledStrengthButton implements IHook {
     public void apply(Context context, ClassLoader classLoader) {
         InjectPoints.class_StrengthTouchListeners.forEach(classTouchListener -> {
             XposedHelpers.findAndHookMethod(classTouchListener, classLoader,
                     "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
                         @Override
                         protected void afterHookedMethod(MethodHookParam param) {
-                            withCatch("HookEnforceLocalStrength", () -> {
+                            withCatch("FeatureEnforceLocalStrength", () -> {
                                 if (ModuleSettings.enforceLocalStrength)
-                                    HookEnforceLocalStrength.INSTANCE.handleLocalStrengthChange(context);
+                                    FeatureEnforceLocalStrength.INSTANCE.handleLocalStrengthChange(context);
                             });
                         }
                     });

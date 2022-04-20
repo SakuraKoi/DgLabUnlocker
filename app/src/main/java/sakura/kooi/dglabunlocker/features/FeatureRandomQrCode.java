@@ -1,12 +1,12 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.features;
 
 import android.util.Log;
 
 import java.util.UUID;
 
-public class HookRandomQrCode {
-    public static final HookRandomQrCode INSTANCE = new HookRandomQrCode();
-    private HookRandomQrCode() {}
+public class FeatureRandomQrCode {
+    public static final FeatureRandomQrCode INSTANCE = new FeatureRandomQrCode();
+    private FeatureRandomQrCode() {}
 
     public String apply(String identifier) {
         Log.i("DgLabUnlocker", "Replacing login identifier " + identifier);

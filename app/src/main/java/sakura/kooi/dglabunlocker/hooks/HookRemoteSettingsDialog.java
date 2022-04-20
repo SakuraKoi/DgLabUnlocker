@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.injector;
+package sakura.kooi.dglabunlocker.hooks;
 
 import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 
@@ -7,19 +7,19 @@ import android.os.Bundle;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.hooks.HookUnlockRemoteMax;
+import sakura.kooi.dglabunlocker.features.FeatureUnlockRemoteMax;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class InjectRemoteSettingsDialog implements IHookPointInjector {
+public class HookRemoteSettingsDialog implements IHook {
     public void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod(InjectPoints.class_RemoteSettingDialog, classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        withCatch("HookUnlockRemoteMax", () -> {
+                        withCatch("FeatureUnlockRemoteMax", () -> {
                             if (ModuleSettings.unlockRemoteMaxStrength)
-                                HookUnlockRemoteMax.INSTANCE.unlockRemoteMaxStrength(param, context);
+                                FeatureUnlockRemoteMax.INSTANCE.unlockRemoteMaxStrength(param, context);
                         });
                     }
                 });

@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.features;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,10 +10,10 @@ import java.lang.reflect.Method;
 import de.robv.android.xposed.XC_MethodHook;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
-public class HookUnlockRemoteMax {
-    public static final HookUnlockRemoteMax INSTANCE = new HookUnlockRemoteMax();
+public class FeatureUnlockRemoteMax {
+    public static final FeatureUnlockRemoteMax INSTANCE = new FeatureUnlockRemoteMax();
 
-    private HookUnlockRemoteMax() {
+    private FeatureUnlockRemoteMax() {
     }
 
     public void unlockRemoteMaxStrength(XC_MethodHook.MethodHookParam param, Context context) throws ReflectiveOperationException {

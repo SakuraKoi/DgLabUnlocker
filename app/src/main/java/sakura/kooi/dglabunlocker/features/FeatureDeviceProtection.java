@@ -1,12 +1,12 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.features;
 
 import android.content.Context;
 import android.util.Log;
 
-public class HookDeviceProtection {
-    public static final HookDeviceProtection INSTANCE = new HookDeviceProtection();
+public class FeatureDeviceProtection {
+    public static final FeatureDeviceProtection INSTANCE = new FeatureDeviceProtection();
 
-    private HookDeviceProtection() {
+    private FeatureDeviceProtection() {
     }
 
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {

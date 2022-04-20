@@ -17,14 +17,14 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import sakura.kooi.dglabunlocker.injector.IHookPointInjector;
-import sakura.kooi.dglabunlocker.injector.InjectBluetoothServiceReceiver;
-import sakura.kooi.dglabunlocker.injector.InjectBugReportDialog;
-import sakura.kooi.dglabunlocker.injector.InjectControlledStrengthButton;
-import sakura.kooi.dglabunlocker.injector.InjectGuestLogin;
-import sakura.kooi.dglabunlocker.injector.InjectProtocolStrengthDecode;
-import sakura.kooi.dglabunlocker.injector.InjectRemoteSettingsDialog;
-import sakura.kooi.dglabunlocker.injector.InjectStrengthButton;
+import sakura.kooi.dglabunlocker.hooks.HookBugReportDialog;
+import sakura.kooi.dglabunlocker.hooks.HookProtocolStrengthDecode;
+import sakura.kooi.dglabunlocker.hooks.IHook;
+import sakura.kooi.dglabunlocker.hooks.HookBluetoothServiceReceiver;
+import sakura.kooi.dglabunlocker.hooks.HookControlledStrengthButton;
+import sakura.kooi.dglabunlocker.hooks.HookGuestLogin;
+import sakura.kooi.dglabunlocker.hooks.HookRemoteSettingsDialog;
+import sakura.kooi.dglabunlocker.hooks.HookStrengthButton;
 import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.utils.MapUtils;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
@@ -38,13 +38,13 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
     // 调试用的实验性功能菜单开关
     public static final boolean ENABLE_DEV_FEATURE = false;
 
-    private final Map<Class<? extends IHookPointInjector>, Runnable> injectorClasses = MapUtils.of(
-            entry(InjectRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),
-            entry(InjectBluetoothServiceReceiver.class, () -> StatusDialog.bluetoothDecoderInject = true),
-            entry(InjectProtocolStrengthDecode.class, () -> StatusDialog.protocolStrengthDecodeInject = true),
-            entry(InjectStrengthButton.class, () -> StatusDialog.strengthButtonInject = true),
-            entry(InjectControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true),
-            entry(InjectGuestLogin.class, () -> StatusDialog.guestLogin = true)
+    private final Map<Class<? extends IHook>, Runnable> hookClasses = MapUtils.of(
+            entry(HookRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),
+            entry(HookBluetoothServiceReceiver.class, () -> StatusDialog.bluetoothDecoderInject = true),
+            entry(HookProtocolStrengthDecode.class, () -> StatusDialog.protocolStrengthDecodeInject = true),
+            entry(HookStrengthButton.class, () -> StatusDialog.strengthButtonInject = true),
+            entry(HookControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true),
+            entry(HookGuestLogin.class, () -> StatusDialog.guestLogin = true)
     );
 
     @NonNull
@@ -117,11 +117,11 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
 
         // region inject setting dialog
         try {
-            new InjectBugReportDialog().apply(context, classLoader);
+            new HookBugReportDialog().apply(context, classLoader);
             Log.i("DgLabUnlocker", "Hook Loading: Settings dialog loaded");
             StatusDialog.moduleSettingsDialogInject = true;
         } catch (Exception e) {
-            ModuleUtils.logError("DgLabUnlocker", "An error occurred in InjectBugReportDialog", e);
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred in HookBugReportDialog", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
@@ -135,20 +135,20 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
             StatusDialog.fieldsLookup = true;
         } catch (Exception e) {
-            ModuleUtils.logError("DgLabUnlocker", "An error occurred in initDgLabFields()", e);
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred in initializeAccessors()", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
         // endregion
 
         // region hooks
-        for (Map.Entry<Class<? extends IHookPointInjector>, Runnable> injectorClass : injectorClasses.entrySet()) {
+        for (Map.Entry<Class<? extends IHook>, Runnable> hookClass : hookClasses.entrySet()) {
             try {
-                injectorClass.getKey().newInstance().apply(context, classLoader);
-                injectorClass.getValue().run();
-                Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getKey().getName());
+                hookClass.getKey().newInstance().apply(context, classLoader);
+                hookClass.getValue().run();
+                Log.i("DgLabUnlocker", "Hook Loading: injected " + hookClass.getKey().getName());
             } catch (Exception e) {
-                ModuleUtils.logError("DgLabUnlocker", "Could not apply " + injectorClass.getKey().getName(), e);
+                ModuleUtils.logError("DgLabUnlocker", "Could not apply " + hookClass.getKey().getName(), e);
             }
         }
         // endregion

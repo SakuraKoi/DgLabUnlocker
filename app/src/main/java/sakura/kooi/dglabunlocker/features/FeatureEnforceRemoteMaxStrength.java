@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.features;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,10 +6,10 @@ import android.widget.Toast;
 
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
-public class HookEnforceRemoteMaxStrength {
-    public static final HookEnforceRemoteMaxStrength INSTANCE = new HookEnforceRemoteMaxStrength();
+public class FeatureEnforceRemoteMaxStrength {
+    public static final FeatureEnforceRemoteMaxStrength INSTANCE = new FeatureEnforceRemoteMaxStrength();
 
-    private HookEnforceRemoteMaxStrength() {
+    private FeatureEnforceRemoteMaxStrength() {
     }
 
     public int handleStrengthA(Context context, int strength) throws ReflectiveOperationException {

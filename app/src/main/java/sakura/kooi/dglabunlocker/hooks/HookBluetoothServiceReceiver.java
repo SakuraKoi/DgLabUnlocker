@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.injector;
+package sakura.kooi.dglabunlocker.hooks;
 
 import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 
@@ -7,12 +7,12 @@ import android.util.Log;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.hooks.HookDoubleBugFix;
+import sakura.kooi.dglabunlocker.features.FeatureDoubleBugFix;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class InjectBluetoothServiceReceiver implements IHookPointInjector {
+public class HookBluetoothServiceReceiver implements IHook {
     public void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod(InjectPoints.class_BluetoothServiceDecoder, classLoader, InjectPoints.method_BluetoothServiceDecoder_decode, byte[].class,
                 new XC_MethodHook() {
@@ -36,7 +36,7 @@ public class InjectBluetoothServiceReceiver implements IHookPointInjector {
                             // endregion
 
                             if (ModuleSettings.fixDoubleBug)
-                                withCatch("HookDoubleBugFix", () -> HookDoubleBugFix.INSTANCE.beforeDataUpdate(context,
+                                withCatch("FeatureDoubleBugFix", () -> FeatureDoubleBugFix.INSTANCE.beforeDataUpdate(context,
                                         localStrengthA, totalStrengthA, remoteStrengthA,
                                         localStrengthB, totalStrengthB, remoteStrengthB));
                         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class InjectBluetoothServiceReceiver implements IHookPointInjector {
                             // endregion
 
                             if (ModuleSettings.fixDoubleBug)
-                                withCatch("HookDoubleBugFix", () -> HookDoubleBugFix.INSTANCE.afterDataUpdate(context,
+                                withCatch("FeatureDoubleBugFix", () -> FeatureDoubleBugFix.INSTANCE.afterDataUpdate(context,
                                         localStrengthA, totalStrengthA, remoteStrengthA,
                                         localStrengthB, totalStrengthB, remoteStrengthB));
                         } catch (Exception e) {

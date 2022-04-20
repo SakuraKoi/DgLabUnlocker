@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.injector;
+package sakura.kooi.dglabunlocker.hooks;
 
 import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 
@@ -7,38 +7,38 @@ import android.util.Log;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.hooks.HookBypassRemoteMaxStrength;
-import sakura.kooi.dglabunlocker.hooks.HookDeviceProtection;
-import sakura.kooi.dglabunlocker.hooks.HookEnforceLocalStrength;
-import sakura.kooi.dglabunlocker.hooks.HookEnforceRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.features.FeatureBypassRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.features.FeatureDeviceProtection;
+import sakura.kooi.dglabunlocker.features.FeatureEnforceLocalStrength;
+import sakura.kooi.dglabunlocker.features.FeatureEnforceRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class InjectProtocolStrengthDecode implements IHookPointInjector {
+public class HookProtocolStrengthDecode implements IHook {
 
     public void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod(InjectPoints.class_BluetoothService, classLoader, InjectPoints.method_BluetoothService_updateStrength, int.class, int.class,
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        withCatch("InjectProtocolStrengthDecode", () -> {
+                        withCatch("HookProtocolStrengthDecode", () -> {
                             if (Accessors.isRemote.get()) {
-                                withCatch("HookDeviceProtection", () -> {
+                                withCatch("FeatureDeviceProtection", () -> {
                                     if (ModuleSettings.deviceProtection) {
-                                        param.args[0] = HookDeviceProtection.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
-                                        param.args[1] = HookDeviceProtection.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
+                                        param.args[0] = FeatureDeviceProtection.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
+                                        param.args[1] = FeatureDeviceProtection.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
                                 });
-                                withCatch("HookEnforceRemoteMaxStrength", () -> {
+                                withCatch("FeatureEnforceRemoteMaxStrength", () -> {
                                     if (ModuleSettings.enforceRemoteMaxStrength) {
-                                        param.args[0] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
-                                        param.args[1] = HookEnforceRemoteMaxStrength.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
+                                        param.args[0] = FeatureEnforceRemoteMaxStrength.INSTANCE.handleStrengthA(context, (Integer) param.args[0]);
+                                        param.args[1] = FeatureEnforceRemoteMaxStrength.INSTANCE.handleStrengthB(context, (Integer) param.args[1]);
                                     }
                                 });
-                                withCatch("HookBypassRemoteMaxStrength", () -> {
+                                withCatch("FeatureBypassRemoteMaxStrength", () -> {
                                     if (ModuleSettings.bypassRemoteMaxStrength)
-                                        HookBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
+                                        FeatureBypassRemoteMaxStrength.INSTANCE.beforeStrength(context);
                                 });
                             }
                         });
@@ -47,16 +47,16 @@ public class InjectProtocolStrengthDecode implements IHookPointInjector {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         Log.d("DgLabUnlocker", "Bluetooth sent " + param.args[0] + " " + param.args[1]);
-                        withCatch("InjectProtocolStrengthDecode", () -> {
+                        withCatch("HookProtocolStrengthDecode", () -> {
                             if (Accessors.isRemote.get()) {
-                                withCatch("HookBypassRemoteMaxStrength", () -> {
+                                withCatch("FeatureBypassRemoteMaxStrength", () -> {
                                     if (ModuleSettings.bypassRemoteMaxStrength)
-                                        HookBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
+                                        FeatureBypassRemoteMaxStrength.INSTANCE.afterStrength(context);
                                 });
                             }
-                                withCatch("HookEnforceLocalStrength", () -> {
+                                withCatch("FeatureEnforceLocalStrength", () -> {
                                     if (ModuleSettings.enforceLocalStrength)
-                                        HookEnforceLocalStrength.INSTANCE.afterStrengthDecode(context);
+                                        FeatureEnforceLocalStrength.INSTANCE.afterStrengthDecode(context);
                                 });
                         });
                     }

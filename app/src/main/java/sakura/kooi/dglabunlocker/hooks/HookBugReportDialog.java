@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.injector;
+package sakura.kooi.dglabunlocker.hooks;
 
 import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 
@@ -15,13 +15,13 @@ import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.ui.ConfigurationDialog;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class InjectBugReportDialog implements IHookPointInjector {
+public class HookBugReportDialog implements IHook {
     public void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.FuncSelectDialog", classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        withCatch("InjectBugReportDialog FuncSelectDialog", () -> {
+                        withCatch("HookBugReportDialog FuncSelectDialog", () -> {
                             Log.i("DgLabUnlocker", "SafeButtonHook: replacing onClickListener");
                             Dialog dialog = (Dialog) param.thisObject;
                             Field btnField = dialog.getClass().getDeclaredField("safe_button");
@@ -41,7 +41,7 @@ public class InjectBugReportDialog implements IHookPointInjector {
                 "onCreate", Bundle.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
-                        withCatch("InjectBugReportDialog BugDialog", () -> {
+                        withCatch("HookBugReportDialog BugDialog", () -> {
                             Log.i("DgLabUnlocker", "SettingDialog: replacing layout of BugDialog");
                             Dialog dialog = (Dialog) param.thisObject;
                             dialog.setContentView(ConfigurationDialog.createSettingsPanel(dialog.getContext()));
