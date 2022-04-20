@@ -1,6 +1,8 @@
 # DG-Lab Unlocker
 某APP的奇怪xposed模块
 
+![](https://img.shields.io/github/license/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/languages/top/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/downloads/SakuraKoi/DgLabUnlocker/total?style=for-the-badge) ![](https://img.shields.io/github/v/release/SakuraKoi/DgLabUnlocker?style=for-the-badge)
+
 > 当前适配版本: `1.2.6` `1.3.1`
 
 - **解锁远程控制最大强度到276**\
