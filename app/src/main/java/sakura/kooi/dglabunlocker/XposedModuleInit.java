@@ -129,7 +129,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
 
         // region detect app version and initialize reflection
         try {
-            detectAppVersion(context).initializeAccessors(classLoader, context);
+            detectAppVersion(context).initializeAccessors(classLoader);
             ModuleUtils.testFieldWorks();
 
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");

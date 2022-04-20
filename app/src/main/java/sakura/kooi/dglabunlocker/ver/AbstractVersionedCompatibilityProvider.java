@@ -27,10 +27,10 @@ public abstract class AbstractVersionedCompatibilityProvider {
 
     protected abstract void initializeNames();
 
-    public void initializeAccessors(ClassLoader classLoader, Context context) throws ReflectiveOperationException {
+    public void initializeAccessors(ClassLoader classLoader) throws ReflectiveOperationException {
         initializeNames();
         MethodHandles.Lookup lookup = MethodHandles.lookup();
-        Class<?> clsGlobalVariable = Class.forName("com.bjsm.dungeonlab.global.b", true, classLoader);
+        Class<?> clsGlobalVariable = Class.forName(classGlobalVariables, true, classLoader);
 
         Accessors.localStrengthA = new FieldAccessor<>(lookup, clsGlobalVariable, localStrengthA);
         Accessors.totalStrengthA = new FieldAccessor<>(lookup, clsGlobalVariable, totalStrengthA);
