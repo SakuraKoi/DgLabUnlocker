@@ -12,6 +12,9 @@ import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthB;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
+
+import de.robv.android.xposed.XposedBridge;
 
 public class ModuleUtils {
     public static int getAppVersion(Context context) {
@@ -32,5 +35,12 @@ public class ModuleUtils {
         maxStrengthA.get();
         maxStrengthB.get();
         isRemote.get();
+    }
+
+    public static void logError(String tag, String s, Exception e) {
+        // 不优雅, 能用就行.jpg
+        XposedBridge.log(s);
+        XposedBridge.log(e);
+        Log.e(tag, s, e);
     }
 }

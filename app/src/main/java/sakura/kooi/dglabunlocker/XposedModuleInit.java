@@ -109,7 +109,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             ModuleSettings.loadConfiguration(context);
             Log.i("DgLabUnlocker", "Hook Loading: Configuration loaded");
         } catch (Exception e) {
-            Log.e("DgLabUnlocker", "An error occurred in loadConfiguration()", e);
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred in loadConfiguration()", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
@@ -121,7 +121,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             Log.i("DgLabUnlocker", "Hook Loading: Settings dialog loaded");
             StatusDialog.moduleSettingsDialogInject = true;
         } catch (Exception e) {
-            Log.e("DgLabUnlocker", "An error occurred in InjectBugReportDialog", e);
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred in InjectBugReportDialog", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
@@ -135,7 +135,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
             StatusDialog.fieldsLookup = true;
         } catch (Exception e) {
-            Log.e("DgLabUnlocker", "An error occurred in initDgLabFields()", e);
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred in initDgLabFields()", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
@@ -148,7 +148,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                 injectorClass.getValue().run();
                 Log.i("DgLabUnlocker", "Hook Loading: injected " + injectorClass.getKey().getName());
             } catch (Exception e) {
-                Log.e("DgLabUnlocker", "Could not apply " + injectorClass.getKey().getName(), e);
+                ModuleUtils.logError("DgLabUnlocker", "Could not apply " + injectorClass.getKey().getName(), e);
             }
         }
         // endregion
