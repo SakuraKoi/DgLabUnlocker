@@ -2,9 +2,7 @@ package sakura.kooi.dglabunlocker.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.StateListDrawable;
 import android.util.Log;
-import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import java.util.function.Consumer;
 import sakura.kooi.dglabunlocker.XposedModuleInit;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
-import sakura.kooi.dglabunlocker.variables.ResourceInject;
 
 public class ConfigurationDialog {
     private static void createSettingSwitches(LinearLayout container) {
@@ -43,10 +40,8 @@ public class ConfigurationDialog {
 
         createSettingSwitches(container);
 
-        UiUtils.createSpace(container);
         UiUtils.createButton(container, "模块运行状态", e -> new StatusDialog(context).show());
         if (XposedModuleInit.ENABLE_DEV_FEATURE) {
-            UiUtils.createSpace(container);
             UiUtils.createButton(container, "实验功能测试", e -> new DevTestDialog(context).show());
         }
 
@@ -57,27 +52,14 @@ public class ConfigurationDialog {
     private static void createSwitch(LinearLayout container, String title, String desc, String config, Consumer<Boolean> handler) {
         LinearLayout layout = new LinearLayout(container.getContext());
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
-        TextView textTitle = new TextView(container.getContext());
+        TextView textTitle = UiUtils.createTextView(container.getContext());
         textTitle.setText(title);
-        if (StatusDialog.resourceInjection) {
-            textTitle.setTextColor(0xffffe99d);
-        }
         textTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         layout.addView(textTitle);
-        Switch settingSwitch = new Switch(container.getContext());
+
+
+        Switch settingSwitch = UiUtils.createSwitch(container.getContext());
         settingSwitch.setPadding(UiUtils.dpToPx(layout, 10), 0, 0, 0);
-        if (StatusDialog.resourceInjection) {
-            StateListDrawable trackSelector = new StateListDrawable();
-            trackSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.switchOpenTrack.getConstantState().newDrawable());
-            trackSelector.addState(StateSet.WILD_CARD, ResourceInject.switchCloseTrack.getConstantState().newDrawable());
-            settingSwitch.setTrackDrawable(trackSelector);
-            StateListDrawable thumbSelector = new StateListDrawable();
-            thumbSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.switchOpenThumb.getConstantState().newDrawable());
-            thumbSelector.addState(StateSet.WILD_CARD, ResourceInject.switchCloseThumb.getConstantState().newDrawable());
-            settingSwitch.setThumbDrawable(thumbSelector);
-        }
-        settingSwitch.setTextOff("");
-        settingSwitch.setTextOn("");
         settingSwitch.setChecked(ModuleSettings.sharedPref.getBoolean(config, false));
         settingSwitch.setOnClickListener(e -> {
             handler.accept(settingSwitch.isChecked());
@@ -87,13 +69,10 @@ public class ConfigurationDialog {
         layout.addView(settingSwitch);
         container.addView(layout);
 
-        TextView textDesc = new TextView(container.getContext());
+        TextView textDesc = UiUtils.createTextView(container.getContext(), 0xffdfd2a5);
         textDesc.setText(desc);
         textDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         textDesc.setPadding(0, UiUtils.dpToPx(layout, 1), 0, UiUtils.dpToPx(layout, 4));
-        if (StatusDialog.resourceInjection) {
-            textDesc.setTextColor(0xffdfd2a5);
-        }
         container.addView(textDesc);
     }
 
