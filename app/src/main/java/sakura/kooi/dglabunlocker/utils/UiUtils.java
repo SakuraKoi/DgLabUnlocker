@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.variables.ResourceInject;
 
 public class UiUtils {
@@ -26,9 +27,11 @@ public class UiUtils {
     public static void createButton(LinearLayout container, String title, View.OnClickListener listener) {
         TextView btnStatus = new TextView(container.getContext());
         btnStatus.setPadding(0, dpToPx(btnStatus, 3), 0, dpToPx(btnStatus, 3));
-        btnStatus.setBackground(ResourceInject.buttonBackground.getConstantState().newDrawable());
+        if (StatusDialog.resourceInjection) {
+            btnStatus.setBackground(ResourceInject.buttonBackground.getConstantState().newDrawable());
+            btnStatus.setTextColor(Color.BLACK);
+        }
         btnStatus.setText(title);
-        btnStatus.setTextColor(Color.BLACK);
         btnStatus.setGravity(Gravity.CENTER);
         btnStatus.setOnClickListener(listener);
         container.addView(btnStatus);
@@ -38,7 +41,9 @@ public class UiUtils {
     public static LinearLayout makeDialogContainer(Context context, String title) {
         LinearLayout container = new LinearLayout(context);
         container.setPadding(dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16));
-        container.setBackground(ResourceInject.dialogSettingsBackground.getConstantState().newDrawable());
+        if (StatusDialog.resourceInjection) {
+            container.setBackground(ResourceInject.dialogSettingsBackground.getConstantState().newDrawable());
+        }
         container.setOrientation(LinearLayout.VERTICAL);
         TextView header = new TextView(context);
         header.setText(title);

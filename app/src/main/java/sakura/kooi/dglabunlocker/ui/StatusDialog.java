@@ -14,6 +14,7 @@ import sakura.kooi.dglabunlocker.utils.UiUtils;
 
 public class StatusDialog extends Dialog {
     public static String currentLoadedVersion = null;
+    public static boolean resourceInjection = false;
     public static boolean fieldsLookup = false;
     public static boolean remoteSettingsDialogInject = false;
     public static boolean bluetoothDecoderInject = false;
@@ -30,6 +31,7 @@ public class StatusDialog extends Dialog {
         LinearLayout container = UiUtils.makeDialogContainer(context, "DG-Lab Unlocker 日志");
 
         container.addView(addCurrentVersion(context));
+        container.addView(addStatus(context, "[加载] 界面资源注入", resourceInjection));
         container.addView(addStatus(context, "[加载] 模块设置界面", moduleSettingsDialogInject));
         container.addView(addStatus(context, "[加载] 应用字段初始化", fieldsLookup));
         container.addView(addStatus(context, "[注入] 远程控制设置", remoteSettingsDialogInject));
@@ -47,7 +49,9 @@ public class StatusDialog extends Dialog {
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = new TextView(context);
         textTitle.setText("[数据] 版本适配参数");
-        textTitle.setTextColor(0xffffe99d);
+        if (StatusDialog.resourceInjection) {
+            textTitle.setTextColor(0xffffe99d);
+        }
         textTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         layout.addView(textTitle);
 
@@ -63,7 +67,9 @@ public class StatusDialog extends Dialog {
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = new TextView(context);
         textTitle.setText(title);
-        textTitle.setTextColor(0xffffe99d);
+        if (StatusDialog.resourceInjection) {
+            textTitle.setTextColor(0xffffe99d);
+        }
         textTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         layout.addView(textTitle);
 

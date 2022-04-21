@@ -8,6 +8,8 @@ import android.util.Log;
 
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import sakura.kooi.dglabunlocker.R;
+import sakura.kooi.dglabunlocker.ui.StatusDialog;
+import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 
 public class ResourceInject {
     public static String modulePath;
@@ -32,8 +34,9 @@ public class ResourceInject {
             ResourceInject.switchCloseTrack = modRes.getDrawable(R.drawable.switch_close_track);
             ResourceInject.switchOpenTrack = modRes.getDrawable(R.drawable.switch_open_track);
             ResourceInject.buttonBackground = modRes.getDrawable(R.drawable.button_yellow);
+            StatusDialog.resourceInjection = true;
         } catch (Resources.NotFoundException e) {
-            Log.e("DgLabUnlocker", "settings_bg cannot be found from XModuleResources, still try inject...");
+            ModuleUtils.logError("DgLabUnlocker", "resources cannot be found from XModuleResources, still try inject...", e);
         }
 
         resparam.res.setReplacement("com.bjsm.dungeonlab", "string", "anquanxuzhi2", "模块设置");

@@ -59,19 +59,23 @@ public class ConfigurationDialog {
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = new TextView(container.getContext());
         textTitle.setText(title);
-        textTitle.setTextColor(0xffffe99d);
+        if (StatusDialog.resourceInjection) {
+            textTitle.setTextColor(0xffffe99d);
+        }
         textTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         layout.addView(textTitle);
         Switch settingSwitch = new Switch(container.getContext());
         settingSwitch.setPadding(UiUtils.dpToPx(layout, 10), 0, 0, 0);
-        StateListDrawable trackSelector = new StateListDrawable();
-        trackSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.switchOpenTrack.getConstantState().newDrawable());
-        trackSelector.addState(StateSet.WILD_CARD, ResourceInject.switchCloseTrack.getConstantState().newDrawable());
-        settingSwitch.setTrackDrawable(trackSelector);
-        StateListDrawable thumbSelector = new StateListDrawable();
-        thumbSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.switchOpenThumb.getConstantState().newDrawable());
-        thumbSelector.addState(StateSet.WILD_CARD, ResourceInject.switchCloseThumb.getConstantState().newDrawable());
-        settingSwitch.setThumbDrawable(thumbSelector);
+        if (StatusDialog.resourceInjection) {
+            StateListDrawable trackSelector = new StateListDrawable();
+            trackSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.switchOpenTrack.getConstantState().newDrawable());
+            trackSelector.addState(StateSet.WILD_CARD, ResourceInject.switchCloseTrack.getConstantState().newDrawable());
+            settingSwitch.setTrackDrawable(trackSelector);
+            StateListDrawable thumbSelector = new StateListDrawable();
+            thumbSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.switchOpenThumb.getConstantState().newDrawable());
+            thumbSelector.addState(StateSet.WILD_CARD, ResourceInject.switchCloseThumb.getConstantState().newDrawable());
+            settingSwitch.setThumbDrawable(thumbSelector);
+        }
         settingSwitch.setTextOff("");
         settingSwitch.setTextOn("");
         settingSwitch.setChecked(ModuleSettings.sharedPref.getBoolean(config, false));
@@ -87,7 +91,9 @@ public class ConfigurationDialog {
         textDesc.setText(desc);
         textDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         textDesc.setPadding(0, UiUtils.dpToPx(layout, 1), 0, UiUtils.dpToPx(layout, 4));
-        textDesc.setTextColor(0xffdfd2a5);
+        if (StatusDialog.resourceInjection) {
+            textDesc.setTextColor(0xffdfd2a5);
+        }
         container.addView(textDesc);
     }
 
