@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import sakura.kooi.dglabunlocker.remote.WebsocketRPC;
+
 public class ModuleSettings {
     public static boolean unlockRemoteMaxStrength = false;
     public static boolean deviceProtection = false;
@@ -24,6 +26,9 @@ public class ModuleSettings {
         enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
         bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
         randomQrCode = sharedPref.getBoolean("randomQrCode", false);
+        if (sharedPref.getBoolean("remoteRpc", false)) {
+            WebsocketRPC.update(true, null);
+        }
     }
 
     public static void showSettingsDialog(Context context) throws ReflectiveOperationException {

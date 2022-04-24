@@ -102,7 +102,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
 
     private void onAppLoaded(Context context, ClassLoader classLoader) {
         Log.i("DgLabUnlocker", "Hook Loading: App loaded! Trying to take over the world...");
-
+        ModuleUtils.applicationContext = context;
         // region load configuration
         Log.i("DgLabUnlocker", "Hook Loading: Loading configuration...");
         try {

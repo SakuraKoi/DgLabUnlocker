@@ -21,7 +21,7 @@ import sakura.kooi.dglabunlocker.variables.Accessors;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class WebsocketRPC extends WebSocketServer {
-    public static final WebsocketRPC INSTANCE = new WebsocketRPC();
+    public static WebsocketRPC INSTANCE = new WebsocketRPC();
 
     private WebsocketRPC() {
         super(new InetSocketAddress("0.0.0.0", 23301));
@@ -30,13 +30,19 @@ public class WebsocketRPC extends WebSocketServer {
     public static boolean isRunning = false;
     public static int connected = 0;
 
-    public static void update(boolean checked, @Nullable TextView textDesc) throws InterruptedException {
+    public static void update(boolean checked, @Nullable TextView textDesc) {
         if (isRunning != checked) {
             if (isRunning) {
-                INSTANCE.stop();
+                try {
+                    INSTANCE.stop();
+                    INSTANCE = new WebsocketRPC();
+                } catch (InterruptedException ignored) {
+                }
+                isRunning = false;
                 Log.i("DgLabUnlocker", "RPC: Websocket server stopped");
             } else {
                 INSTANCE.start();
+                isRunning = true;
                 Log.i("DgLabUnlocker", "RPC: Websocket server started");
             }
         }
@@ -84,7 +90,7 @@ public class WebsocketRPC extends WebSocketServer {
         try {
             Log.i("DgLabUnlocker", "RPC: received message " + message);
             String method = req.getString("method");
-            Object data = req.get("data");
+            Object data = req.has("data") ? req.get("data") : null;
             dispatchMethods(conn, id, method, data);
         } catch (Exception e) {
             try {
@@ -116,9 +122,9 @@ public class WebsocketRPC extends WebSocketServer {
                     boolean channel = ((JSONObject) payload).getBoolean("channel");
                     int strength = ((JSONObject) payload).getInt("strength");
                     if (channel) {
-                        addStrength(conn, id, true, strength, Accessors.localStrengthA, Accessors.remoteStrengthA, Accessors.maxStrengthA, Accessors.totalStrengthA);
+                        addStrength(conn, id, true, strength, Accessors.maxStrengthA, Accessors.totalStrengthA);
                     } else {
-                        addStrength(conn, id, false, strength, Accessors.localStrengthB, Accessors.remoteStrengthB, Accessors.maxStrengthB, Accessors.totalStrengthB);
+                        addStrength(conn, id, false, strength, Accessors.maxStrengthB, Accessors.totalStrengthB);
                     }
                 } else {
                     conn.send(makeResponse(id, 400, "Bad request", null));
@@ -131,8 +137,8 @@ public class WebsocketRPC extends WebSocketServer {
         }
     }
 
-    private void addStrength(WebSocket conn, int id, boolean channel, int strength, FieldAccessor<Integer> localStrength, FieldAccessor<Integer> remoteStrength, FieldAccessor<Integer> maxStrength, FieldAccessor<Integer> totalStrength) throws ReflectiveOperationException, JSONException {
-        strength = localStrength.get() + strength + remoteStrength.get();
+    private void addStrength(WebSocket conn, int id, boolean channel, int strength, FieldAccessor<Integer> maxStrength, FieldAccessor<Integer> totalStrength) throws ReflectiveOperationException, JSONException {
+        strength = totalStrength.get() + strength;
 
         if (Accessors.isRemote.get() && !ModuleSettings.bypassRemoteMaxStrength) {
             int max = maxStrength.get();
@@ -144,7 +150,8 @@ public class WebsocketRPC extends WebSocketServer {
             strength = 0;
         }
         totalStrength.set(strength);
-        Log.i("DgLabUnlocker", "RPC: Strength " + (channel ? "A" : "B")+ "set to " + strength);
+        Log.i("DgLabUnlocker", "RPC: Strength " + (channel ? "A" : "B") + " set to " + strength);
+        ModuleUtils.broadcastUiUpdate();
         conn.send(makeResponse(id, 0, "ok", null));
     }
 
@@ -167,25 +174,21 @@ public class WebsocketRPC extends WebSocketServer {
         Accessors.totalStrengthA.set(strengthA);
         Accessors.totalStrengthB.set(strengthB);
         Log.i("DgLabUnlocker", "RPC: Strength set to " + strengthA + " | " + strengthB);
+        ModuleUtils.broadcastUiUpdate();
         conn.send(makeResponse(id, 0, "ok", null));
     }
 
     private void queryStrength(WebSocket conn, int id) throws JSONException, ReflectiveOperationException {
         JSONObject data = new JSONObject();
+        data.put("totalStrengthA", Accessors.totalStrengthA.get());
+        data.put("totalStrengthB", Accessors.totalStrengthB.get());
         data.put("baseStrengthA", Accessors.localStrengthA.get());
         data.put("baseStrengthB", Accessors.localStrengthB.get());
-        if (Accessors.isRemote.get()) {
-            data.put("remoteStrengthA", Accessors.remoteStrengthA.get());
-            data.put("remoteStrengthB", Accessors.remoteStrengthB.get());
-            data.put("maxStrengthA", Accessors.maxStrengthA.get());
-            data.put("maxStrengthB", Accessors.maxStrengthB.get());
-        } else {
-            data.put("remoteStrengthA", null);
-            data.put("remoteStrengthB", null);
-            data.put("maxStrengthA", null);
-            data.put("maxStrengthB", null);
-        }
-
+        data.put("remoteStrengthA", Accessors.remoteStrengthA.get());
+        data.put("remoteStrengthB", Accessors.remoteStrengthB.get());
+        data.put("maxStrengthA", Accessors.maxStrengthA.get());
+        data.put("maxStrengthB", Accessors.maxStrengthB.get());
+        data.put("isRemote", Accessors.isRemote.get());
         conn.send(makeResponse(id, 0, "ok", data));
     }
 

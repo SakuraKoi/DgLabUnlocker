@@ -43,6 +43,8 @@
 
 `id` 字段用于区分请求-响应, 请求的id将在响应中被原样回传, 建议使用随机值或顺序递增
 
+`totalStrength` 的值为 `对应强度+9` (eg: APP显示10时值为19), 等于0即暂停中
+
 1. **查询当前强度**
 
    请求
@@ -62,13 +64,15 @@
      "code": 0, // 错误码
      "result": "ok",
      "data": {
+       "totalStrengthA": 10, // 强度
+       "totalStrengthB": 12,
        "baseStrengthA": 10, // 基础强度
        "baseStrengthB": 12,
-       // 以下数据仅在远程时存在, 否则值为null
        "remoteStrengthA": 30, // 远程强度
        "remoteStrengthB": 19,
        "maxStrengthA": 60, // 被控方设置的强度限制
-       "maxStrengthB": 100
+       "maxStrengthB": 100,
+       "isRemote": false,
      }
    }
    ```
@@ -86,7 +90,7 @@
      "data": {
        // 此处的强度值应为基础强度(即总强度-远程强度)
        "strengthA": 10,
-       "strengthB": 10,
+       "strengthB": 10
      }
    }
    ```
@@ -116,7 +120,7 @@
        // true=A false=B
        "channel": true, 
        // 正加负减
-       "strength": 10,
+       "strength": 10
      }
    }
    ```
