@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import sakura.kooi.dglabunlocker.remote.WebsocketRPC;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
 
 public class StatusDialog extends Dialog {
@@ -38,6 +39,9 @@ public class StatusDialog extends Dialog {
             container.addView(addStatus(context, "[注入] 强度调整按钮", strengthButtonInject));
             container.addView(addStatus(context, "[注入] 基础强度回调", localStrengthHandlerInject));
             container.addView(addStatus(context, "[注入] 游客设备哈希", guestLogin));
+            container.addView(addStatus(context, "[接口] RPC服务连接数",
+                    WebsocketRPC.isRunning ? String.valueOf(WebsocketRPC.connected) : "关闭",
+                    WebsocketRPC.isRunning ? 0xffc6ff00 : 0xfff44336));
         }));
     }
 
@@ -57,6 +61,10 @@ public class StatusDialog extends Dialog {
     }
 
     private LinearLayout addStatus(Context context, String title, boolean isLoaded) {
+        return addStatus(context, title, isLoaded ? "成功" : "错误", isLoaded ? 0xffc6ff00 : 0xfff44336);
+    }
+
+    private LinearLayout addStatus(Context context, String title, String status, int color) {
         LinearLayout layout = new LinearLayout(context);
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = UiUtils.createTextView(context);
@@ -66,8 +74,8 @@ public class StatusDialog extends Dialog {
 
         TextView textStatus = UiUtils.createTextView(context);
         textStatus.setPadding(UiUtils.dpToPx(layout, 10), 0, 0, 0);
-        textStatus.setText(isLoaded ? "成功" : "错误");
-        textStatus.setTextColor(isLoaded ? 0xffc6ff00 : 0xfff44336);
+        textStatus.setText(status);
+        textStatus.setTextColor(color);
         textStatus.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         layout.addView(textStatus);
         return layout;
