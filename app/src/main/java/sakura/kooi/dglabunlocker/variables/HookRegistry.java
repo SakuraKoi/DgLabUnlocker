@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.features.FeatureUnlockRemoteMax;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 
 public class HookRegistry {
@@ -14,7 +15,7 @@ public class HookRegistry {
     public static final boolean ENABLE_DEV_FEATURE = false;
 
     public static final List<Class<? extends AbstractFeature>> features = Collections.unmodifiableList(Arrays.asList(
-       AbstractFeature.class // FIXME
+            FeatureUnlockRemoteMax.class
     ));
 
     public static final Map<Class<? extends AbstractFeature>, AbstractFeature> featureInstances = new ConcurrentHashMap<>();

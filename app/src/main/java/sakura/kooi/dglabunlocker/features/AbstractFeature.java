@@ -1,5 +1,7 @@
 package sakura.kooi.dglabunlocker.features;
 
+import java.util.List;
+
 import lombok.Getter;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 
@@ -9,7 +11,7 @@ public abstract class AbstractFeature {
 
     public abstract String getSettingName();
     public abstract String getSettingDesc();
-    public abstract Class<AbstractHook<?>>[] getRequiredHooks();
+    public abstract List<Class<? extends AbstractHook<?>>> getRequiredHooks();
 
     public abstract boolean isSupported();
     public abstract ClientSide getSide();
