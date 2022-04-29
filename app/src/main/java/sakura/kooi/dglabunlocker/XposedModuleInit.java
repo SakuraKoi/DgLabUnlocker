@@ -35,8 +35,6 @@ import sakura.kooi.dglabunlocker.ver.Version126;
 import sakura.kooi.dglabunlocker.ver.Version131;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
-    // 调试用的实验性功能菜单开关
-    public static final boolean ENABLE_DEV_FEATURE = false;
 
     private final Map<Class<? extends IHook>, Runnable> hookClasses = MapUtils.of(
             entry(HookRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),

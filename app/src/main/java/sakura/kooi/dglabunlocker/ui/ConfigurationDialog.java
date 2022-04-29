@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import java.util.function.Consumer;
 
-import sakura.kooi.dglabunlocker.XposedModuleInit;
 import sakura.kooi.dglabunlocker.remote.WebsocketRPC;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class ConfigurationDialog {
@@ -27,7 +27,7 @@ public class ConfigurationDialog {
         createSettingSwitches(container);
 
         UiUtils.createButton(container, "模块运行状态", e -> new StatusDialog(context).show());
-        if (XposedModuleInit.ENABLE_DEV_FEATURE) {
+        if (HookRegistry.ENABLE_DEV_FEATURE) {
             UiUtils.createButton(container, "实验功能测试", e -> new DevTestDialog(context).show());
         }
 
@@ -35,7 +35,7 @@ public class ConfigurationDialog {
     }
 
     private static void createSettingSwitches(LinearLayout container) {
-        if (XposedModuleInit.ENABLE_DEV_FEATURE) // 目前还没用
+        if (HookRegistry.ENABLE_DEV_FEATURE) // 目前还没用
             createSwitch(container, "被控 | 游客随机二维码", "每次进游客都会刷一个新的二维码",
                 "randomQrCode", val -> ModuleSettings.randomQrCode = val);
 
