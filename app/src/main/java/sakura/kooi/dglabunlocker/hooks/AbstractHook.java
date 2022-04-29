@@ -43,13 +43,15 @@ public abstract class AbstractHook<T> {
         }
     }
 
+    public abstract String getName();
+
     protected abstract void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException;
 
     @SuppressWarnings("unchecked") // is checked
     protected void callHandlers(ConsumerEx<T> dataPipe) throws ReflectiveOperationException {
         boolean isRemote = Accessors.isRemote.get();
         for (AbstractFeature handler : handlers) {
-            if (!handler.isEnabled())
+            if (!handler.isEnabled() || !handler.isSupported())
                 continue;
             if (handler.getSide() == AbstractFeature.ClientSide.CONTROLLED && !isRemote)
                 continue;

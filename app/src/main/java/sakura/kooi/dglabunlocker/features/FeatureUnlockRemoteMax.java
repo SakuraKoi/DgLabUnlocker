@@ -1,5 +1,6 @@
 package sakura.kooi.dglabunlocker.features;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemot
 
     @Override
     public boolean isSupported() {
-        return true;
+        return super.isSupported();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemot
     }
 
     @Override
-    public void interceptUiElements(Object thisObject) throws ReflectiveOperationException {
+    public void interceptUiElements(Context context, Object thisObject) throws ReflectiveOperationException {
         Field fieldChannelA = thisObject.getClass().getDeclaredField(InjectPoints.field_RemoteSettingDialog_strengthA);
         Field fieldChannelB = thisObject.getClass().getDeclaredField(InjectPoints.field_RemoteSettingDialog_strengthB);
         fieldChannelA.setAccessible(true);

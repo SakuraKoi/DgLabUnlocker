@@ -12,6 +12,11 @@ public class HookRemoteSettingsDialog extends AbstractHook<HookRemoteSettingsDia
         super(IRemoteSettingDialogUiInterceptor.class);
     }
 
+    @Override
+    public String getName() {
+        return "远程控制设置";
+    }
+
     public void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod(InjectPoints.class_RemoteSettingDialog, classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
@@ -19,13 +24,13 @@ public class HookRemoteSettingsDialog extends AbstractHook<HookRemoteSettingsDia
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         Object thisObject = param.thisObject;
                         HookRemoteSettingsDialog.this.callHandlers(interceptor -> {
-                            interceptor.interceptUiElements(thisObject);
+                            interceptor.interceptUiElements(context, thisObject);
                         });
                     }
                 });
     }
 
     public interface IRemoteSettingDialogUiInterceptor {
-        void interceptUiElements(Object thisObject) throws ReflectiveOperationException;
+        void interceptUiElements(Context context, Object thisObject) throws ReflectiveOperationException;
     }
 }
