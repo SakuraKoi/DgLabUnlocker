@@ -12,6 +12,7 @@ public abstract class AbstractFeature {
     public abstract IHook[] getRequiredHooks();
 
     public abstract boolean isSupported();
+    public abstract ClientSide getSide();
 
     public abstract void testFeatureWorks() throws Exception;
 
@@ -21,4 +22,8 @@ public abstract class AbstractFeature {
     }
 
     public abstract void updateFeatureStatus(boolean enabled);
+
+    public enum ClientSide {
+        ALL, CONTROLLER, CONTROLLED;
+    }
 }
