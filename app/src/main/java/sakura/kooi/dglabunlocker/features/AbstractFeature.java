@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
-import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
 public abstract class AbstractFeature {
     @Getter
@@ -18,20 +17,14 @@ public abstract class AbstractFeature {
     public String getConfigurationKey() {
         return this.getClass().getSimpleName();
     }
+
     public abstract List<Class<? extends AbstractHook<?>>> getRequiredHooks();
 
-    public boolean isSupported() {
-        boolean supported = isWorking;
-        for (Class<? extends AbstractHook<?>> requiredHookClass : getRequiredHooks()) {
-            AbstractHook<?> hookInstance = HookRegistry.hookInstances.get(requiredHookClass);
-            supported = supported && hookInstance != null && hookInstance.isWorking();
-        }
-        return supported;
-    }
+    public abstract boolean isUnsupported();
 
     public abstract ClientSide getSide();
 
-    public abstract void testFeatureWorks() throws Exception;
+    public abstract void initializeAndTest() throws Exception;
 
     public void setEnabled(boolean enabled) {
         updateFeatureStatus(enabled);

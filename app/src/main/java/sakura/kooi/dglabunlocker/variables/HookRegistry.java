@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.features.FeatureUnlockRemoteMax;
@@ -20,4 +21,5 @@ public class HookRegistry {
 
     public static final Map<Class<? extends AbstractFeature>, AbstractFeature> featureInstances = new ConcurrentHashMap<>();
     public static final Map<Class<? extends AbstractHook<?>>, AbstractHook<?>> hookInstances = new ConcurrentHashMap<>();
+    public static final Map<String, Map.Entry<Supplier<String>, Supplier<Integer>>> customStatuses = new ConcurrentHashMap<>();
 }

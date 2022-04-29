@@ -145,6 +145,8 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                     AbstractHook<?> hook = HookRegistry.hookInstances.get(hookClass);
                     if (hook == null)
                         throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not initialized");
+                    if (!hook.isWorking())
+                        throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not working");
                     hook.registerHandler(feature);
                 }
             } catch (Exception e) {
@@ -163,8 +165,17 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             ModuleUtils.logError("DgLabUnlocker", "An error occurred in loadConfiguration()", e);
         }
         // endregion
-
-
+        // region test features
+        Log.i("DgLabUnlocker", "Hook Loading: Testing features...");
+        for(AbstractFeature feature : HookRegistry.featureInstances.values()) {
+            try {
+                feature.initializeAndTest();
+            } catch (Exception e) {
+                feature.setWorking(false);
+                ModuleUtils.logError("DgLabUnlocker", "An error occurred while testing feature " + feature.getClass().getName(), e);
+            }
+        }
+        // endregion
         Toast.makeText(context, "DG-Lab Unlocker 注入成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();
     }
 

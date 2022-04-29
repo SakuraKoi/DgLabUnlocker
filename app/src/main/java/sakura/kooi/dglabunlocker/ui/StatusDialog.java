@@ -10,8 +10,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import sakura.kooi.dglabunlocker.remote.WebsocketRPC;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
 public class StatusDialog extends Dialog {
     public static String currentLoadedVersion = null;
@@ -33,6 +37,17 @@ public class StatusDialog extends Dialog {
             container.addView(addStatus(context, "[加载] 界面资源注入", resourceInjection));
             container.addView(addStatus(context, "[加载] 模块设置界面", moduleSettingsDialogInject));
             container.addView(addStatus(context, "[加载] 应用字段初始化", fieldsLookup));
+
+            for (AbstractHook<?> hook : HookRegistry.hookInstances.values()) {
+                container.addView(addStatus(context, "[注入] " + hook.getName(), hook.isWorking()));
+            }
+
+            for (Map.Entry<String, Map.Entry<Supplier<String>, Supplier<Integer>>> customStatus : HookRegistry.customStatuses.entrySet()) {
+                container.addView(addStatus(context, customStatus.getKey(),
+                        customStatus.getValue().getKey().get(),
+                        customStatus.getValue().getValue().get()));
+            }
+/*
             container.addView(addStatus(context, "[注入] 远程控制设置", remoteSettingsDialogInject));
             container.addView(addStatus(context, "[注入] 蓝牙命令接收", bluetoothDecoderInject));
             container.addView(addStatus(context, "[注入] 强度协议解码", protocolStrengthDecodeInject));
@@ -41,7 +56,7 @@ public class StatusDialog extends Dialog {
             container.addView(addStatus(context, "[注入] 游客设备哈希", guestLogin));
             container.addView(addStatus(context, "[接口] RPC服务连接数",
                     WebsocketRPC.isRunning ? String.valueOf(WebsocketRPC.connected) : "关闭",
-                    WebsocketRPC.isRunning ? 0xffc6ff00 : 0xfff44336));
+                    WebsocketRPC.isRunning ? 0xffc6ff00 : 0xfff44336));*/
         }));
     }
 

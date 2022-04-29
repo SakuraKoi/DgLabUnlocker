@@ -30,8 +30,8 @@ public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemot
     }
 
     @Override
-    public boolean isSupported() {
-        return super.isSupported();
+    public boolean isUnsupported() {
+        return false;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemot
     }
 
     @Override
-    public void testFeatureWorks() throws Exception {
+    public void initializeAndTest() throws Exception {
 
     }
 
