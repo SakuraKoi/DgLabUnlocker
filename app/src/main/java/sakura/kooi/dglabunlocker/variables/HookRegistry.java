@@ -8,7 +8,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.features.FeatureBypassRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.features.FeatureDeviceProtection;
+import sakura.kooi.dglabunlocker.features.FeatureEnforceLocalStrength;
+import sakura.kooi.dglabunlocker.features.FeatureEnforceRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.features.FeatureUnlockRemoteMax;
+import sakura.kooi.dglabunlocker.features.FeatureWebsocketRpc;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 
 public class HookRegistry {
@@ -16,7 +21,12 @@ public class HookRegistry {
     public static final boolean ENABLE_DEV_FEATURE = false;
 
     public static final List<Class<? extends AbstractFeature>> features = Collections.unmodifiableList(Arrays.asList(
-            FeatureUnlockRemoteMax.class
+            FeatureDeviceProtection.class,
+            FeatureUnlockRemoteMax.class,
+            FeatureEnforceLocalStrength.class,
+            FeatureEnforceRemoteMaxStrength.class,
+            FeatureBypassRemoteMaxStrength.class,
+            FeatureWebsocketRpc.class
     ));
 
     public static final Map<Class<? extends AbstractFeature>, AbstractFeature> featureInstances = new ConcurrentHashMap<>();

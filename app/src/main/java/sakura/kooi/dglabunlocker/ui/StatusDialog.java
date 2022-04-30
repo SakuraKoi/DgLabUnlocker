@@ -47,16 +47,6 @@ public class StatusDialog extends Dialog {
                         customStatus.getValue().getKey().get(),
                         customStatus.getValue().getValue().get()));
             }
-/*
-            container.addView(addStatus(context, "[注入] 远程控制设置", remoteSettingsDialogInject));
-            container.addView(addStatus(context, "[注入] 蓝牙命令接收", bluetoothDecoderInject));
-            container.addView(addStatus(context, "[注入] 强度协议解码", protocolStrengthDecodeInject));
-            container.addView(addStatus(context, "[注入] 强度调整按钮", strengthButtonInject));
-            container.addView(addStatus(context, "[注入] 基础强度回调", localStrengthHandlerInject));
-            container.addView(addStatus(context, "[注入] 游客设备哈希", guestLogin));
-            container.addView(addStatus(context, "[接口] RPC服务连接数",
-                    WebsocketRPC.isRunning ? String.valueOf(WebsocketRPC.connected) : "关闭",
-                    WebsocketRPC.isRunning ? 0xffc6ff00 : 0xfff44336));*/
         }));
     }
 
