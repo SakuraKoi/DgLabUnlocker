@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import sakura.kooi.dglabunlocker.remote.WebsocketRPC;
+import sakura.kooi.dglabunlocker.features.AbstractFeature;
 
 public class ModuleSettings {
     public static boolean unlockRemoteMaxStrength = false;
@@ -20,14 +20,8 @@ public class ModuleSettings {
     public static void loadConfiguration(Context context) {
         sharedPref = context.getSharedPreferences("dglabunlocker", Context.MODE_PRIVATE);
 
-        unlockRemoteMaxStrength = sharedPref.getBoolean("unlockRemoteMaxStrength", false);
-        enforceLocalStrength = sharedPref.getBoolean("enforceLocalStrength", false);
-        deviceProtection = sharedPref.getBoolean("deviceProtection", true);
-        enforceRemoteMaxStrength = sharedPref.getBoolean("enforceRemoteMaxStrength", false);
-        bypassRemoteMaxStrength = sharedPref.getBoolean("bypassRemoteMaxStrength", false);
-        randomQrCode = sharedPref.getBoolean("randomQrCode", false);
-        if (sharedPref.getBoolean("remoteRpc", false)) {
-            WebsocketRPC.update(true, null);
+        for(AbstractFeature feature : HookRegistry.featureInstances.values()) {
+            feature.setEnabled(sharedPref.getBoolean(feature.getConfigurationKey(), false));
         }
     }
 
