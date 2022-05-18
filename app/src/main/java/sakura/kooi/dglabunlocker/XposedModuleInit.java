@@ -1,14 +1,12 @@
 package sakura.kooi.dglabunlocker;
 
-import static sakura.kooi.dglabunlocker.utils.MapUtils.entry;
-
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import java.util.Map;
+import java.util.HashSet;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -17,17 +15,13 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import sakura.kooi.dglabunlocker.hooks.HookBugReportDialog;
-import sakura.kooi.dglabunlocker.hooks.HookProtocolStrengthDecode;
-import sakura.kooi.dglabunlocker.hooks.IHook;
-import sakura.kooi.dglabunlocker.hooks.HookBluetoothServiceReceiver;
-import sakura.kooi.dglabunlocker.hooks.HookControlledStrengthButton;
-import sakura.kooi.dglabunlocker.hooks.HookGuestLogin;
-import sakura.kooi.dglabunlocker.hooks.HookRemoteSettingsDialog;
-import sakura.kooi.dglabunlocker.hooks.HookStrengthButton;
+import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.hooks.AbstractHook;
+import sakura.kooi.dglabunlocker.hooks.PreLoadHookSettingsDialog;
 import sakura.kooi.dglabunlocker.ui.StatusDialog;
-import sakura.kooi.dglabunlocker.utils.MapUtils;
+import sakura.kooi.dglabunlocker.utils.ModuleException;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 import sakura.kooi.dglabunlocker.variables.ResourceInject;
 import sakura.kooi.dglabunlocker.ver.AbstractVersionedCompatibilityProvider;
@@ -35,18 +29,6 @@ import sakura.kooi.dglabunlocker.ver.Version126;
 import sakura.kooi.dglabunlocker.ver.Version131;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
-    // 调试用的实验性功能菜单开关
-    public static final boolean ENABLE_DEV_FEATURE = false;
-
-    private final Map<Class<? extends IHook>, Runnable> hookClasses = MapUtils.of(
-            entry(HookRemoteSettingsDialog.class, () -> StatusDialog.remoteSettingsDialogInject = true),
-            entry(HookBluetoothServiceReceiver.class, () -> StatusDialog.bluetoothDecoderInject = true),
-            entry(HookProtocolStrengthDecode.class, () -> StatusDialog.protocolStrengthDecodeInject = true),
-            entry(HookStrengthButton.class, () -> StatusDialog.strengthButtonInject = true),
-            entry(HookControlledStrengthButton.class, () -> StatusDialog.localStrengthHandlerInject = true),
-            entry(HookGuestLogin.class, () -> StatusDialog.guestLogin = true)
-    );
-
     @NonNull
     private static AbstractVersionedCompatibilityProvider detectAppVersion(Context context) {
         AbstractVersionedCompatibilityProvider versionedFieldInitializer;
@@ -103,34 +85,21 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
     private void onAppLoaded(Context context, ClassLoader classLoader) {
         Log.i("DgLabUnlocker", "Hook Loading: App loaded! Trying to take over the world...");
         ModuleUtils.applicationContext = context;
+
         // region load configuration
-        Log.i("DgLabUnlocker", "Hook Loading: Loading configuration...");
+        Log.i("DgLabUnlocker", "Hook Loading: Injecting settings dialog...");
         try {
-            ModuleSettings.loadConfiguration(context);
-            Log.i("DgLabUnlocker", "Hook Loading: Configuration loaded");
+            PreLoadHookSettingsDialog.apply(context, classLoader);
         } catch (Exception e) {
-            ModuleUtils.logError("DgLabUnlocker", "An error occurred in loadConfiguration()", e);
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred while injecting settings dialog", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
             return;
         }
         // endregion
-
-        // region inject setting dialog
-        try {
-            new HookBugReportDialog().apply(context, classLoader);
-            Log.i("DgLabUnlocker", "Hook Loading: Settings dialog loaded");
-            StatusDialog.moduleSettingsDialogInject = true;
-        } catch (Exception e) {
-            ModuleUtils.logError("DgLabUnlocker", "An error occurred in HookBugReportDialog", e);
-            Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
-            return;
-        }
-        // endregion
-
         // region detect app version and initialize reflection
         try {
             detectAppVersion(context).initializeAccessors(classLoader);
-            ModuleUtils.testFieldWorks();
+            ModuleUtils.testFieldWorks(); // FIXME move to features
 
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
             StatusDialog.fieldsLookup = true;
@@ -141,18 +110,72 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         }
         // endregion
 
-        // region hooks
-        for (Map.Entry<Class<? extends IHook>, Runnable> hookClass : hookClasses.entrySet()) {
+        // region load features and collect hook classes
+        HashSet<Class<? extends AbstractHook<?>>> hookClasses = new HashSet<>();
+        for (Class<? extends AbstractFeature> featureClass : HookRegistry.features) {
             try {
-                hookClass.getKey().newInstance().apply(context, classLoader);
-                hookClass.getValue().run();
-                Log.i("DgLabUnlocker", "Hook Loading: injected " + hookClass.getKey().getName());
+                AbstractFeature feature = featureClass.newInstance();
+                hookClasses.addAll(feature.getRequiredHooks());
+                HookRegistry.featureInstances.put(featureClass, feature);
             } catch (Exception e) {
-                ModuleUtils.logError("DgLabUnlocker", "Could not apply " + hookClass.getKey().getName(), e);
+                ModuleUtils.logError("DgLabUnlocker", "Could not initialize feature " + featureClass.getName(), e);
             }
         }
         // endregion
+        // region inject hooks
+        for (Class<? extends AbstractHook<?>> hookClass : hookClasses) {
+            try {
+                AbstractHook<?> hook = hookClass.newInstance();
+                hook.applyHook(context, classLoader);
+                HookRegistry.hookInstances.put(hookClass, hook);
+            } catch (Exception e) {
+                ModuleUtils.logError("DgLabUnlocker", "Could not apply hook " + hookClass.getName(), e);
+            }
+        }
+        // endregion
+        // region register hook handlers
+        for (Class<? extends AbstractFeature> featureClass : HookRegistry.features) {
+            AbstractFeature feature = null;
+            try {
+                feature = HookRegistry.featureInstances.get(featureClass);
+                if (feature == null)
+                    continue;
 
+                for (Class<? extends AbstractHook<?>> hookClass : feature.getRequiredHooks()) {
+                    AbstractHook<?> hook = HookRegistry.hookInstances.get(hookClass);
+                    if (hook == null)
+                        throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not initialized");
+                    if (!hook.isWorking())
+                        throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not working");
+                    hook.registerHandler(feature);
+                }
+            } catch (Exception e) {
+                ModuleUtils.logError("DgLabUnlocker", "Could not register hook handler for feature " + featureClass.getName(), e);
+                if (feature != null)
+                    feature.setWorking(false);
+            }
+        }
+        // endregion
+        // region load configurations
+        Log.i("DgLabUnlocker", "Hook Loading: Loading configuration...");
+        try {
+            ModuleSettings.loadConfiguration(context);
+            Log.i("DgLabUnlocker", "Hook Loading: Configuration loaded");
+        } catch (Exception e) {
+            ModuleUtils.logError("DgLabUnlocker", "An error occurred in loadConfiguration()", e);
+        }
+        // endregion
+        // region test features
+        Log.i("DgLabUnlocker", "Hook Loading: Testing features...");
+        for(AbstractFeature feature : HookRegistry.featureInstances.values()) {
+            try {
+                feature.initializeAndTest();
+            } catch (Exception e) {
+                feature.setWorking(false);
+                ModuleUtils.logError("DgLabUnlocker", "An error occurred while testing feature " + feature.getClass().getName(), e);
+            }
+        }
+        // endregion
         Toast.makeText(context, "DG-Lab Unlocker 注入成功\nGithub @SakuraKoi/DgLabUnlocker", Toast.LENGTH_LONG).show();
     }
 

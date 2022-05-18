@@ -1,46 +1,43 @@
 package sakura.kooi.dglabunlocker.hooks;
 
 import android.content.Context;
-import android.view.MotionEvent;
-import android.view.View;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
-public class HookStrengthButton extends AbstractHook<HookStrengthButton.IStrengthButtonInterceptor> {
-    public HookStrengthButton() {
-        super(IStrengthButtonInterceptor.class);
+public class HookProtocolStrengthDecoder extends AbstractHook<HookProtocolStrengthDecoder.IProtocolDecoderInterceptor> {
+    public HookProtocolStrengthDecoder() {
+        super(IProtocolDecoderInterceptor.class);
     }
 
     @Override
     public String getName() {
-        return "强度调整按钮";
+        return "强度协议解码";
     }
 
+    @Override
     public void apply(Context context, ClassLoader classLoader) {
-        InjectPoints.class_StrengthTouchListeners.forEach(classTouchListener -> {
-            XposedHelpers.findAndHookMethod(classTouchListener, classLoader,
-                "onTouch", View.class, MotionEvent.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(InjectPoints.class_BluetoothServiceDecoder, classLoader, InjectPoints.method_BluetoothServiceDecoder_decode, byte[].class,
+                new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         callHandlers(handler -> {
-                            handler.beforeStrengthChange(context);
+                            handler.beforeStrengthDecode(context);
                         });
                     }
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         callHandlers(handler -> {
-                            handler.afterStrengthChange(context);
+                            handler.afterStrengthDecode(context);
                         });
                     }
                 });
-        });
     }
 
-    public interface IStrengthButtonInterceptor {
-        void beforeStrengthChange(Context context);
-        void afterStrengthChange(Context context);
+    public interface IProtocolDecoderInterceptor {
+        void beforeStrengthDecode(Context context) throws ReflectiveOperationException;
+        void afterStrengthDecode(Context context) throws ReflectiveOperationException;
     }
 }

@@ -1,10 +1,8 @@
 package sakura.kooi.dglabunlocker.remote;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -14,53 +12,29 @@ import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
 
-import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class WebsocketRPC extends WebSocketServer {
-    public static WebsocketRPC INSTANCE = new WebsocketRPC();
-
-    private WebsocketRPC() {
+    public WebsocketRPC() {
         super(new InetSocketAddress("0.0.0.0", 23301));
     }
 
-    public static boolean isRunning = false;
-    public static int connected = 0;
+    public boolean isRunning = false;
+    public int connected = 0;
 
-    public static void update(boolean checked, @Nullable TextView textDesc) {
-        if (isRunning != checked) {
-            if (isRunning) {
-                try {
-                    INSTANCE.stop();
-                    INSTANCE = new WebsocketRPC();
-                } catch (InterruptedException ignored) {
-                }
-                isRunning = false;
-                Log.i("DgLabUnlocker", "RPC: Websocket server stopped");
-            } else {
-                INSTANCE.start();
-                isRunning = true;
-                Log.i("DgLabUnlocker", "RPC: Websocket server started");
-            }
-        }
-        if (textDesc != null) {
-            updateStatus(textDesc);
-        }
+    public void start() {
+        super.start();
+        isRunning = true;
+        Log.i("DgLabUnlocker", "RPC: Websocket server started");
     }
 
-    public static void updateStatus(TextView textDesc) {
-        textDesc.setText(WebsocketRPC.isRunning ? "运行于 ws://0.0.0.0:23301" : "对外开放Websocket RPC服务端口");
-        if (WebsocketRPC.isRunning) {
-            textDesc.setTextColor(0xffc6ff00);
-        } else if (StatusDialog.resourceInjection) {
-            textDesc.setTextColor(0xffdfd2a5);
-        } else { // system default color
-            TextView textView = new TextView(textDesc.getContext());
-            textDesc.setTextColor(textView.getCurrentTextColor());
-        }
+    public void stop() throws InterruptedException {
+        super.stop();
+        isRunning = false;
+        Log.i("DgLabUnlocker", "RPC: Websocket server stopped");
     }
 
     @Override
