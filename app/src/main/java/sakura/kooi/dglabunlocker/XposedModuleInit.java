@@ -27,6 +27,7 @@ import sakura.kooi.dglabunlocker.variables.ResourceInject;
 import sakura.kooi.dglabunlocker.ver.AbstractVersionedCompatibilityProvider;
 import sakura.kooi.dglabunlocker.ver.Version126;
 import sakura.kooi.dglabunlocker.ver.Version131;
+import sakura.kooi.dglabunlocker.ver.Version132;
 
 public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
     @NonNull
@@ -34,6 +35,10 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         AbstractVersionedCompatibilityProvider versionedFieldInitializer;
         int versionCode = ModuleUtils.getAppVersion(context);
         switch (versionCode) {
+            case 22:
+                versionedFieldInitializer = new Version132();
+                StatusDialog.currentLoadedVersion = "1.3.2";
+                break;
             case 21:
                 versionedFieldInitializer = new Version131();
                 StatusDialog.currentLoadedVersion = "1.3.1";
