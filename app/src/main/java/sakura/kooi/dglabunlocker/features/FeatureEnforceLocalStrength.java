@@ -26,6 +26,11 @@ public class FeatureEnforceLocalStrength extends AbstractFeature implements Hook
     }
 
     @Override
+    public String getConfigurationKey() {
+        return "FeatureEnforceLocalStrength";
+    }
+
+    @Override
     public List<Class<? extends AbstractHook<?>>> getRequiredHooks() {
         return Arrays.asList(HookProtocolStrengthDecoder.class, HookControlledStrengthButton.class);
     }

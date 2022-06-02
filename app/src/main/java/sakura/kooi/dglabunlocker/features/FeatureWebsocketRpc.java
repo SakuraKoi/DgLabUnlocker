@@ -23,6 +23,11 @@ public class FeatureWebsocketRpc extends AbstractFeature {
     }
 
     @Override
+    public String getConfigurationKey() {
+        return "FeatureWebsocketRpc";
+    }
+
+    @Override
     public List<Class<? extends AbstractHook<?>>> getRequiredHooks() {
         return Collections.emptyList();
     }

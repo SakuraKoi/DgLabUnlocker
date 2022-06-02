@@ -25,6 +25,11 @@ public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemot
     }
 
     @Override
+    public String getConfigurationKey() {
+        return "FeatureUnlockRemoteMax";
+    }
+
+    @Override
     public List<Class<? extends AbstractHook<?>>> getRequiredHooks() {
         return Arrays.asList(HookRemoteSettingsDialog.class);
     }

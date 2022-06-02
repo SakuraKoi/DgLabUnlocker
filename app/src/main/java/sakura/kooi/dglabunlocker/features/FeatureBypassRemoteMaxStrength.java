@@ -34,6 +34,11 @@ public class FeatureBypassRemoteMaxStrength extends AbstractFeature implements H
     }
 
     @Override
+    public String getConfigurationKey() {
+        return "FeatureBypassRemoteMaxStrength";
+    }
+
+    @Override
     public List<Class<? extends AbstractHook<?>>> getRequiredHooks() {
         return Arrays.asList(HookBluetoothStrengthSender.class, HookStrengthButton.class);
     }
@@ -86,12 +91,16 @@ public class FeatureBypassRemoteMaxStrength extends AbstractFeature implements H
     }
 
     @Override
-    public void beforeStrengthChange(Context context) {
-
+    public void beforeStrengthChange(Context context) throws ReflectiveOperationException {
+        realMaxA.set(maxStrengthA.get());
+        realMaxB.set(maxStrengthB.get());
+        maxStrengthA.set(276);
+        maxStrengthB.set(276);
     }
 
     @Override
-    public void afterStrengthChange(Context context) {
-
+    public void afterStrengthChange(Context context) throws ReflectiveOperationException {
+        maxStrengthA.set(realMaxA.get());
+        maxStrengthB.set(realMaxB.get());
     }
 }

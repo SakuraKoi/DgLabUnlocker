@@ -14,9 +14,7 @@ public abstract class AbstractFeature {
 
     public abstract String getSettingName();
     public abstract String getSettingDesc();
-    public String getConfigurationKey() {
-        return this.getClass().getSimpleName();
-    }
+    public abstract String getConfigurationKey();
 
     public abstract List<Class<? extends AbstractHook<?>>> getRequiredHooks();
 

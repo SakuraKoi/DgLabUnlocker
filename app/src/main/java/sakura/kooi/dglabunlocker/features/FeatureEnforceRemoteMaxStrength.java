@@ -24,6 +24,11 @@ public class FeatureEnforceRemoteMaxStrength extends AbstractFeature implements 
     }
 
     @Override
+    public String getConfigurationKey() {
+        return "FeatureEnforceRemoteMaxStrength";
+    }
+
+    @Override
     public List<Class<? extends AbstractHook<?>>> getRequiredHooks() {
         return Arrays.asList(HookBluetoothStrengthSender.class);
     }

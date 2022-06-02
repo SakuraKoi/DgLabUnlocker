@@ -23,6 +23,7 @@ public class ConfigurationDialog {
 
         createSettingSwitches(container);
 
+        UiUtils.createButton(container, "附加功能", e -> new ClickableFeatureDialog(context).show());
         UiUtils.createButton(container, "模块运行状态", e -> new StatusDialog(context).show());
         if (HookRegistry.ENABLE_DEV_FEATURE) {
             UiUtils.createButton(container, "实验功能测试", e -> new DevTestDialog(context).show());
