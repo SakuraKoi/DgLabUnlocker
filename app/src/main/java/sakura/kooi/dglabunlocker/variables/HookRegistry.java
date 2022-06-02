@@ -2,9 +2,9 @@ package sakura.kooi.dglabunlocker.variables;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
@@ -27,7 +27,7 @@ public class HookRegistry {
             FeatureWebsocketRpc.class
     ));
 
-    public static final Map<Class<? extends AbstractFeature>, AbstractFeature> featureInstances = new ConcurrentHashMap<>();
-    public static final Map<Class<? extends AbstractHook<?>>, AbstractHook<?>> hookInstances = new ConcurrentHashMap<>();
-    public static final Map<String, Map.Entry<Supplier<String>, Supplier<Integer>>> customStatuses = new ConcurrentHashMap<>();
+    public static final Map<Class<? extends AbstractFeature>, AbstractFeature> featureInstances = Collections.synchronizedMap(new LinkedHashMap<>());
+    public static final Map<Class<? extends AbstractHook<?>>, AbstractHook<?>> hookInstances = Collections.synchronizedMap(new LinkedHashMap<>());
+    public static final Map<String, Map.Entry<Supplier<String>, Supplier<Integer>>> customStatuses = Collections.synchronizedMap(new LinkedHashMap<>());
 }
