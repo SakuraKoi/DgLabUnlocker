@@ -95,6 +95,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         Log.i("DgLabUnlocker", "Hook Loading: Injecting settings dialog...");
         try {
             PreLoadHookSettingsDialog.apply(context, classLoader);
+            StatusDialog.moduleSettingsDialogInject = true;
         } catch (Exception e) {
             ModuleUtils.logError("DgLabUnlocker", "An error occurred while injecting settings dialog", e);
             Toast.makeText(context, "DG-Lab Unlocker 加载失败", Toast.LENGTH_LONG).show();
