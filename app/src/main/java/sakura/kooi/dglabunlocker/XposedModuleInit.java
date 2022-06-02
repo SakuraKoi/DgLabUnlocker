@@ -176,6 +176,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         for(AbstractFeature feature : HookRegistry.featureInstances.values()) {
             try {
                 feature.initializeAndTest();
+                feature.setWorking(true);
             } catch (Exception e) {
                 feature.setWorking(false);
                 ModuleUtils.logError("DgLabUnlocker", "An error occurred while testing feature " + feature.getClass().getName(), e);
