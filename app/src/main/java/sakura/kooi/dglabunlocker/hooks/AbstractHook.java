@@ -7,17 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.Setter;
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
 public abstract class AbstractHook<T> {
     @Getter
     private Class<T> handlerClass;
     private List<AbstractFeature> handlers = new ArrayList<>();
 
-    @Getter
-    private boolean isWorking = false;
+    @Getter @Setter
+    private boolean isHooked = false;
 
     public AbstractHook(Class<T> handlerClass) {
         this.handlerClass = handlerClass;
@@ -36,26 +38,31 @@ public abstract class AbstractHook<T> {
     public void applyHook(Context context, ClassLoader classLoader) {
         try {
             apply(context, classLoader);
-            isWorking = true;
+            isHooked = true;
         } catch (Exception e) {
-            isWorking = false;
+            isHooked = false;
             ModuleUtils.logError("DgLabUnlocker", "Could not apply " + this.getClass().getName(), e);
         }
     }
 
     public abstract String getName();
 
+    public abstract int getMinVersion();
+
+    public boolean isUnsupported() {
+        return HookRegistry.versionCode < getMinVersion();
+    }
+
     protected abstract void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException;
 
     @SuppressWarnings("unchecked") // is checked
-    protected void callHandlers(ConsumerEx<T> dataPipe) throws ReflectiveOperationException {
-        boolean isRemote = Accessors.isRemote.get();
+    protected void callHandlers(ConsumerEx<T> dataPipe) {
         for (AbstractFeature handler : handlers) {
             if (!handler.isEnabled() || handler.isUnsupported())
                 continue;
-            if (handler.getSide() == AbstractFeature.ClientSide.CONTROLLED && !isRemote)
+            if (handler.getSide() == AbstractFeature.ClientSide.CONTROLLED && Accessors.isRemote)
                 continue;
-            if (handler.getSide() == AbstractFeature.ClientSide.CONTROLLER && isRemote)
+            if (handler.getSide() == AbstractFeature.ClientSide.CONTROLLER && !Accessors.isRemote)
                 continue;
 
             try {
@@ -63,7 +70,6 @@ public abstract class AbstractHook<T> {
             } catch (Exception e) {
                 Log.e("DgLabUnlocker", "An error occurred in " + handler.getClass().getName(), e);
             }
-
         }
     }
 

@@ -1,5 +1,7 @@
 package sakura.kooi.dglabunlocker;
 
+import static sakura.kooi.dglabunlocker.utils.DgLabVersion.*;
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.hooks.PreLoadHookSettingsDialog;
+import sakura.kooi.dglabunlocker.hooks.StaticHookUpdateClientSide;
 import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.utils.ModuleException;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
@@ -34,16 +37,17 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
     private static AbstractVersionedCompatibilityProvider detectAppVersion(Context context) {
         AbstractVersionedCompatibilityProvider versionedFieldInitializer;
         int versionCode = ModuleUtils.getAppVersion(context);
+        HookRegistry.versionCode = versionCode;
         switch (versionCode) {
-            case 22:
+            case V_1_3_2:
                 versionedFieldInitializer = new Version132();
                 StatusDialog.currentLoadedVersion = "1.3.2";
                 break;
-            case 21:
+            case V_1_3_1:
                 versionedFieldInitializer = new Version131();
                 StatusDialog.currentLoadedVersion = "1.3.1";
                 break;
-            case 19:
+            case V_1_2_6:
                 versionedFieldInitializer = new Version126();
                 StatusDialog.currentLoadedVersion = "1.2.6";
                 break;
@@ -105,7 +109,6 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         // region detect app version and initialize reflection
         try {
             detectAppVersion(context).initializeAccessors(classLoader);
-            ModuleUtils.testFieldWorks(); // FIXME move to features
 
             Log.i("DgLabUnlocker", "Hook Loading: Fields lookup done");
             StatusDialog.fieldsLookup = true;
@@ -118,6 +121,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
 
         // region load features and collect hook classes
         HashSet<Class<? extends AbstractHook<?>>> hookClasses = new HashSet<>();
+        hookClasses.add(StaticHookUpdateClientSide.class);
         for (Class<? extends AbstractFeature> featureClass : HookRegistry.features) {
             try {
                 AbstractFeature feature = featureClass.newInstance();
@@ -132,7 +136,11 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         for (Class<? extends AbstractHook<?>> hookClass : hookClasses) {
             try {
                 AbstractHook<?> hook = hookClass.newInstance();
-                hook.applyHook(context, classLoader);
+                if (!hook.isUnsupported()) {
+                    hook.applyHook(context, classLoader);
+                    hook.setHooked(true);
+                    Log.i("DgLabUnlocker", "Hook " + hook.getName() + " loaded");
+                }
                 HookRegistry.hookInstances.put(hookClass, hook);
             } catch (Exception e) {
                 ModuleUtils.logError("DgLabUnlocker", "Could not apply hook " + hookClass.getName(), e);
@@ -146,19 +154,23 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                 feature = HookRegistry.featureInstances.get(featureClass);
                 if (feature == null)
                     continue;
-
+                if (feature.isUnsupported()) {
+                    ModuleUtils.logError("DgLabUnlocker", "Cannot register feature " + featureClass.getName() + ": minVersion not match");
+                    continue;
+                }
                 for (Class<? extends AbstractHook<?>> hookClass : feature.getRequiredHooks()) {
                     AbstractHook<?> hook = HookRegistry.hookInstances.get(hookClass);
                     if (hook == null)
                         throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not initialized");
-                    if (!hook.isWorking())
+                    if (!hook.isHooked())
                         throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not working");
                     hook.registerHandler(feature);
                 }
+                Log.i("DgLabUnlocker", "Feature " + feature.getSettingName() + " registered");
             } catch (Exception e) {
                 ModuleUtils.logError("DgLabUnlocker", "Could not register hook handler for feature " + featureClass.getName(), e);
                 if (feature != null)
-                    feature.setWorking(false);
+                    feature.setLoaded(false);
             }
         }
         // endregion
@@ -175,10 +187,12 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         Log.i("DgLabUnlocker", "Hook Loading: Testing features...");
         for(AbstractFeature feature : HookRegistry.featureInstances.values()) {
             try {
-                feature.initializeAndTest();
-                feature.setWorking(true);
+                if (feature.isUnsupported())
+                    continue;
+                feature.initialize();
+                feature.setLoaded(true);
             } catch (Exception e) {
-                feature.setWorking(false);
+                feature.setLoaded(false);
                 ModuleUtils.logError("DgLabUnlocker", "An error occurred while testing feature " + feature.getClass().getName(), e);
             }
         }

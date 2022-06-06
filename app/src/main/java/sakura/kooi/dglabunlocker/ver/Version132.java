@@ -1,14 +1,6 @@
 package sakura.kooi.dglabunlocker.ver;
 
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothService;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothServiceDecoder;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_ControlledStrengthTouchListeners;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_RemoteSettingDialog;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_StrengthTouchListeners;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthA;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthB;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothServiceDecoder_decode;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothService_updateStrength;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.*;
 
 import java.util.Arrays;
 
@@ -49,8 +41,6 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$18"
         );
 
-        // class_StrengthTouchListeners -> R.string.remote_strength_max -> if
-        isRemote = "by";
 
         // ControlledActivity.? implements View.OnTouchListener && R.string.strength_max
         // ControlledActivity.? implements View.OnTouchListener && R.string.strength_min
@@ -64,5 +54,15 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
         // BlueToothService LDC "写入强度数据成功"
         class_BluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
         method_BluetoothService_updateStrength = "b";
+        // class_StrengthTouchListeners -> R.string.remote_strength_max -> if -> getter -> setter
+        method_BluetoothService_updateClientSide = "b";
+
+        class_StrengthLongPressHandler = "com.bjsm.dungeonlab.ui.activity.HomeActivity$1";
+
+        // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
+        class_HomeActivity = "com.bjsm.dungeonlab.ui.activity.HomeActivity";
+        method_HomeActivity_updateStrengthText = "a";
+        field_HomeActivity_strengthTextA = "y";
+        field_HomeActivity_strengthTextB = "G";
     }
 }

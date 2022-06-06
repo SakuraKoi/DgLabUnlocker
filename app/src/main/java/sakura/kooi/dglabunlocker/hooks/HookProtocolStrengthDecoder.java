@@ -4,6 +4,7 @@ import android.content.Context;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
 public class HookProtocolStrengthDecoder extends AbstractHook<HookProtocolStrengthDecoder.IProtocolDecoderInterceptor> {
@@ -14,6 +15,11 @@ public class HookProtocolStrengthDecoder extends AbstractHook<HookProtocolStreng
     @Override
     public String getName() {
         return "强度协议解码";
+    }
+
+    @Override
+    public int getMinVersion() {
+        return DgLabVersion.V_ANY;
     }
 
     @Override

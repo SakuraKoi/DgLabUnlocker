@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
 public class HookBluetoothStrengthSender extends AbstractHook<HookBluetoothStrengthSender.IBluetoothStrengthSendInterceptor> {
@@ -17,6 +18,11 @@ public class HookBluetoothStrengthSender extends AbstractHook<HookBluetoothStren
     @Override
     public String getName() {
         return "蓝牙强度发送";
+    }
+
+    @Override
+    public int getMinVersion() {
+        return DgLabVersion.V_ANY;
     }
 
     public void apply(Context context, ClassLoader classLoader) {

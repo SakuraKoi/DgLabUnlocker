@@ -64,7 +64,7 @@ public class UiUtils {
         }
 
         TextView view = new TextView(container.getContext());
-        view.setPadding(0, dpToPx(view, 3), 0, dpToPx(view, 3));
+        view.setPadding( dpToPx(view, 8), dpToPx(view, 3), dpToPx(view, 8), dpToPx(view, 3));
         if (StatusDialog.resourceInjection) {
             view.setBackground(ResourceInject.buttonBackground.getConstantState().newDrawable());
             view.setTextColor(Color.BLACK);

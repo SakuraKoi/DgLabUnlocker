@@ -36,18 +36,8 @@ public class FeatureEnforceLocalStrength extends AbstractFeature implements Hook
     }
 
     @Override
-    public boolean isUnsupported() {
-        return false;
-    }
-
-    @Override
     public ClientSide getSide() {
         return ClientSide.CONTROLLED;
-    }
-
-    @Override
-    public void initializeAndTest() throws Exception {
-
     }
 
     @Override

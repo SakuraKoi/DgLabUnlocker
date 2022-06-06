@@ -11,10 +11,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
+import java.util.Objects;
 
+import sakura.kooi.dglabunlocker.features.FeatureBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class WebsocketRPC extends WebSocketServer {
@@ -114,7 +117,7 @@ public class WebsocketRPC extends WebSocketServer {
     private void addStrength(WebSocket conn, int id, boolean channel, int strength, FieldAccessor<Integer> maxStrength, FieldAccessor<Integer> totalStrength) throws ReflectiveOperationException, JSONException {
         strength = totalStrength.get() + strength;
 
-        if (Accessors.isRemote.get() && !ModuleSettings.bypassRemoteMaxStrength) {
+        if (Accessors.isRemote && !Objects.requireNonNull(HookRegistry.featureInstances.get(FeatureBypassRemoteMaxStrength.class)).isEnabled()) {
             int max = maxStrength.get();
             if (max < strength) {
                 strength = max;
@@ -135,7 +138,7 @@ public class WebsocketRPC extends WebSocketServer {
         strengthA = strengthA + Accessors.remoteStrengthA.get();
         strengthB = strengthB + Accessors.remoteStrengthA.get();
 
-        if (Accessors.isRemote.get() && !ModuleSettings.bypassRemoteMaxStrength) {
+        if (Accessors.isRemote && !Objects.requireNonNull(HookRegistry.featureInstances.get(FeatureBypassRemoteMaxStrength.class)).isEnabled()) {
             int maxStrengthA = Accessors.maxStrengthA.get();
             int maxStrengthB = Accessors.maxStrengthB.get();
             if (maxStrengthA < strengthA) {
@@ -162,7 +165,7 @@ public class WebsocketRPC extends WebSocketServer {
         data.put("remoteStrengthB", Accessors.remoteStrengthB.get());
         data.put("maxStrengthA", Accessors.maxStrengthA.get());
         data.put("maxStrengthB", Accessors.maxStrengthB.get());
-        data.put("isRemote", Accessors.isRemote.get());
+        data.put("isRemote", Accessors.isRemote);
         conn.send(makeResponse(id, 0, "ok", data));
     }
 

@@ -7,14 +7,6 @@ import android.content.SharedPreferences;
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 
 public class ModuleSettings {
-    public static boolean unlockRemoteMaxStrength = false;
-    public static boolean deviceProtection = false;
-    public static boolean enforceRemoteMaxStrength = false;
-    public static boolean enforceLocalStrength = false;
-    public static boolean bypassRemoteMaxStrength = false;
-    public static boolean fixDoubleBug = false;
-    public static boolean randomQrCode = false;
-
     public static SharedPreferences sharedPref;
 
     public static void loadConfiguration(Context context) {

@@ -1,5 +1,12 @@
 package sakura.kooi.dglabunlocker.ver;
 
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_HomeActivity;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_RemoteSettingDialog;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextA;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextB;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthA;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthB;
+
 import android.app.Dialog;
 import android.content.Context;
 
@@ -21,8 +28,6 @@ public abstract class AbstractVersionedCompatibilityProvider {
     protected String maxStrengthB;
     protected String remoteStrengthB;
 
-    protected String isRemote;
-
     protected String classBugDialog;
 
     protected abstract void initializeNames();
@@ -30,6 +35,11 @@ public abstract class AbstractVersionedCompatibilityProvider {
     public void initializeAccessors(ClassLoader classLoader) throws ReflectiveOperationException {
         initializeNames();
         MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+        Class<?> clsBugDialog = Class.forName(classBugDialog, true, classLoader);
+        Constructor<Dialog> constBugDialog = (Constructor<Dialog>) clsBugDialog.getDeclaredConstructor(Context.class);
+        Accessors.constructorBugDialog = lookup.unreflectConstructor(constBugDialog);
+
         Class<?> clsGlobalVariable = Class.forName(classGlobalVariables, true, classLoader);
 
         Accessors.localStrengthA = new FieldAccessor<>(lookup, clsGlobalVariable, localStrengthA);
@@ -40,10 +50,11 @@ public abstract class AbstractVersionedCompatibilityProvider {
         Accessors.totalStrengthB = new FieldAccessor<>(lookup, clsGlobalVariable, totalStrengthB);
         Accessors.maxStrengthB = new FieldAccessor<>(lookup, clsGlobalVariable, maxStrengthB);
         Accessors.remoteStrengthB = new FieldAccessor<>(lookup, clsGlobalVariable, remoteStrengthB);
-        Accessors.isRemote = new FieldAccessor<>(lookup, clsGlobalVariable, isRemote);
 
-        Class<?> clsBugDialog = Class.forName(classBugDialog, true, classLoader);
-        Constructor<Dialog> constBugDialog = (Constructor<Dialog>) clsBugDialog.getDeclaredConstructor(Context.class);
-        Accessors.constructorBugDialog = lookup.unreflectConstructor(constBugDialog);
+        if (class_HomeActivity != null) {
+            Class<?> clsHomeActivity = Class.forName(class_HomeActivity, true, classLoader);
+            Accessors.textHomeActivityStrengthA = new FieldAccessor<>(lookup, clsHomeActivity, field_HomeActivity_strengthTextA);
+            Accessors.textHomeActivityStrengthB = new FieldAccessor<>(lookup, clsHomeActivity, field_HomeActivity_strengthTextB);
+        }
     }
 }

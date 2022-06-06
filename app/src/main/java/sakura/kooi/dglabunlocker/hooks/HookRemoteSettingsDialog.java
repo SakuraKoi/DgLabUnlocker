@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
 public class HookRemoteSettingsDialog extends AbstractHook<HookRemoteSettingsDialog.IRemoteSettingDialogUiInterceptor> {
@@ -15,6 +16,11 @@ public class HookRemoteSettingsDialog extends AbstractHook<HookRemoteSettingsDia
     @Override
     public String getName() {
         return "远程控制设置";
+    }
+
+    @Override
+    public int getMinVersion() {
+        return DgLabVersion.V_ANY;
     }
 
     public void apply(Context context, ClassLoader classLoader) {

@@ -18,8 +18,6 @@ public class Version126 extends AbstractVersionedCompatibilityProvider {
         remoteStrengthB = "Y";
         maxStrengthB = "aa";
 
-        isRemote = "aZ";
-
         classBugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
 
         class_BluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
@@ -27,6 +25,7 @@ public class Version126 extends AbstractVersionedCompatibilityProvider {
 
         class_BluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
         method_BluetoothService_updateStrength = "a";
+        method_BluetoothService_updateClientSide = "b";
 
         class_StrengthTouchListeners = Arrays.asList(
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$15",

@@ -29,20 +29,13 @@ public class ModuleUtils {
         return versionCode;
     }
 
-    public static void testFieldWorks() throws ReflectiveOperationException {
-        localStrengthA.get();
-        totalStrengthA.get();
-        remoteStrengthA.get();
-        localStrengthB.get();
-        totalStrengthB.get();
-        remoteStrengthB.get();
-        maxStrengthA.get();
-        maxStrengthB.get();
-        isRemote.get();
+    // 不优雅, 能用就行.jpg
+    public static void logError(String tag, String s) {
+        XposedBridge.log(s);
+        Log.e(tag, s);
     }
 
     public static void logError(String tag, String s, Exception e) {
-        // 不优雅, 能用就行.jpg
         XposedBridge.log(s);
         XposedBridge.log(e);
         Log.e(tag, s, e);

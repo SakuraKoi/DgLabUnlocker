@@ -5,12 +5,14 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
 public abstract class AbstractFeature {
     @Getter
     private boolean isEnabled = false;
+
     @Getter @Setter
-    private boolean isWorking = false;
+    private boolean isLoaded = false;
 
     public abstract String getSettingName();
     public abstract String getSettingDesc();
@@ -18,11 +20,23 @@ public abstract class AbstractFeature {
 
     public abstract List<Class<? extends AbstractHook<?>>> getRequiredHooks();
 
-    public abstract boolean isUnsupported();
+    public boolean isUnsupported() {
+        for (Class<? extends AbstractHook<?>> hook : getRequiredHooks()) {
+            AbstractHook<?> hookInstance = HookRegistry.hookInstances.get(hook);
+            // every required hook's instance should has been created
+            if (hookInstance == null)
+                return true;
+            if (hookInstance.isUnsupported())
+                return true;
+        }
+        return false;
+    }
 
     public abstract ClientSide getSide();
 
-    public abstract void initializeAndTest() throws Exception;
+    public void initialize() throws Exception {
+
+    }
 
     public void setEnabled(boolean enabled) {
         updateFeatureStatus(enabled);

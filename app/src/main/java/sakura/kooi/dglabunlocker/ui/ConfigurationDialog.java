@@ -53,13 +53,13 @@ public class ConfigurationDialog {
 
         settingSwitch.setPadding(UiUtils.dpToPx(layout, 10), 0, 0, 0);
         settingSwitch.setChecked(feature.isEnabled());
-        settingSwitch.setEnabled(feature.isWorking());
+        settingSwitch.setEnabled(feature.isLoaded());
         settingSwitch.setOnClickListener(e -> {
             boolean enabled = settingSwitch.isChecked();
             try {
                 feature.setEnabled(enabled);
                 ModuleSettings.sharedPref.edit().putBoolean(feature.getConfigurationKey(), enabled).commit();
-                textDesc.setText(feature.isWorking() ? feature.getSettingDesc() : "加载时发生错误, 功能不可用");
+                textDesc.setText(feature.getSettingDesc());
                 Log.i("DgLabUnlocker", "Config " + feature.getConfigurationKey() + " set to " + settingSwitch.isChecked());
             } catch (Exception ex) {
                 feature.setEnabled(false);
@@ -70,7 +70,7 @@ public class ConfigurationDialog {
         layout.addView(settingSwitch);
         container.addView(layout);
 
-        textDesc.setText(feature.isWorking() ? feature.getSettingDesc() : "加载时发生错误, 功能不可用");
+        textDesc.setText(feature.isLoaded() ? feature.getSettingDesc() : "加载时发生错误, 功能不可用");
         textDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         textDesc.setPadding(0, UiUtils.dpToPx(layout, 1), 0, UiUtils.dpToPx(layout, 4));
         container.addView(textDesc);

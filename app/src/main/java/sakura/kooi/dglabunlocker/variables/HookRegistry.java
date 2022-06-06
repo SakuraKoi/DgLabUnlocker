@@ -30,4 +30,5 @@ public class HookRegistry {
     public static final Map<Class<? extends AbstractFeature>, AbstractFeature> featureInstances = Collections.synchronizedMap(new LinkedHashMap<>());
     public static final Map<Class<? extends AbstractHook<?>>, AbstractHook<?>> hookInstances = Collections.synchronizedMap(new LinkedHashMap<>());
     public static final Map<String, Map.Entry<Supplier<String>, Supplier<Integer>>> customStatuses = Collections.synchronizedMap(new LinkedHashMap<>());
+    public static int versionCode;
 }

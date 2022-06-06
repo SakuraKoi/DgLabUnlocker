@@ -6,6 +6,7 @@ import android.view.View;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
 public class HookControlledStrengthButton extends AbstractHook<HookControlledStrengthButton.ILocalStrengthInterceptor> {
@@ -16,6 +17,11 @@ public class HookControlledStrengthButton extends AbstractHook<HookControlledStr
     @Override
     public String getName() {
         return "基础强度回调";
+    }
+
+    @Override
+    public int getMinVersion() {
+        return DgLabVersion.V_ANY;
     }
 
     public void apply(Context context, ClassLoader classLoader) {

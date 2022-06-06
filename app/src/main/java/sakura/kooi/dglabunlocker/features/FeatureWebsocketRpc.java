@@ -33,17 +33,12 @@ public class FeatureWebsocketRpc extends AbstractFeature {
     }
 
     @Override
-    public boolean isUnsupported() {
-        return false;
-    }
-
-    @Override
     public ClientSide getSide() {
         return ClientSide.ALL;
     }
 
     @Override
-    public void initializeAndTest() throws Exception {
+    public void initialize() throws Exception {
         HookRegistry.customStatuses.put("[接口] RPC服务连接数", new AbstractMap.SimpleEntry<>(
                 () -> service.isRunning ? String.valueOf(service.connected) : "关闭",
                 () -> service.isRunning ? 0xffc6ff00 : 0xfff44336

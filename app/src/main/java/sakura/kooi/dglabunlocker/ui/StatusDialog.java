@@ -21,25 +21,19 @@ public class StatusDialog extends Dialog {
     public static String currentLoadedVersion = null;
     public static boolean resourceInjection = false;
     public static boolean fieldsLookup = false;
-    public static boolean remoteSettingsDialogInject = false;
-    public static boolean bluetoothDecoderInject = false;
-    public static boolean protocolStrengthDecodeInject = false;
-    public static boolean strengthButtonInject = false;
-    public static boolean localStrengthHandlerInject = false;
     public static boolean moduleSettingsDialogInject = false;
-    public static boolean guestLogin;
 
     @SuppressLint("ResourceType")
     public StatusDialog(@NonNull Context context) {
         super(context);
         this.setContentView(UiUtils.makeDialogLayout(this, "DG-Lab Unlocker 日志", container -> {
             container.addView(addCurrentVersion(context));
-            container.addView(addStatus(context, "[加载] 界面资源注入", resourceInjection));
-            container.addView(addStatus(context, "[加载] 模块设置界面", moduleSettingsDialogInject));
-            container.addView(addStatus(context, "[加载] 应用字段初始化", fieldsLookup));
+            container.addView(addStatus(context, "[加载] 界面资源注入", false, resourceInjection));
+            container.addView(addStatus(context, "[加载] 模块设置界面", false, moduleSettingsDialogInject));
+            container.addView(addStatus(context, "[加载] 应用字段初始化", false, fieldsLookup));
 
             for (AbstractHook<?> hook : HookRegistry.hookInstances.values()) {
-                container.addView(addStatus(context, "[注入] " + hook.getName(), hook.isWorking()));
+                container.addView(addStatus(context, "[注入] " + hook.getName(), hook.isUnsupported(), hook.isHooked()));
             }
 
             for (Map.Entry<String, Map.Entry<Supplier<String>, Supplier<Integer>>> customStatus : HookRegistry.customStatuses.entrySet()) {
@@ -65,8 +59,8 @@ public class StatusDialog extends Dialog {
         return layout;
     }
 
-    private LinearLayout addStatus(Context context, String title, boolean isLoaded) {
-        return addStatus(context, title, isLoaded ? "成功" : "错误", isLoaded ? 0xffc6ff00 : 0xfff44336);
+    private LinearLayout addStatus(Context context, String title, boolean isUnsupported, boolean isHooked) {
+        return addStatus(context, title, isUnsupported ? "不支持" : isHooked ? "成功" : "错误", !isUnsupported && isHooked ? 0xffc6ff00 : 0xfff44336);
     }
 
     private LinearLayout addStatus(Context context, String title, String status, int color) {

@@ -35,18 +35,8 @@ public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemot
     }
 
     @Override
-    public boolean isUnsupported() {
-        return false;
-    }
-
-    @Override
     public ClientSide getSide() {
         return ClientSide.ALL;
-    }
-
-    @Override
-    public void initializeAndTest() throws Exception {
-
     }
 
     @Override
