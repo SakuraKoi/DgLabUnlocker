@@ -21,9 +21,7 @@ import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 public class ConfigurationDialog extends Dialog {
     public ConfigurationDialog(@NonNull Context context) {
         super(context);
-        setContentView(UiUtils.makeDialogLayout(this, "DG-Lab Unlocker 设置", container -> {
-            createSettingSwitches(container);
-        }));
+        setContentView(UiUtils.makeDialogLayout(this, "DG-Lab Unlocker 设置", ConfigurationDialog::createSettingSwitches));
     }
 
     private static void createSettingSwitches(LinearLayout container) {

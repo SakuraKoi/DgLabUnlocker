@@ -20,7 +20,7 @@ public class ModuleDialog extends Dialog {
     }
 
     public static LinearLayout makeLayout(@NonNull Context context) {
-        var container = UiUtils.makeDialogContainer(context, "DG-Lab 魔改模块");
+        LinearLayout container = UiUtils.makeDialogContainer(context, "DG-Lab 魔改模块");
 
         container.addView(UiUtils.createTextView(context, "应用版本: " +
                 (StatusDialog.currentLoadedVersion == null ? "未知" : StatusDialog.currentLoadedVersion) + " - " + HookRegistry.versionCode
