@@ -52,15 +52,19 @@ public class UiUtils {
         return container;
     }
 
+    public static void createSpacing(LinearLayout container, int dp) {
+        TextView space = new TextView(container.getContext());
+        space.setPadding(0, dpToPx(space, dp), 0, 0);
+        container.addView(space);
+    }
+
     public static void createButton(LinearLayout container, String title, View.OnClickListener listener) {
         createButton(container, title, true, listener);
     }
 
     public static void createButton(LinearLayout container, String title, boolean withSpacing, View.OnClickListener listener) {
         if (withSpacing) {
-            TextView space = new TextView(container.getContext());
-            space.setPadding(0, dpToPx(space, 4), 0, 0);
-            container.addView(space);
+            createSpacing(container, 2);
         }
 
         TextView view = new TextView(container.getContext());
@@ -75,6 +79,12 @@ public class UiUtils {
         view.setGravity(Gravity.CENTER);
         view.setOnClickListener(listener);
         container.addView(view);
+    }
+
+    public static TextView createTextView(Context context, String text) {
+        TextView textView = createTextView(context, 0xffffe99d);
+        textView.setText(text);
+        return textView;
     }
 
     public static TextView createTextView(Context context) {

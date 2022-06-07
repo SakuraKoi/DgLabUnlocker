@@ -8,7 +8,6 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
     @Override
     protected void initializeNames() {
         classGlobalVariables = "com.bjsm.dungeonlab.global.b";
-        classBugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
 
         // RemoteSettingDialog
         class_RemoteSettingDialog = "com.bjsm.dungeonlab.widget.RemoteSettingDialog";

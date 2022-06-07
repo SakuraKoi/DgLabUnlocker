@@ -7,7 +7,6 @@ import java.lang.invoke.MethodHandle;
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 
 public class Accessors {
-    public static MethodHandle constructorBugDialog;
 
     public static FieldAccessor<Integer> localStrengthA;
     public static FieldAccessor<Integer> totalStrengthA;

@@ -1,17 +1,10 @@
 package sakura.kooi.dglabunlocker.ver;
 
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_HomeActivity;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_RemoteSettingDialog;
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextA;
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextB;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthA;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthB;
-
-import android.app.Dialog;
-import android.content.Context;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
 
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 import sakura.kooi.dglabunlocker.variables.Accessors;
@@ -28,17 +21,11 @@ public abstract class AbstractVersionedCompatibilityProvider {
     protected String maxStrengthB;
     protected String remoteStrengthB;
 
-    protected String classBugDialog;
-
     protected abstract void initializeNames();
 
     public void initializeAccessors(ClassLoader classLoader) throws ReflectiveOperationException {
         initializeNames();
         MethodHandles.Lookup lookup = MethodHandles.lookup();
-
-        Class<?> clsBugDialog = Class.forName(classBugDialog, true, classLoader);
-        Constructor<Dialog> constBugDialog = (Constructor<Dialog>) clsBugDialog.getDeclaredConstructor(Context.class);
-        Accessors.constructorBugDialog = lookup.unreflectConstructor(constBugDialog);
 
         Class<?> clsGlobalVariable = Class.forName(classGlobalVariables, true, classLoader);
 

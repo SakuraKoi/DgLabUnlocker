@@ -1,10 +1,10 @@
 package sakura.kooi.dglabunlocker.variables;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.ui.ModuleDialog;
 
 public class ModuleSettings {
     public static SharedPreferences sharedPref;
@@ -17,11 +17,7 @@ public class ModuleSettings {
         }
     }
 
-    public static void showSettingsDialog(Context context) throws ReflectiveOperationException {
-        try {
-            ((Dialog) Accessors.constructorBugDialog.invoke(context)).show();
-        } catch (Throwable throwable) {
-            throw new ReflectiveOperationException(throwable);
-        }
+    public static void showSettingsDialog(Context context) {
+        new ModuleDialog(context).show();
     }
 }

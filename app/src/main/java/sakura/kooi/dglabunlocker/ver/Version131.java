@@ -18,8 +18,6 @@ public class Version131 extends AbstractVersionedCompatibilityProvider {
         remoteStrengthB = "ax";
         maxStrengthB = "ax";
 
-        classBugDialog = "com.bjsm.dungeonlab.widget.BugDialog";
-
         class_BluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
         method_BluetoothServiceDecoder_decode = "a";
 

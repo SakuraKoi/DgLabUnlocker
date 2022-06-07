@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import sakura.kooi.dglabunlocker.ui.ConfigurationDialog;
+import sakura.kooi.dglabunlocker.ui.ModuleDialog;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class PreLoadHookSettingsDialog {
@@ -44,7 +44,7 @@ public class PreLoadHookSettingsDialog {
                         withCatch("HookBugReportDialog BugDialog", () -> {
                             Log.i("DgLabUnlocker", "PreLoadHookSettingsDialog: replacing layout of BugDialog");
                             Dialog dialog = (Dialog) param.thisObject;
-                            dialog.setContentView(ConfigurationDialog.createSettingsPanel(dialog.getContext()));
+                            dialog.setContentView(ModuleDialog.makeLayout(dialog.getContext()));
                         });
                     }
                 });

@@ -1,35 +1,29 @@
 package sakura.kooi.dglabunlocker.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class ConfigurationDialog {
-    @SuppressLint({"UseSwitchCompatOrMaterialCode", "SetTextI18n", "UseCompatLoadingForDrawables"})
-    public static View createSettingsPanel(Context context) {
-        LinearLayout container = UiUtils.makeDialogContainer(context, "DG-Lab Unlocker 设置");
-
-        createSettingSwitches(container);
-
-        UiUtils.createButton(container, "附加功能", e -> new ClickableFeatureDialog(context).show());
-        UiUtils.createButton(container, "模块运行状态", e -> new StatusDialog(context).show());
-        if (HookRegistry.ENABLE_DEV_FEATURE) {
-            UiUtils.createButton(container, "实验功能测试", e -> new DevTestDialog(context).show());
-        }
-
-        return container;
+public class ConfigurationDialog extends Dialog {
+    public ConfigurationDialog(@NonNull Context context) {
+        super(context);
+        setContentView(UiUtils.makeDialogLayout(this, "DG-Lab Unlocker 设置", container -> {
+            createSettingSwitches(container);
+        }));
     }
 
     private static void createSettingSwitches(LinearLayout container) {
