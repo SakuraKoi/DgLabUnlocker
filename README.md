@@ -3,7 +3,8 @@
 
 ![](https://img.shields.io/badge/Module-Xposed-green?style=for-the-badge&logo=Android&logoColor=white) ![](https://img.shields.io/github/license/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/languages/top/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/downloads/SakuraKoi/DgLabUnlocker/total?style=for-the-badge) ![](https://img.shields.io/github/v/release/SakuraKoi/DgLabUnlocker?style=for-the-badge)
 
-> 当前适配版本: `1.2.6` `1.3.1` `1.3.2`
+> 当前适配版本: `1.2.6` `1.3.1` `1.3.2`\
+> 项目开发将以当前支持的最新版本为目标, 在老版本中不保证所有功能可用
 
 ### 功能
 
