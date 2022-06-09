@@ -1,18 +1,16 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.hooks.business;
 
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.*;
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_HomeActivity_updateStrengthText;
 
 import android.content.Context;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.Accessors;
-import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
 public class HookStrengthText extends AbstractHook<HookStrengthText.StrengthTextHandler> {
     public HookStrengthText() {

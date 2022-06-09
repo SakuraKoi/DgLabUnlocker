@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.features;
+package sakura.kooi.dglabunlocker.features.toggleable;
 
 import android.content.Context;
 
@@ -6,12 +6,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
-import sakura.kooi.dglabunlocker.hooks.HookControlledStrengthButton;
-import sakura.kooi.dglabunlocker.hooks.HookProtocolStrengthDecoder;
+import sakura.kooi.dglabunlocker.hooks.business.HookControlledStrengthButton;
+import sakura.kooi.dglabunlocker.hooks.business.HookProtocolStrengthDecoder;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
-public class FeatureEnforceLocalStrength extends AbstractFeature implements HookProtocolStrengthDecoder.IProtocolDecoderInterceptor, HookControlledStrengthButton.ILocalStrengthInterceptor {
+public class FeatureEnforceLocalStrength extends ToggleableFeature implements
+        HookProtocolStrengthDecoder.IProtocolDecoderInterceptor,
+        HookControlledStrengthButton.ILocalStrengthInterceptor {
     private AtomicInteger localStrengthA = new AtomicInteger();
     private AtomicInteger localStrengthB = new AtomicInteger();
 

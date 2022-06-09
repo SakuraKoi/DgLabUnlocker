@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
@@ -58,7 +59,9 @@ public abstract class AbstractHook<T> {
     @SuppressWarnings("unchecked") // is checked
     protected void callHandlers(ConsumerEx<T> dataPipe) {
         for (AbstractFeature handler : handlers) {
-            if (!handler.isEnabled() || handler.isUnsupported())
+            if (handler.isUnsupported())
+                continue;
+            if (handler instanceof ToggleableFeature && !((ToggleableFeature) handler).isEnabled())
                 continue;
             if (handler.getSide() == AbstractFeature.ClientSide.CONTROLLED && Accessors.isRemote)
                 continue;

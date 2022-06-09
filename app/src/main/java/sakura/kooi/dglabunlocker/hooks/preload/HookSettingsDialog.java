@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.hooks.preload;
 
 import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 
@@ -15,20 +15,20 @@ import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.ui.ModuleDialog;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
-public class PreLoadHookSettingsDialog {
+public class HookSettingsDialog {
     public static void apply(Context context, ClassLoader classLoader) {
         XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.widget.FuncSelectDialog", classLoader,
                 "onCreate", Bundle.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         withCatch("HookBugReportDialog FuncSelectDialog", () -> {
-                            Log.i("DgLabUnlocker", "PreLoadHookSettingsDialog: replacing onClickListener");
+                            Log.i("DgLabUnlocker", "HookSettingsDialog: replacing onClickListener");
                             Dialog dialog = (Dialog) param.thisObject;
                             Field btnField = dialog.getClass().getDeclaredField("safe_button");
                             btnField.setAccessible(true);
                             View btn = (View) btnField.get(dialog);
                             if (btn == null) {
-                                Log.e("DgLabUnlocker", "PreLoadHookSettingsDialog: Inject failed, button is null");
+                                Log.e("DgLabUnlocker", "HookSettingsDialog: Inject failed, button is null");
                                 return;
                             }
 
@@ -42,7 +42,7 @@ public class PreLoadHookSettingsDialog {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         withCatch("HookBugReportDialog BugDialog", () -> {
-                            Log.i("DgLabUnlocker", "PreLoadHookSettingsDialog: replacing layout of BugDialog");
+                            Log.i("DgLabUnlocker", "HookSettingsDialog: replacing layout of BugDialog");
                             Dialog dialog = (Dialog) param.thisObject;
                             dialog.setContentView(ModuleDialog.makeLayout(dialog.getContext()));
                         });

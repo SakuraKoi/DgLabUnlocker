@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.features;
+package sakura.kooi.dglabunlocker.features.toggleable;
 
 
 import static sakura.kooi.dglabunlocker.variables.Accessors.localStrengthA;
@@ -9,20 +9,20 @@ import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthA;
 import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthB;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
-import sakura.kooi.dglabunlocker.hooks.HookBluetoothStrengthSender;
-import sakura.kooi.dglabunlocker.hooks.HookLongPressStrengthHandler;
-import sakura.kooi.dglabunlocker.hooks.HookStrengthButton;
-import sakura.kooi.dglabunlocker.hooks.HookStrengthText;
+import sakura.kooi.dglabunlocker.hooks.business.HookBluetoothStrengthSender;
+import sakura.kooi.dglabunlocker.hooks.business.HookLongPressStrengthHandler;
+import sakura.kooi.dglabunlocker.hooks.business.HookStrengthButton;
+import sakura.kooi.dglabunlocker.hooks.business.HookStrengthText;
 
-public class FeatureBypassRemoteMaxStrength extends AbstractFeature implements
+public class FeatureBypassRemoteMaxStrength extends ToggleableFeature implements
         HookBluetoothStrengthSender.IBluetoothStrengthSendInterceptor,
         HookStrengthButton.IStrengthButtonInterceptor,
         HookLongPressStrengthHandler.IStrengthButtonInterceptor,

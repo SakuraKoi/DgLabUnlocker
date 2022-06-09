@@ -1,25 +1,20 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.hooks.preload;
 
-import static sakura.kooi.dglabunlocker.utils.ExceptionLogger.withCatch;
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothService;
 import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothService_updateClientSide;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
-public class StaticHookUpdateClientSide extends AbstractHook<Object> {
-    public StaticHookUpdateClientSide() {
+public class HookUpdateClientSide extends AbstractHook<Object> {
+    public HookUpdateClientSide() {
         super(Object.class);
     }
 

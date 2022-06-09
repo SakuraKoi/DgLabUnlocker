@@ -67,7 +67,11 @@ public class UiUtils {
             createSpacing(container, 2);
         }
 
-        TextView view = new TextView(container.getContext());
+        container.addView(createButton(container.getContext(), title, listener));
+    }
+
+    public static TextView createButton(Context context, String title, View.OnClickListener listener) {
+        TextView view = new TextView(context);
         view.setPadding( dpToPx(view, 8), dpToPx(view, 3), dpToPx(view, 8), dpToPx(view, 3));
         if (StatusDialog.resourceInjection) {
             view.setBackground(ResourceInject.buttonBackground.getConstantState().newDrawable());
@@ -78,7 +82,7 @@ public class UiUtils {
         view.setText(title);
         view.setGravity(Gravity.CENTER);
         view.setOnClickListener(listener);
-        container.addView(view);
+        return view;
     }
 
     public static TextView createTextView(Context context, String text) {

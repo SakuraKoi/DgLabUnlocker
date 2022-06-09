@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.hooks;
+package sakura.kooi.dglabunlocker.hooks.business;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.utils.DgLabVersion;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 

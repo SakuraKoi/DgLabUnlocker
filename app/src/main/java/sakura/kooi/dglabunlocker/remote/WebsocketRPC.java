@@ -13,12 +13,12 @@ import org.json.JSONObject;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 
-import sakura.kooi.dglabunlocker.features.FeatureBypassRemoteMaxStrength;
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
+import sakura.kooi.dglabunlocker.features.toggleable.FeatureBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
-import sakura.kooi.dglabunlocker.variables.ModuleSettings;
 
 public class WebsocketRPC extends WebSocketServer {
     public WebsocketRPC() {
@@ -117,7 +117,7 @@ public class WebsocketRPC extends WebSocketServer {
     private void addStrength(WebSocket conn, int id, boolean channel, int strength, FieldAccessor<Integer> maxStrength, FieldAccessor<Integer> totalStrength) throws ReflectiveOperationException, JSONException {
         strength = totalStrength.get() + strength;
 
-        if (Accessors.isRemote && !Objects.requireNonNull(HookRegistry.featureInstances.get(FeatureBypassRemoteMaxStrength.class)).isEnabled()) {
+        if (Accessors.isRemote && !Objects.requireNonNull((ToggleableFeature)HookRegistry.featureInstances.get(FeatureBypassRemoteMaxStrength.class)).isEnabled()) {
             int max = maxStrength.get();
             if (max < strength) {
                 strength = max;
@@ -138,7 +138,7 @@ public class WebsocketRPC extends WebSocketServer {
         strengthA = strengthA + Accessors.remoteStrengthA.get();
         strengthB = strengthB + Accessors.remoteStrengthA.get();
 
-        if (Accessors.isRemote && !Objects.requireNonNull(HookRegistry.featureInstances.get(FeatureBypassRemoteMaxStrength.class)).isEnabled()) {
+        if (Accessors.isRemote && !Objects.requireNonNull((ToggleableFeature)HookRegistry.featureInstances.get(FeatureBypassRemoteMaxStrength.class)).isEnabled()) {
             int maxStrengthA = Accessors.maxStrengthA.get();
             int maxStrengthB = Accessors.maxStrengthB.get();
             if (maxStrengthA < strengthA) {

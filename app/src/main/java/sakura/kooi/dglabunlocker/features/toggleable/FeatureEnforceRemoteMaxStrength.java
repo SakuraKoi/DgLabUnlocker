@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.features;
+package sakura.kooi.dglabunlocker.features.toggleable;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,11 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
-import sakura.kooi.dglabunlocker.hooks.HookBluetoothStrengthSender;
+import sakura.kooi.dglabunlocker.hooks.business.HookBluetoothStrengthSender;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
-public class FeatureEnforceRemoteMaxStrength extends AbstractFeature implements HookBluetoothStrengthSender.IBluetoothStrengthSendInterceptor {
+public class FeatureEnforceRemoteMaxStrength extends ToggleableFeature implements HookBluetoothStrengthSender.IBluetoothStrengthSendInterceptor {
     @Override
     public String getSettingName() {
         return "被控 | 强制限制远程强度";

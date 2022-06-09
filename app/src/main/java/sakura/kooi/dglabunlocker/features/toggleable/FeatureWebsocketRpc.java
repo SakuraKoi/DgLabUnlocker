@@ -1,15 +1,16 @@
-package sakura.kooi.dglabunlocker.features;
+package sakura.kooi.dglabunlocker.features.toggleable;
 
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.List;
 
 import lombok.SneakyThrows;
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.remote.WebsocketRPC;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
-public class FeatureWebsocketRpc extends AbstractFeature {
+public class FeatureWebsocketRpc extends ToggleableFeature {
     private WebsocketRPC service = new WebsocketRPC();
 
     @Override

@@ -1,4 +1,4 @@
-package sakura.kooi.dglabunlocker.features;
+package sakura.kooi.dglabunlocker.features.toggleable;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,11 +9,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
-import sakura.kooi.dglabunlocker.hooks.HookRemoteSettingsDialog;
+import sakura.kooi.dglabunlocker.hooks.business.HookRemoteSettingsDialog;
 import sakura.kooi.dglabunlocker.variables.InjectPoints;
 
-public class FeatureUnlockRemoteMax extends AbstractFeature implements HookRemoteSettingsDialog.IRemoteSettingDialogUiInterceptor {
+public class FeatureUnlockRemoteMax extends ToggleableFeature implements HookRemoteSettingsDialog.IRemoteSettingDialogUiInterceptor {
     @Override
     public String getSettingName() {
         return "被控 | 解锁远程强度上限";

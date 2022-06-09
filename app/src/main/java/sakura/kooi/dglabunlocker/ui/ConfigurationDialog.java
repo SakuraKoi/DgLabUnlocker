@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.features.ToggleableFeature;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
@@ -26,14 +27,16 @@ public class ConfigurationDialog extends Dialog {
 
     private static void createSettingSwitches(LinearLayout container) {
         for (AbstractFeature feature : HookRegistry.featureInstances.values()) {
+            if (!(feature instanceof ToggleableFeature))
+                continue;
             if (feature.isUnsupported())
                 continue;
-            createSettingSwitch(container, feature);
+            createSettingSwitch(container, (ToggleableFeature)feature);
         }
     }
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private static void createSettingSwitch(LinearLayout container, AbstractFeature feature) {
+    private static void createSettingSwitch(LinearLayout container, ToggleableFeature feature) {
         LinearLayout layout = new LinearLayout(container.getContext());
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
         TextView textTitle = UiUtils.createTextView(container.getContext());

@@ -8,15 +8,11 @@ import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
 public abstract class AbstractFeature {
-    @Getter
-    private boolean isEnabled = false;
 
     @Getter @Setter
     private boolean isLoaded = false;
 
-    public abstract String getSettingName();
-    public abstract String getSettingDesc();
-    public abstract String getConfigurationKey();
+    public abstract String getName();
 
     public abstract List<Class<? extends AbstractHook<?>>> getRequiredHooks();
 
@@ -34,16 +30,7 @@ public abstract class AbstractFeature {
 
     public abstract ClientSide getSide();
 
-    public void initialize() throws Exception {
-
-    }
-
-    public void setEnabled(boolean enabled) {
-        updateFeatureStatus(enabled);
-        this.isEnabled = enabled;
-    }
-
-    public abstract void updateFeatureStatus(boolean enabled);
+    public void initialize() throws Exception {}
 
     public enum ClientSide {
         ALL, CONTROLLER, CONTROLLED;

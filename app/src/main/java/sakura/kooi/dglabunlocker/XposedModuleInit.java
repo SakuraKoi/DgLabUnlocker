@@ -1,6 +1,8 @@
 package sakura.kooi.dglabunlocker;
 
-import static sakura.kooi.dglabunlocker.utils.DgLabVersion.*;
+import static sakura.kooi.dglabunlocker.utils.DgLabVersion.V_1_2_6;
+import static sakura.kooi.dglabunlocker.utils.DgLabVersion.V_1_3_1;
+import static sakura.kooi.dglabunlocker.utils.DgLabVersion.V_1_3_2;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,8 +21,7 @@ import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
-import sakura.kooi.dglabunlocker.hooks.PreLoadHookSettingsDialog;
-import sakura.kooi.dglabunlocker.hooks.StaticHookUpdateClientSide;
+import sakura.kooi.dglabunlocker.hooks.preload.HookSettingsDialog;
 import sakura.kooi.dglabunlocker.ui.StatusDialog;
 import sakura.kooi.dglabunlocker.utils.ModuleException;
 import sakura.kooi.dglabunlocker.utils.ModuleUtils;
@@ -98,7 +99,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         // region load configuration
         Log.i("DgLabUnlocker", "Hook Loading: Injecting settings dialog...");
         try {
-            PreLoadHookSettingsDialog.apply(context, classLoader);
+            HookSettingsDialog.apply(context, classLoader);
             StatusDialog.moduleSettingsDialogInject = true;
         } catch (Exception e) {
             ModuleUtils.logError("DgLabUnlocker", "An error occurred while injecting settings dialog", e);
@@ -120,8 +121,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         // endregion
 
         // region load features and collect hook classes
-        HashSet<Class<? extends AbstractHook<?>>> hookClasses = new HashSet<>();
-        hookClasses.add(StaticHookUpdateClientSide.class);
+        HashSet<Class<? extends AbstractHook<?>>> hookClasses = new HashSet<>(HookRegistry.preloadHooks);
         for (Class<? extends AbstractFeature> featureClass : HookRegistry.features) {
             try {
                 AbstractFeature feature = featureClass.newInstance();
@@ -166,7 +166,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                         throw new ModuleException("Cannot register feature " + featureClass.getName() + " to hook " + hookClass.getName() + ": hook not working");
                     hook.registerHandler(feature);
                 }
-                Log.i("DgLabUnlocker", "Feature " + feature.getSettingName() + " registered");
+                Log.i("DgLabUnlocker", "Feature " + feature.getName() + " registered");
             } catch (Exception e) {
                 ModuleUtils.logError("DgLabUnlocker", "Could not register hook handler for feature " + featureClass.getName(), e);
                 if (feature != null)

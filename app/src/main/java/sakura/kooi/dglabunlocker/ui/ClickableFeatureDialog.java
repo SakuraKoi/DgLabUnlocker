@@ -2,22 +2,28 @@ package sakura.kooi.dglabunlocker.ui;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.widget.Toast;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.features.ClickableFeature;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
+import sakura.kooi.dglabunlocker.variables.HookRegistry;
 
 public class ClickableFeatureDialog extends Dialog {
     public ClickableFeatureDialog(@NonNull Context context) {
         super(context);
         this.setContentView(UiUtils.makeDialogLayout(this, "附加功能", container -> {
-            UiUtils.createButton(container, "一键276 - A", false, e -> {
-                Toast.makeText(context, "坏蛋! 还没写完, 咕咕咕了", Toast.LENGTH_SHORT).show();
-            });
-            UiUtils.createButton(container, "一键276 - B", true, e -> {
-                Toast.makeText(context, "坏蛋! 还没写完, 咕咕咕了", Toast.LENGTH_SHORT).show();
-            });
+            for (AbstractFeature feature : HookRegistry.featureInstances.values()) {
+                if (!(feature instanceof ClickableFeature))
+                    continue;
+                if (feature.isUnsupported())
+                    continue;
+                View btn = ((ClickableFeature) feature).inflateFeatureLayout(context);
+                btn.setEnabled(feature.isLoaded());
+                container.addView(btn);
+            }
         }));
     }
 }

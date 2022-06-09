@@ -1,15 +1,5 @@
 package sakura.kooi.dglabunlocker.utils;
 
-import static sakura.kooi.dglabunlocker.variables.Accessors.isRemote;
-import static sakura.kooi.dglabunlocker.variables.Accessors.localStrengthA;
-import static sakura.kooi.dglabunlocker.variables.Accessors.localStrengthB;
-import static sakura.kooi.dglabunlocker.variables.Accessors.maxStrengthA;
-import static sakura.kooi.dglabunlocker.variables.Accessors.maxStrengthB;
-import static sakura.kooi.dglabunlocker.variables.Accessors.remoteStrengthA;
-import static sakura.kooi.dglabunlocker.variables.Accessors.remoteStrengthB;
-import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthA;
-import static sakura.kooi.dglabunlocker.variables.Accessors.totalStrengthB;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
