@@ -3,7 +3,8 @@
 
 ![](https://img.shields.io/badge/Module-Xposed-green?style=for-the-badge&logo=Android&logoColor=white) ![](https://img.shields.io/github/license/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/languages/top/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/downloads/SakuraKoi/DgLabUnlocker/total?style=for-the-badge) ![](https://img.shields.io/github/v/release/SakuraKoi/DgLabUnlocker?style=for-the-badge)
 
-> 当前适配版本: `1.2.6` `1.3.1`
+> 当前适配版本: `1.2.6` `1.3.1` `1.3.2`\
+> 项目开发将以当前支持的最新版本为目标, 在老版本中不保证所有功能可用
 
 ### 功能
 
@@ -14,10 +15,6 @@
 - **暴力锁死基础强度**\
 理论上拦截所有远程加基础强度的BUG, 有效避免突然惨遭弹射起飞\
 `有坏蛋试了半小时翻倍bug, 咱不说是谁`
-
-- **屏蔽超过296的非法强度** \
-避免恶意用户发送超高强度直接烧掉你的设备的变压模块\
-`这破协议居然没有上限 (大声BB`
 
 - **无视远程最大强度限制**\
 字面意思, 想拉多高拉多高 (坏.jpg\
