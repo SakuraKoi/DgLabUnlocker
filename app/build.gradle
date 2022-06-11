@@ -32,7 +32,6 @@ dependencies {
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
     
     compileOnly 'de.robv.android.xposed:api:82'
-    compileOnly 'de.robv.android.xposed:api:82:sources'
 
     compileOnly "org.projectlombok:lombok:1.18.24"
     annotationProcessor 'org.projectlombok:lombok:1.18.24'

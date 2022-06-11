@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,11 @@ import sakura.kooi.dglabunlocker.variables.HookRegistry;
 public class ModuleDialog extends Dialog {
     public ModuleDialog(@NonNull Context context) {
         super(context);
+        if (StatusDialog.resourceInjection) {
+            getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        } else {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
         this.setContentView(makeLayout(context));
     }
 
