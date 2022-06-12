@@ -32,13 +32,6 @@ public class Version126 extends AbstractVersionedCompatibilityProvider {
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$18"
         );
 
-        class_ControlledStrengthTouchListeners = Arrays.asList(
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$24",
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$2",
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$25",
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$3"
-        );
-
         class_RemoteSettingDialog = "com.bjsm.dungeonlab.widget.RemoteSettingDialog";
         field_RemoteSettingDialog_strengthA = "a_channel_strength_range";
         field_RemoteSettingDialog_strengthB = "b_channel_strength_range";

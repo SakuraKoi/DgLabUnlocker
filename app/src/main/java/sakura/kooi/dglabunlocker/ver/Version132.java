@@ -40,16 +40,6 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
                 "com.bjsm.dungeonlab.ui.activity.HomeActivity$18"
         );
 
-
-        // ControlledActivity.? implements View.OnTouchListener && R.string.strength_max
-        // ControlledActivity.? implements View.OnTouchListener && R.string.strength_min
-        class_ControlledStrengthTouchListeners = Arrays.asList(
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$24",
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$2",
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$25",
-                "com.bjsm.dungeonlab.ui.activity.ControlledActivity$3"
-        );
-
         // BlueToothService LDC "写入强度数据成功"
         class_BluetoothService = "com.bjsm.dungeonlab.service.BlueToothService";
         method_BluetoothService_updateStrength = "b";
