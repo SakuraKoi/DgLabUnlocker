@@ -113,6 +113,12 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
             element.remove("selectedStateB");
             element.add("selectedStateB", new JsonPrimitive(3));
 
+            element.remove("stateA");
+            element.add("stateA", new JsonPrimitive(1));
+
+            element.remove("stateB");
+            element.add("stateB", new JsonPrimitive(1));
+
             element.remove("playOrderA");
             element.add("playOrderA", new JsonPrimitive(-1));
 
