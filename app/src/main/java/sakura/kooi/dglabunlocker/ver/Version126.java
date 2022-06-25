@@ -4,20 +4,28 @@ import static sakura.kooi.dglabunlocker.variables.InjectPoints.*;
 
 import java.util.Arrays;
 
+import sakura.kooi.dglabunlocker.variables.Accessors;
+
 public class Version126 extends AbstractVersionedCompatibilityProvider {
     @Override
+    protected void initializeAccessors() throws ReflectiveOperationException {
+        String classGlobalVariables = "com.bjsm.dungeonlab.global.b";
+
+        // method_BluetoothServiceDecoder_decode
+        Accessors.totalStrengthA = lookupField(classGlobalVariables, "V");
+        Accessors.totalStrengthB = lookupField(classGlobalVariables, "W");
+        Accessors.remoteStrengthA = lookupField(classGlobalVariables, "X");
+        Accessors.remoteStrengthB = lookupField(classGlobalVariables, "Y");
+
+        // HomeActivity LDC "控制方连接成功"
+        Accessors.localStrengthA = lookupField(classGlobalVariables, "ab"); // getRealStrengthA
+        Accessors.localStrengthB = lookupField(classGlobalVariables, "ac"); // getRealStrengthB
+        Accessors.maxStrengthA = lookupField(classGlobalVariables, "Z"); // getStrengthRangeMax
+        Accessors.maxStrengthB = lookupField(classGlobalVariables, "aa"); // getStrengthRangeMax
+    }
+
+    @Override
     protected void initializeNames() {
-        classGlobalVariables = "com.bjsm.dungeonlab.global.b";
-        totalStrengthA = "V";
-        localStrengthA = "ab";
-        remoteStrengthA = "X";
-        maxStrengthA = "Z";
-
-        totalStrengthB = "W";
-        localStrengthB = "ac";
-        remoteStrengthB = "Y";
-        maxStrengthB = "aa";
-
         class_BluetoothServiceDecoder = "com.bjsm.dungeonlab.service.BlueToothService$18";
         method_BluetoothServiceDecoder_decode = "a";
 

@@ -1,13 +1,50 @@
 package sakura.kooi.dglabunlocker.ver;
 
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.*;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothService;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothServiceDecoder;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_HomeActivity;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_RemoteSettingDialog;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_StrengthLongPressHandler;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_StrengthTouchListeners;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextA;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextB;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthA;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthB;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothServiceDecoder_decode;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothService_updateClientSide;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothService_updateStrength;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_HomeActivity_updateStrengthText;
 
 import java.util.Arrays;
 
+import sakura.kooi.dglabunlocker.variables.Accessors;
+
 public class Version132 extends AbstractVersionedCompatibilityProvider {
     @Override
+    protected void initializeAccessors() throws ReflectiveOperationException {
+        String classGlobalVariables = "com.bjsm.dungeonlab.global.b";
+
+        // method_BluetoothServiceDecoder_decode
+        Accessors.totalStrengthA = lookupField(classGlobalVariables, "as");
+        Accessors.totalStrengthB = lookupField(classGlobalVariables, "at");
+        Accessors.remoteStrengthA = lookupField(classGlobalVariables, "au");
+        Accessors.remoteStrengthB = lookupField(classGlobalVariables, "av");
+
+        // HomeActivity LDC "控制方连接成功"
+        Accessors.localStrengthA = lookupField(classGlobalVariables, "ay"); // getRealStrengthA
+        Accessors.localStrengthB = lookupField(classGlobalVariables, "az"); // getRealStrengthB
+        Accessors.maxStrengthA = lookupField(classGlobalVariables, "aw"); // getStrengthRangeMax
+        Accessors.maxStrengthB = lookupField(classGlobalVariables, "ax"); // getStrengthRangeMax
+
+
+        // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
+        String classHomeActivity = "com.bjsm.dungeonlab.ui.activity.HomeActivity";
+        Accessors.textHomeActivityStrengthA = lookupField(class_HomeActivity, "y");
+        Accessors.textHomeActivityStrengthB = lookupField(class_HomeActivity, "G");
+    }
+
+    @Override
     protected void initializeNames() {
-        classGlobalVariables = "com.bjsm.dungeonlab.global.b";
 
         // RemoteSettingDialog
         class_RemoteSettingDialog = "com.bjsm.dungeonlab.widget.RemoteSettingDialog";
@@ -19,18 +56,6 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
 
         // class_BluetoothServiceDecoder LDC "notify 回调"
         method_BluetoothServiceDecoder_decode = "a";
-
-        // method_BluetoothServiceDecoder_decode
-        totalStrengthA = "as";
-        totalStrengthB = "at";
-        remoteStrengthA = "au";
-        remoteStrengthB = "av";
-
-        // HomeActivity LDC "控制方连接成功"
-        localStrengthA = "ay"; // getRealStrength
-        localStrengthB = "az"; // getRealStrengthA
-        maxStrengthA = "aw"; // getStrengthRangeMax
-        maxStrengthB = "ax"; // getStrengthRangeMax
 
         // HomeActivity.? implements View.OnTouchListener && R.string.remote_strength_max
         class_StrengthTouchListeners = Arrays.asList(

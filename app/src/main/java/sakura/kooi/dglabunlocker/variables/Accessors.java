@@ -2,8 +2,6 @@ package sakura.kooi.dglabunlocker.variables;
 
 import android.widget.TextView;
 
-import java.lang.invoke.MethodHandle;
-
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 
 public class Accessors {
