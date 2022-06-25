@@ -34,6 +34,8 @@ import sakura.kooi.dglabunlocker.utils.UiUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
 public class FeatureExportWave extends ClickableFeature implements HookActivityResult.IActivityResultInterceptor {
+    private List<Object> pendingWaves;
+
     @Override
     public String getName() {
         return "导出波形";
@@ -54,12 +56,7 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
         UiUtils.createButton(layout, "导出波形", e -> {
-            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("application/json");
-            intent.putExtra(Intent.EXTRA_TITLE, "DG-Lab_Unlocker_Wave-Export.json");
-                Log.i("DgLabUnlocker", "Sending ACTION_CREATE_DOCUMENT from activity " + HookCurrentActivity.getCurrentActivity().getClass().getName());
-            HookCurrentActivity.getCurrentActivity().startActivityForResult(intent, 11451);
+            displayExportWaveDialog(context);
         });
         return layout;
     }
@@ -96,20 +93,13 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
             if (selectedWaves.isEmpty()) {
                 return;
             }
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String json = gson.toJson(cleanupWaves(gson, selectedWaves));
-            try {
-                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-                FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-                fileOutputStream.write(json.getBytes(StandardCharsets.UTF_8));
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                pfd.close();
-                Toast.makeText(context, "成功导出了 " + selectedWaves.size() + " 个波形", Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-                Log.e("DgLabUnlocker", "An error occurred while writing wave list", e);
-                Toast.makeText(context, "导出波形列表失败", Toast.LENGTH_LONG).show();
-            }
+            pendingWaves = selectedWaves;
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/json");
+            intent.putExtra(Intent.EXTRA_TITLE, "DG-Lab_Unlocker_Wave-Export.json");
+            Log.i("DgLabUnlocker", "Sending ACTION_CREATE_DOCUMENT from activity " + HookCurrentActivity.getCurrentActivity().getClass().getName());
+            HookCurrentActivity.getCurrentActivity().startActivityForResult(intent, 11451);
         }).show();
     }
 
@@ -130,8 +120,7 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
             element.add("playOrderB", new JsonPrimitive(-1));
 
             element.remove("channel");
-
-
+            out.add(element);
         }
         return out;
     }
@@ -141,7 +130,20 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
         if (requestCode == 11451 && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                displayExportWaveDialog(uri);
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                String pendingJson = gson.toJson(cleanupWaves(gson, pendingWaves));
+                try {
+                    ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w");
+                    FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+                    fileOutputStream.write(pendingJson.getBytes(StandardCharsets.UTF_8));
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    pfd.close();
+                    Toast.makeText(context, "成功导出了 " + pendingWaves.size() + " 个波形", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    Log.e("DgLabUnlocker", "An error occurred while writing wave list", e);
+                    Toast.makeText(context, "导出波形列表失败", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
