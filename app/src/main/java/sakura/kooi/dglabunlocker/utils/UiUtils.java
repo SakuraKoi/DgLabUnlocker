@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -28,13 +29,13 @@ public class UiUtils {
     @NonNull
     public static LinearLayout makeDialogContainer(Context context, String title) {
         LinearLayout container = new LinearLayout(context);
+        container.setMinimumWidth(UiUtils.dpToPx(container, 270));
         container.setPadding(dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16), dpToPx(container, 16));
         if (StatusDialog.resourceInjection) {
             container.setBackground(ResourceInject.dialogSettingsBackground.getConstantState().newDrawable());
         }
         container.setOrientation(LinearLayout.VERTICAL);
-        TextView header = new TextView(context);
-        header.setText(title);
+        TextView header = createTextView(context, title);
         header.setGravity(Gravity.CENTER);
         header.setPadding(0, 0, 0, dpToPx(container, 16));
         container.addView(header);
@@ -63,11 +64,10 @@ public class UiUtils {
     }
 
     public static void createButton(LinearLayout container, String title, boolean withSpacing, View.OnClickListener listener) {
+        container.addView(createButton(container.getContext(), title, listener));
         if (withSpacing) {
             createSpacing(container, 2);
         }
-
-        container.addView(createButton(container.getContext(), title, listener));
     }
 
     public static TextView createButton(Context context, String title, View.OnClickListener listener) {
@@ -83,6 +83,23 @@ public class UiUtils {
         view.setGravity(Gravity.CENTER);
         view.setOnClickListener(listener);
         return view;
+    }
+
+    public static CheckBox createCheckbox(LinearLayout container, String title, Consumer<Boolean> listener) {
+        CheckBox checkbox = new CheckBox(container.getContext());
+        checkbox.setPadding( dpToPx(checkbox, 8), dpToPx(checkbox, 3), dpToPx(checkbox, 8), dpToPx(checkbox, 3));
+        if (StatusDialog.resourceInjection) {
+            checkbox.setTextColor(0xffffe99d);
+            StateListDrawable thumbSelector = new StateListDrawable();
+            thumbSelector.addState(new int[]{android.R.attr.state_checked}, ResourceInject.checkOn.getConstantState().newDrawable());
+            thumbSelector.addState(StateSet.WILD_CARD, ResourceInject.checkOff.getConstantState().newDrawable());
+            checkbox.setButtonDrawable(thumbSelector);
+        }
+        checkbox.setText(title);
+        checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> listener.accept(isChecked));
+        checkbox.setChecked(false);
+        container.addView(checkbox);
+        return checkbox;
     }
 
     public static TextView createTextView(Context context, String text) {

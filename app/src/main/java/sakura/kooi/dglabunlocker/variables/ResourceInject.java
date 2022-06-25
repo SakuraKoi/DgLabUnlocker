@@ -21,6 +21,9 @@ public class ResourceInject {
     public static Drawable switchOpenTrack;
     public static Drawable buttonBackground;
 
+    public static Drawable checkOn;
+    public static Drawable checkOff;
+
     @SuppressWarnings("deprecation")
     @SuppressLint("UseCompatLoadingForDrawables")
     public static void doResourceInject(XC_InitPackageResources.InitPackageResourcesParam resparam) {
@@ -34,6 +37,8 @@ public class ResourceInject {
             ResourceInject.switchCloseTrack = modRes.getDrawable(R.drawable.switch_close_track);
             ResourceInject.switchOpenTrack = modRes.getDrawable(R.drawable.switch_open_track);
             ResourceInject.buttonBackground = modRes.getDrawable(R.drawable.button_yellow);
+            ResourceInject.checkOn = modRes.getDrawable(R.drawable.check_on);
+            ResourceInject.checkOff = modRes.getDrawable(R.drawable.check_off);
             StatusDialog.resourceInjection = true;
         } catch (Resources.NotFoundException e) {
             ModuleUtils.logError("DgLabUnlocker", "resources cannot be found from XModuleResources, still try inject...", e);

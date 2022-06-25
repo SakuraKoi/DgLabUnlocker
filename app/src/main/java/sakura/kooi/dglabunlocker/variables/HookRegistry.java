@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
+import sakura.kooi.dglabunlocker.features.clickable.FeatureExportWave;
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureEnforceLocalStrength;
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureEnforceRemoteMaxStrength;
@@ -24,7 +25,8 @@ public class HookRegistry {
             FeatureEnforceLocalStrength.class,
             FeatureEnforceRemoteMaxStrength.class,
             FeatureBypassRemoteMaxStrength.class,
-            FeatureWebsocketRpc.class
+            FeatureWebsocketRpc.class,
+            FeatureExportWave.class
     );
     public static final List<Class<? extends AbstractHook<?>>> preloadHooks = List.of(
             HookUpdateClientSide.class

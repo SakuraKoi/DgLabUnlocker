@@ -38,6 +38,14 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
         Accessors.maxStrengthA = lookupField(classGlobalVariables, "aw"); // getStrengthRangeMax
         Accessors.maxStrengthB = lookupField(classGlobalVariables, "ax"); // getStrengthRangeMax
 
+        // PlayFragment.class -> MainListCustomizAdapter constructor -> DataUtils.b()
+        Accessors.listWaveData = lookupField(classGlobalVariables, "ak");
+
+        String classNameWaveBean = "com.bjsm.dungeonlab.bean.WaveClassicBean";
+        Accessors.classWaveClassicBean = lookupClass(classNameWaveBean);
+        Accessors.waveIsClassic = lookupField(classNameWaveBean, "isClassic");
+        Accessors.waveName = lookupField(classNameWaveBean, "waveName");
+
         // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
         String classHomeActivity = "com.bjsm.dungeonlab.ui.activity.HomeActivity";
         Accessors.textHomeActivityStrengthA = lookupField(class_HomeActivity, "y");

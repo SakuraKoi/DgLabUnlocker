@@ -21,8 +21,8 @@ public abstract class AbstractVersionedCompatibilityProvider {
         initializeAccessors();
     }
 
-    protected <T> FieldAccessor<T> lookupField(String className, String fieldName) throws ReflectiveOperationException {
-        Class<?> clazz = classCache.computeIfAbsent(className, className1 -> {
+    protected Class<?> lookupClass(String className) {
+        return classCache.computeIfAbsent(className, className1 -> {
             try {
                 return Class.forName(className1, true, classLoader);
             } catch (ClassNotFoundException e) {
@@ -30,6 +30,10 @@ public abstract class AbstractVersionedCompatibilityProvider {
                 return null;
             }
         });
+    }
+
+    protected <T> FieldAccessor<T> lookupField(String className, String fieldName) throws ReflectiveOperationException {
+        Class<?> clazz = lookupClass(className);
         if (clazz != null) {
             return new FieldAccessor<>(lookup, clazz, fieldName);
         }
