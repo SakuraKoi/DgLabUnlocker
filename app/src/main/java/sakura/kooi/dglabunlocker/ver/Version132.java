@@ -46,6 +46,8 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
         Accessors.waveIsClassic = lookupField(classNameWaveBean, "isClassic");
         Accessors.waveName = lookupField(classNameWaveBean, "waveName");
 
+        Accessors.funcSaveWave = lookupMethod("com.bjsm.dungeonlab.d.d", "a", int.class, Accessors.classWaveClassicBean, int.class, String.class, int.class);
+
         // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
         String classHomeActivity = "com.bjsm.dungeonlab.ui.activity.HomeActivity";
         Accessors.textHomeActivityStrengthA = lookupField(class_HomeActivity, "y");

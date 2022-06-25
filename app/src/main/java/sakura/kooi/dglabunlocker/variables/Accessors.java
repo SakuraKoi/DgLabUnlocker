@@ -2,6 +2,7 @@ package sakura.kooi.dglabunlocker.variables;
 
 import android.widget.TextView;
 
+import java.lang.invoke.MethodHandle;
 import java.util.List;
 
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
@@ -26,4 +27,5 @@ public class Accessors {
     public static Class<?> classWaveClassicBean;
     public static FieldAccessor<Integer> waveIsClassic;
     public static FieldAccessor<String> waveName;
+    public static MethodHandle funcSaveWave;
 }

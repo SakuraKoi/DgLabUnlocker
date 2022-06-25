@@ -1,6 +1,8 @@
 package sakura.kooi.dglabunlocker.ver;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
@@ -12,6 +14,7 @@ public abstract class AbstractVersionedCompatibilityProvider {
     private ClassLoader classLoader;
 
     protected abstract void initializeAccessors() throws ReflectiveOperationException;
+
     protected abstract void initializeNames();
 
     public void initializeAccessors(ClassLoader classLoader) throws ReflectiveOperationException {
@@ -36,6 +39,16 @@ public abstract class AbstractVersionedCompatibilityProvider {
         Class<?> clazz = lookupClass(className);
         if (clazz != null) {
             return new FieldAccessor<>(lookup, clazz, fieldName);
+        }
+        return null;
+    }
+
+    protected MethodHandle lookupMethod(String className, String methodName, Class<?>... parameterTypes) throws ReflectiveOperationException {
+        Class<?> clazz = lookupClass(className);
+        if (clazz != null) {
+            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            return lookup.unreflect(method);
         }
         return null;
     }
