@@ -56,7 +56,7 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
         UiUtils.createButton(layout, "导出波形", e -> {
-            displayExportWaveDialog(context);
+            displayExportWaveDialog();
         });
         return layout;
     }
@@ -79,7 +79,7 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
         }, wave -> wave, (o1, o2) -> o1, LinkedHashMap::new));
     }
 
-    private void displayExportWaveDialog(Uri uri) {
+    private void displayExportWaveDialog() {
         Context context = HookCurrentActivity.getCurrentActivity();
         Map<String, Object> waveList;
         try {
