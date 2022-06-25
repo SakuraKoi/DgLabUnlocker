@@ -2,6 +2,8 @@ package sakura.kooi.dglabunlocker.variables;
 
 import android.widget.TextView;
 
+import java.util.List;
+
 import sakura.kooi.dglabunlocker.utils.FieldAccessor;
 
 public class Accessors {
@@ -17,6 +19,8 @@ public class Accessors {
 
     public static FieldAccessor<TextView> textHomeActivityStrengthA;
     public static FieldAccessor<TextView> textHomeActivityStrengthB;
+    public static FieldAccessor<Boolean> isRemoteControlling;
 
     public static boolean isRemote;
+    public static FieldAccessor<List<Object>> listWaveData;
 }

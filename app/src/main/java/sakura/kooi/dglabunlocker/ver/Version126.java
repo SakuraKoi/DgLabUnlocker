@@ -16,6 +16,8 @@ public class Version126 extends AbstractVersionedCompatibilityProvider {
         Accessors.totalStrengthB = lookupField(classGlobalVariables, "W");
         Accessors.remoteStrengthA = lookupField(classGlobalVariables, "X");
         Accessors.remoteStrengthB = lookupField(classGlobalVariables, "Y");
+        Accessors.remoteStrengthB = lookupField(classGlobalVariables, "Y");
+        Accessors.isRemoteControlling = lookupField(classGlobalVariables, "aZ");
 
         // HomeActivity LDC "控制方连接成功"
         Accessors.localStrengthA = lookupField(classGlobalVariables, "ab"); // getRealStrengthA

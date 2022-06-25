@@ -15,6 +15,7 @@ public class Version131 extends AbstractVersionedCompatibilityProvider {
         Accessors.totalStrengthB = lookupField(classGlobalVariables, "at");
         Accessors.remoteStrengthA = lookupField(classGlobalVariables, "aw");
         Accessors.remoteStrengthB = lookupField(classGlobalVariables, "ax");
+        Accessors.isRemoteControlling = lookupField(classGlobalVariables, "by");
 
         Accessors.localStrengthA = lookupField(classGlobalVariables, "ay"); // getRealStrengthA
         Accessors.localStrengthB = lookupField(classGlobalVariables, "az"); // getRealStrengthB

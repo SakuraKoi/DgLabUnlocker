@@ -30,12 +30,13 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
         Accessors.remoteStrengthA = lookupField(classGlobalVariables, "au");
         Accessors.remoteStrengthB = lookupField(classGlobalVariables, "av");
 
+        Accessors.isRemoteControlling = lookupField(classGlobalVariables, "by");
+
         // HomeActivity LDC "控制方连接成功"
         Accessors.localStrengthA = lookupField(classGlobalVariables, "ay"); // getRealStrengthA
         Accessors.localStrengthB = lookupField(classGlobalVariables, "az"); // getRealStrengthB
         Accessors.maxStrengthA = lookupField(classGlobalVariables, "aw"); // getStrengthRangeMax
         Accessors.maxStrengthB = lookupField(classGlobalVariables, "ax"); // getStrengthRangeMax
-
 
         // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
         String classHomeActivity = "com.bjsm.dungeonlab.ui.activity.HomeActivity";

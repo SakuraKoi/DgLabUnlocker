@@ -11,6 +11,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.utils.DgLabVersion;
+import sakura.kooi.dglabunlocker.utils.ModuleUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
 public class HookUpdateClientSide extends AbstractHook<Object> {
@@ -32,10 +33,14 @@ public class HookUpdateClientSide extends AbstractHook<Object> {
     protected void apply(Context context, ClassLoader classLoader) throws ReflectiveOperationException {
         XposedHelpers.findAndHookMethod(class_BluetoothService, classLoader,
                 method_BluetoothService_updateClientSide, int.class, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    Accessors.isRemote = !Objects.equals(param.args[0], 0);
-                }
-            });
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) {
+                        try {
+                            Accessors.isRemote = Accessors.isRemoteControlling.get() && !Objects.equals(param.args[0], 0);
+                        } catch (ReflectiveOperationException e) {
+                            ModuleUtils.logError("DgLabUnlocker", "Update isRemoteControlling failed", e);
+                        }
+                    }
+                });
     }
 }
