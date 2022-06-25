@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -53,10 +54,12 @@ public class UiUtils {
         return container;
     }
 
-    public static void createSpacing(LinearLayout container, int dp) {
-        TextView space = new TextView(container.getContext());
-        space.setPadding(0, dpToPx(space, dp), 0, 0);
+    public static void createSpacing(LinearLayout container, float dp) {
+        Space space = new Space(container.getContext());
         container.addView(space);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) space.getLayoutParams();
+        params.height = dpToPx(space, dp);
+        space.setLayoutParams(params);
     }
 
     public static void createButton(LinearLayout container, String title, View.OnClickListener listener) {
@@ -64,9 +67,15 @@ public class UiUtils {
     }
 
     public static void createButton(LinearLayout container, String title, boolean withSpacing, View.OnClickListener listener) {
-        container.addView(createButton(container.getContext(), title, listener));
+        TextView button = createButton(container.getContext(), title, listener);
         if (withSpacing) {
-            createSpacing(container, 2);
+            container.addView(button);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) button.getLayoutParams();
+            layoutParams.topMargin = dpToPx(button, 6);
+            layoutParams.bottomMargin = dpToPx(button, 6);
+            button.setLayoutParams(layoutParams);
+        } else {
+            container.addView(button);
         }
     }
 

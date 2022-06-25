@@ -40,14 +40,15 @@ public class ModuleDialog extends Dialog {
             UiUtils.createButton(container, "实验功能测试", e -> new DevTestDialog(context).show());
         }
 
-        UiUtils.createSpacing(container, 4);
         TextView textAuthor = new TextView(context);
         textAuthor.setText("Github @SakuraKoi/DgLabUnlocker");
         textAuthor.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         textAuthor.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         container.addView(textAuthor);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textAuthor.getLayoutParams();
+        layoutParams.topMargin = UiUtils.dpToPx(textAuthor, 24);
+        textAuthor.setLayoutParams(layoutParams);
 
-        container.setMinimumWidth(UiUtils.dpToPx(container, 270));
         return container;
     }
 }
