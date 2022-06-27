@@ -1,25 +1,14 @@
 package sakura.kooi.dglabunlocker.ver;
 
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothService;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_BluetoothServiceDecoder;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_HomeActivity;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_RemoteSettingDialog;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_StrengthLongPressHandler;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.class_StrengthTouchListeners;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextA;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_HomeActivity_strengthTextB;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthA;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.field_RemoteSettingDialog_strengthB;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothServiceDecoder_decode;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothService_updateClientSide;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_BluetoothService_updateStrength;
-import static sakura.kooi.dglabunlocker.variables.InjectPoints.method_HomeActivity_updateStrengthText;
+import static sakura.kooi.dglabunlocker.variables.InjectPoints.*;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
 public class Version132 extends AbstractVersionedCompatibilityProvider {
+
     @Override
     protected void initializeAccessors() throws ReflectiveOperationException {
         String classGlobalVariables = "com.bjsm.dungeonlab.global.b";
@@ -48,8 +37,10 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
 
         Accessors.funcSaveWave = lookupMethod("com.bjsm.dungeonlab.d.d", "a", int.class, Accessors.classWaveClassicBean, int.class, String.class, int.class);
 
+        // MainListCustomizAdapter -> constr -> setList(collection) -> a
+        Accessors.funcAdapterSetList = lookupMethod(class_MainListCustomizAdapter, "a", Collection.class);
+
         // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
-        String classHomeActivity = "com.bjsm.dungeonlab.ui.activity.HomeActivity";
         Accessors.textHomeActivityStrengthA = lookupField(class_HomeActivity, "y");
         Accessors.textHomeActivityStrengthB = lookupField(class_HomeActivity, "G");
     }
@@ -89,5 +80,7 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
         method_HomeActivity_updateStrengthText = "a";
         field_HomeActivity_strengthTextA = "y";
         field_HomeActivity_strengthTextB = "G";
+
+        class_MainListCustomizAdapter = "com.bjsm.dungeonlab.adapter.MainListCustomizAdapter";
     }
 }

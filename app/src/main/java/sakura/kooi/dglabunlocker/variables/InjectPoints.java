@@ -17,4 +17,5 @@ public class InjectPoints {
     public static String method_HomeActivity_updateStrengthText;
     public static String field_HomeActivity_strengthTextA;
     public static String field_HomeActivity_strengthTextB;
+    public static String class_MainListCustomizAdapter;
 }

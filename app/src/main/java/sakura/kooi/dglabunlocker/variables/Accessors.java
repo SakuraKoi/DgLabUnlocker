@@ -27,5 +27,7 @@ public class Accessors {
     public static Class<?> classWaveClassicBean;
     public static FieldAccessor<Integer> waveIsClassic;
     public static FieldAccessor<String> waveName;
+    
     public static MethodHandle funcSaveWave;
+    public static MethodHandle funcAdapterSetList;
 }

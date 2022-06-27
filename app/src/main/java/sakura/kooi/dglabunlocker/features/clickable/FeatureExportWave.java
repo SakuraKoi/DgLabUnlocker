@@ -20,10 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import sakura.kooi.dglabunlocker.features.ClickableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
@@ -31,7 +29,7 @@ import sakura.kooi.dglabunlocker.hooks.business.HookActivityResult;
 import sakura.kooi.dglabunlocker.hooks.business.HookCurrentActivity;
 import sakura.kooi.dglabunlocker.ui.WaveSelectDialog;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
-import sakura.kooi.dglabunlocker.variables.Accessors;
+import sakura.kooi.dglabunlocker.utils.WaveUtils;
 
 public class FeatureExportWave extends ClickableFeature implements HookActivityResult.IActivityResultInterceptor {
     private List<Object> pendingWaves;
@@ -61,29 +59,11 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
         return layout;
     }
 
-    private Map<String, Object> getWaveList() throws ReflectiveOperationException {
-        return Accessors.listWaveData.get().stream().filter(wave -> {
-            try {
-                return Accessors.waveIsClassic.get(wave) == 1;
-            } catch (ReflectiveOperationException e) {
-                Log.e("DgLabUnlocker", "An error occurred while checking wave is classic", e);
-                return false;
-            }
-        }).collect(Collectors.toMap(wave -> {
-            try {
-                return Accessors.waveName.get(wave);
-            } catch (ReflectiveOperationException e) {
-                Log.e("DgLabUnlocker", "An error occurred while getting wave name", e);
-                return null;
-            }
-        }, wave -> wave, (o1, o2) -> o1, LinkedHashMap::new));
-    }
-
     private void displayExportWaveDialog() {
         Context context = HookCurrentActivity.getCurrentActivity();
         Map<String, Object> waveList;
         try {
-            waveList = getWaveList();
+            waveList = WaveUtils.getWaveList();
         } catch (ReflectiveOperationException e) {
             Log.e("DgLabUnlocker", "An error occurred while getting wave list", e);
             Toast.makeText(context, "获取波形列表失败", Toast.LENGTH_LONG).show();

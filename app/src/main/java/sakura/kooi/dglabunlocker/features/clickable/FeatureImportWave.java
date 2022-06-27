@@ -25,8 +25,10 @@ import sakura.kooi.dglabunlocker.features.ClickableFeature;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
 import sakura.kooi.dglabunlocker.hooks.business.HookActivityResult;
 import sakura.kooi.dglabunlocker.hooks.business.HookCurrentActivity;
+import sakura.kooi.dglabunlocker.hooks.business.HookWaveAdapterCollector;
 import sakura.kooi.dglabunlocker.ui.WaveSelectDialog;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
+import sakura.kooi.dglabunlocker.utils.WaveUtils;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
 public class FeatureImportWave extends ClickableFeature implements HookActivityResult.IActivityResultInterceptor {
@@ -110,8 +112,26 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
                     Log.e("DgLabUnlocker", "An error occurred while importing wave", e);
                 }
             }
-            Toast.makeText(context, "成功导入" + success + " / " + selectedWaves.size() + "个波形 (可能需要重启APP以生效)", Toast.LENGTH_LONG).show();
+            boolean refreshed = false;
+            try {
+                refreshWaveList();
+                refreshed = true;
+            } catch (ReflectiveOperationException e) {
+                Log.e("DgLabUnlocker", "An error occurred while refreshing wave list", e);
+            }
+            Toast.makeText(context, "成功导入" + success + " / " + selectedWaves.size() + " 个波形" + (refreshed? "" : " (可能需要重启APP以生效)"), Toast.LENGTH_LONG).show();
         }).show();
+    }
+
+    private void refreshWaveList() throws ReflectiveOperationException {
+        List<Object> waveList = WaveUtils.getCustomizWaveList();
+        for (Object adapter : HookWaveAdapterCollector.getAdapters()) {
+            try {
+                Accessors.funcSaveWave.invoke(adapter, waveList);
+            } catch (Throwable e) {
+                throw new ReflectiveOperationException(e);
+            }
+        }
     }
 
 }
