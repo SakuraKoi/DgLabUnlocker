@@ -38,7 +38,7 @@ public class Version132 extends AbstractVersionedCompatibilityProvider {
         Accessors.funcSaveWave = lookupMethod("com.bjsm.dungeonlab.d.d", "a", int.class, Accessors.classWaveClassicBean, int.class, String.class, int.class);
 
         // MainListCustomizAdapter -> constr -> setList(collection) -> a
-        Accessors.funcAdapterSetList = lookupMethod(class_MainListCustomizAdapter, "a", Collection.class);
+        Accessors.funcAdapterSetList = lookupMethod("com.chad.library.adapter.base.BaseQuickAdapter", "a", Collection.class);
 
         // HomeActivity action.equals("com.bjsm.dungeonlab.ble.abpower")
         Accessors.textHomeActivityStrengthA = lookupField(class_HomeActivity, "y");

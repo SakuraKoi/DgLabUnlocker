@@ -33,8 +33,17 @@ public class ModuleDialog extends Dialog {
         ));
         container.addView(UiUtils.createTextView(context, "模块版本: " + BuildConfig.VERSION_NAME));
 
-        UiUtils.createButton(container, "功能设置", e -> new ConfigurationDialog(context).show());
-        UiUtils.createButton(container, "附加功能", e -> new ClickableFeatureDialog(context).show());
+        if (StatusDialog.fieldsLookup) {
+            UiUtils.createButton(container, "功能设置", e -> new ConfigurationDialog(context).show());
+            UiUtils.createButton(container, "附加功能", e -> new ClickableFeatureDialog(context).show());
+        } else {
+            TextView textView = UiUtils.createTextView(context, "严重错误: 模块加载失败, 请检查日志");
+            textView.setTextColor(0xfff44336);
+            container.addView(textView);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
+            params.topMargin = UiUtils.dpToPx(textView, 6);
+            textView.setLayoutParams(params);
+        }
         UiUtils.createButton(container, "模块运行状态", e -> new StatusDialog(context).show());
         if (HookRegistry.ENABLE_DEV_FEATURE) {
             UiUtils.createButton(container, "实验功能测试", e -> new DevTestDialog(context).show());
