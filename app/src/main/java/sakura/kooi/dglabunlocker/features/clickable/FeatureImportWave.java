@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import sakura.kooi.dglabunlocker.features.ClickableFeature;
@@ -103,10 +104,17 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
             if (selectedWaves.isEmpty()) {
                 return;
             }
+
+            Set<String> currentWaveNameList = null;
+            try {
+                currentWaveNameList = WaveUtils.getWaveList().keySet();
+            } catch (ReflectiveOperationException e) {
+            }
+
             int success = 0;
             for (Object wave : selectedWaves) {
                 try {
-                    Accessors.funcSaveWave.invoke(8, wave, 1, Accessors.waveName.get(wave), 1);
+                    Accessors.funcSaveWave.invoke(8, wave, 1, deduplicateWaveName(currentWaveNameList, Accessors.waveName.get(wave)), 1);
                     success++;
                 } catch (Throwable e) {
                     Log.e("DgLabUnlocker", "An error occurred while importing wave", e);
@@ -119,8 +127,21 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
             } catch (ReflectiveOperationException e) {
                 Log.e("DgLabUnlocker", "An error occurred while refreshing wave list", e);
             }
-            Toast.makeText(context, "成功导入" + success + " / " + selectedWaves.size() + " 个波形" + (refreshed? "" : " (可能需要重启APP以生效)"), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "成功导入" + success + " / " + selectedWaves.size() + " 个波形" + (refreshed ? "" : " (可能需要重启APP以生效)"), Toast.LENGTH_LONG).show();
         }).show();
+    }
+
+    private String deduplicateWaveName(Set<String> currentWaveNameList, String origName) {
+        if (currentWaveNameList == null) {
+            return origName;
+        }
+        
+        int id = 0;
+        String name = origName;
+        while (currentWaveNameList.contains(name)) {
+            name = origName + ++id;
+        }
+        return name;
     }
 
     private void refreshWaveList() throws ReflectiveOperationException {
