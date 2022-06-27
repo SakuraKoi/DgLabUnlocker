@@ -21,7 +21,7 @@ public class HookWaveAdapterCollector extends AbstractHook<Object> {
 
     @Override
     public String getName() {
-        return "列表对象收集";
+        return "波形列表收集";
     }
 
     @Override
