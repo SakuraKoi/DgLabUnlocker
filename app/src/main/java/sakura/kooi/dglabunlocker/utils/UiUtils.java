@@ -62,11 +62,11 @@ public class UiUtils {
         space.setLayoutParams(params);
     }
 
-    public static void createButton(LinearLayout container, String title, View.OnClickListener listener) {
-        createButton(container, title, true, listener);
+    public static TextView createButton(LinearLayout container, String title, View.OnClickListener listener) {
+        return createButton(container, title, true, listener);
     }
 
-    public static void createButton(LinearLayout container, String title, boolean withSpacing, View.OnClickListener listener) {
+    public static TextView createButton(LinearLayout container, String title, boolean withSpacing, View.OnClickListener listener) {
         TextView button = createButton(container.getContext(), title, listener);
         if (withSpacing) {
             container.addView(button);
@@ -77,6 +77,7 @@ public class UiUtils {
         } else {
             container.addView(button);
         }
+        return button;
     }
 
     public static TextView createButton(Context context, String title, View.OnClickListener listener) {

@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -36,9 +38,14 @@ public class FeatureIgnoreBatteryOptimization extends ClickableFeature {
 
     @Override
     public void inflateFeatureLayout(Context context, LinearLayout layout) {
-        UiUtils.createButton(layout, "申请忽略电池优化", e -> {
+        TextView btn = UiUtils.createButton(layout, "忽略电池优化", e -> {
             requestIgnoreBatteryOptimization(context);
         });
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (pm.isIgnoringBatteryOptimizations("com.bjsm.dungeonlab")) {
+            btn.setEnabled(false);
+            btn.setText("忽略电池优化 (已生效)");
+        }
     }
 
     private void requestIgnoreBatteryOptimization(Context context) {
