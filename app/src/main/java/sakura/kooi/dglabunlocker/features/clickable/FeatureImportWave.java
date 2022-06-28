@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -49,9 +48,7 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
     }
 
     @Override
-    public View inflateFeatureLayout(Context context) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
+    public void inflateFeatureLayout(Context context, LinearLayout layout) {
         UiUtils.createButton(layout, "导入波形", e -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -59,7 +56,6 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
             Log.i("DgLabUnlocker", "Sending ACTION_OPEN_DOCUMENT from activity " + HookCurrentActivity.getCurrentActivity().getClass().getName());
             HookCurrentActivity.getCurrentActivity().startActivityForResult(intent, 11452);
         });
-        return layout;
     }
 
     @Override

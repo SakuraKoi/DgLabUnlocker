@@ -1,8 +1,8 @@
 package sakura.kooi.dglabunlocker.features;
 
 import android.content.Context;
-import android.view.View;
+import android.widget.LinearLayout;
 
 public abstract class ClickableFeature extends AbstractFeature {
-    public abstract View inflateFeatureLayout(Context context);
+    public abstract void inflateFeatureLayout(Context context, LinearLayout layout);
 }

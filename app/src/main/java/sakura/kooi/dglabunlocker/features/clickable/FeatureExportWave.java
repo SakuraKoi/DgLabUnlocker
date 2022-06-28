@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -50,13 +49,10 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
     }
 
     @Override
-    public View inflateFeatureLayout(Context context) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
+    public void inflateFeatureLayout(Context context, LinearLayout layout) {
         UiUtils.createButton(layout, "导出波形", e -> {
             displayExportWaveDialog();
         });
-        return layout;
     }
 
     private void displayExportWaveDialog() {

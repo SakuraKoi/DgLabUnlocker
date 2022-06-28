@@ -2,7 +2,7 @@ package sakura.kooi.dglabunlocker.ui;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
@@ -20,9 +20,11 @@ public class ClickableFeatureDialog extends Dialog {
                     continue;
                 if (feature.isUnsupported())
                     continue;
-                View btn = ((ClickableFeature) feature).inflateFeatureLayout(context);
-                btn.setEnabled(feature.isLoaded());
-                container.addView(btn);
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                ((ClickableFeature) feature).inflateFeatureLayout(context, layout);
+                layout.setEnabled(feature.isLoaded());
+                container.addView(layout);
             }
         }));
     }
