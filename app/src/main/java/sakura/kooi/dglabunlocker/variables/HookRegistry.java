@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.features.clickable.FeatureExportWave;
+import sakura.kooi.dglabunlocker.features.clickable.FeatureIgnoreBatteryOptimization;
 import sakura.kooi.dglabunlocker.features.clickable.FeatureImportWave;
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureBypassRemoteMaxStrength;
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureEnforceLocalStrength;
@@ -27,6 +28,7 @@ public class HookRegistry {
             FeatureEnforceRemoteMaxStrength.class,
             FeatureBypassRemoteMaxStrength.class,
             FeatureWebsocketRpc.class,
+            FeatureIgnoreBatteryOptimization.class,
             FeatureExportWave.class,
             FeatureImportWave.class
     );
