@@ -59,7 +59,7 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
         Context context = HookCurrentActivity.getCurrentActivity();
         Map<String, Object> waveList;
         try {
-            waveList = WaveUtils.getWaveList();
+            waveList = WaveUtils.getWaveListWithName(true);
         } catch (ReflectiveOperationException e) {
             Log.e("DgLabUnlocker", "An error occurred while getting wave list", e);
             Toast.makeText(context, "获取波形列表失败", Toast.LENGTH_LONG).show();

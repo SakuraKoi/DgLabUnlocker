@@ -10,19 +10,20 @@ import java.util.stream.Collectors;
 import sakura.kooi.dglabunlocker.variables.Accessors;
 
 public class WaveUtils {
-    public static List<Object> getCustomizWaveList() throws ReflectiveOperationException {
+    public static List<Object> getWaveList(boolean filterClassic) throws ReflectiveOperationException {
         return Accessors.listWaveData.get().stream().filter(wave -> {
-            try {
-                return Accessors.waveIsClassic.get(wave) == 1;
-            } catch (ReflectiveOperationException e) {
-                Log.e("DgLabUnlocker", "An error occurred while checking wave is classic", e);
-                return false;
-            }
+            if (filterClassic) {
+                try {
+                    return Accessors.waveIsClassic.get(wave) == 1;
+                } catch (ReflectiveOperationException e) {
+                    Log.e("DgLabUnlocker", "An error occurred while checking wave is classic", e);
+                    return false;
+                }
+            } else return true;
         }).collect(Collectors.toList());
     }
-
-    public static Map<String, Object> getWaveList() throws ReflectiveOperationException {
-        return getCustomizWaveList().stream().collect(Collectors.toMap(wave -> {
+    public static Map<String, Object> getWaveListWithName(boolean filterClassic) throws ReflectiveOperationException {
+        return getWaveList(filterClassic).stream().collect(Collectors.toMap(wave -> {
             try {
                 return Accessors.waveName.get(wave);
             } catch (ReflectiveOperationException e) {

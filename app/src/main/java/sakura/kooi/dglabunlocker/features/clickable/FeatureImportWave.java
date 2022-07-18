@@ -103,7 +103,7 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
 
             Set<String> currentWaveNameList = null;
             try {
-                currentWaveNameList = WaveUtils.getWaveList().keySet();
+                currentWaveNameList = WaveUtils.getWaveListWithName(true).keySet();
             } catch (ReflectiveOperationException e) {
                 Log.w("DgLabUnlocker", "An error occurred while deduplicating wave name", e);
             }
@@ -142,7 +142,7 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
     }
 
     private void refreshWaveList() throws ReflectiveOperationException {
-        List<Object> waveList = WaveUtils.getCustomizWaveList();
+        List<Object> waveList = WaveUtils.getWaveList(true);
         for (Object adapter : HookWaveAdapterCollector.getAdapters()) {
             try {
                 Accessors.funcSaveWave.invoke(adapter, waveList);
