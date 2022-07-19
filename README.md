@@ -20,9 +20,13 @@
 字面意思, 想拉多高拉多高 (坏.jpg\
 `不要拿去干坏事qwq`
 
-- **强制确保远程强度不超过限制** \
+- **强制确保远程强度不超过限制**\
   避免魔改客户端搞事情\
   `上面那个功能的防御`
+  
+- **导入/导出波形**\
+  以JSON格式从文件导入波形/导出波形到文件\
+  <strike>`用别人的波形算不算也是一种NTR`</strike>
 
 - **开放强度调整接口**\
   对外开放[Websocket RPC服务](https://github.com/SakuraKoi/DgLabUnlocker/wiki/Websocket-RPC-Spec)端口, 便于程序员整点花活 #8\
