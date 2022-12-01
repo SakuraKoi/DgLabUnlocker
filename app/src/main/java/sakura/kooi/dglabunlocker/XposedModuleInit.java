@@ -1,8 +1,6 @@
 package sakura.kooi.dglabunlocker;
 
-import static sakura.kooi.dglabunlocker.utils.DgLabVersion.V_1_2_6;
-import static sakura.kooi.dglabunlocker.utils.DgLabVersion.V_1_3_1;
-import static sakura.kooi.dglabunlocker.utils.DgLabVersion.V_1_3_2;
+import static sakura.kooi.dglabunlocker.utils.DgLabVersion.*;
 
 import android.content.Context;
 import android.util.Log;
@@ -40,6 +38,10 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         int versionCode = ModuleUtils.getAppVersion(context);
         HookRegistry.versionCode = versionCode;
         switch (versionCode) {
+            case V_1_3_3:
+                versionedFieldInitializer = new Version132(); // FIXME
+                StatusDialog.currentLoadedVersion = "1.3.3";
+                break;
             case V_1_3_2:
                 versionedFieldInitializer = new Version132();
                 StatusDialog.currentLoadedVersion = "1.3.2";
@@ -67,6 +69,24 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
             return;
         }
         Log.i("DgLabUnlocker", "Init Loading: found target app " + lpparam.packageName);
+
+        try {
+            Class.forName("com.netease.nis.wrapper.MyApplication", false, lpparam.classLoader);
+
+            XposedHelpers.findAndHookMethod("com.netease.nis.wrapper.MyApplication", lpparam.classLoader,
+                    "attachBaseContext", Context.class, new XC_MethodHook() {
+                        @Override
+                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            Context context = (Context) param.args[0];
+                            ClassLoader classLoader = context.getClassLoader();
+                            onAppLoaded(context, classLoader);
+                        }
+                    });
+            return;
+        } catch (ClassNotFoundException e) {
+            Log.i("DgLabUnlocker", "nesec packer not found, try hook as tencent packed...");
+        }
+
         try {
             Class.forName("com.wrapper.proxyapplication.WrapperProxyApplication", false, lpparam.classLoader);
 
@@ -79,8 +99,12 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                             onAppLoaded(context, classLoader);
                         }
                     });
+            return;
         } catch (ClassNotFoundException e) {
-            Log.i("DgLabUnlocker", "Possible unpacked app, try hook activity directly");
+            Log.i("DgLabUnlocker", "tencent packer not found, try hook as unpacked app...");
+        }
+
+        try {
             XposedHelpers.findAndHookMethod("com.bjsm.dungeonlab.global.BaseLocalApplication", lpparam.classLoader, "onCreate", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
@@ -89,6 +113,8 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
                     onAppLoaded(context, classLoader);
                 }
             });
+        } catch (Exception e) {
+
         }
     }
 
@@ -185,7 +211,7 @@ public class XposedModuleInit implements IXposedHookLoadPackage, IXposedHookZygo
         // endregion
         // region test features
         Log.i("DgLabUnlocker", "Hook Loading: Testing features...");
-        for(AbstractFeature feature : HookRegistry.featureInstances.values()) {
+        for (AbstractFeature feature : HookRegistry.featureInstances.values()) {
             try {
                 if (feature.isUnsupported())
                     continue;
