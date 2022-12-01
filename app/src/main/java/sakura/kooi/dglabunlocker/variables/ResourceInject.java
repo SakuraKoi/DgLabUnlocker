@@ -20,6 +20,7 @@ public class ResourceInject {
     public static Drawable switchCloseTrack;
     public static Drawable switchOpenTrack;
     public static Drawable buttonBackground;
+    public static Drawable buttonSettingIcon;
 
     public static Drawable checkOn;
     public static Drawable checkOff;
@@ -39,6 +40,7 @@ public class ResourceInject {
             ResourceInject.buttonBackground = modRes.getDrawable(R.drawable.button_yellow);
             ResourceInject.checkOn = modRes.getDrawable(R.drawable.check_on);
             ResourceInject.checkOff = modRes.getDrawable(R.drawable.check_off);
+            ResourceInject.buttonSettingIcon = modRes.getDrawable(R.drawable.icon_settings);
             StatusDialog.resourceInjection = true;
         } catch (Resources.NotFoundException e) {
             ModuleUtils.logError("DgLabUnlocker", "resources cannot be found from XModuleResources, still try inject...", e);

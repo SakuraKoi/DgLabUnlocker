@@ -80,6 +80,23 @@ public class UiUtils {
         return button;
     }
 
+    public static TextView createSettingButton(Context context, View.OnClickListener listener) {
+        TextView view = new TextView(context);
+        view.setPadding( dpToPx(view, 8), dpToPx(view, 3), dpToPx(view, 8), dpToPx(view, 3));
+        if (StatusDialog.resourceInjection) {
+            view.setBackground(ResourceInject.buttonSettingIcon.getConstantState().newDrawable());
+            view.setWidth(dpToPx(view, 24));
+            view.setHeight(dpToPx(view, 24));
+        } else {
+            view.setBackgroundResource(android.R.drawable.btn_default);
+            view.setText("设置");
+        }
+        view.setGravity(Gravity.CENTER);
+        view.setOnClickListener(listener);
+        return view;
+    }
+
+
     public static TextView createButton(Context context, String title, View.OnClickListener listener) {
         TextView view = new TextView(context);
         view.setPadding( dpToPx(view, 8), dpToPx(view, 3), dpToPx(view, 8), dpToPx(view, 3));

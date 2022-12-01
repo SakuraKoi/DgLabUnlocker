@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 
 import sakura.kooi.dglabunlocker.features.AbstractFeature;
 import sakura.kooi.dglabunlocker.features.ToggleableFeature;
+import sakura.kooi.dglabunlocker.features.WithExtraConfiguration;
 import sakura.kooi.dglabunlocker.utils.UiUtils;
 import sakura.kooi.dglabunlocker.variables.HookRegistry;
 import sakura.kooi.dglabunlocker.variables.ModuleSettings;
@@ -39,6 +41,13 @@ public class ConfigurationDialog extends Dialog {
     private static void createSettingSwitch(LinearLayout container, ToggleableFeature feature) {
         LinearLayout layout = new LinearLayout(container.getContext());
         layout.setPadding(0, UiUtils.dpToPx(layout, 6), 0, 0);
+        if (feature instanceof WithExtraConfiguration) {
+            View extraConfigButton = ((WithExtraConfiguration) feature).createSettingButton(container.getContext());
+            layout.addView(extraConfigButton);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) extraConfigButton.getLayoutParams();
+            layoutParams.rightMargin = UiUtils.dpToPx(layout, 6);
+            extraConfigButton.setLayoutParams(layoutParams);
+        }
         TextView textTitle = UiUtils.createTextView(container.getContext());
         Switch settingSwitch = UiUtils.createSwitch(container.getContext());
         TextView textDesc = UiUtils.createTextView(container.getContext(), 0xffdfd2a5);
