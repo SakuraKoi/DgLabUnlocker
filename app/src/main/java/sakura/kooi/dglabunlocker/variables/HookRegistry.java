@@ -16,6 +16,7 @@ import sakura.kooi.dglabunlocker.features.toggleable.FeatureEnforceRemoteMaxStre
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureUnlockRemoteMax;
 import sakura.kooi.dglabunlocker.features.toggleable.FeatureWebsocketRpc;
 import sakura.kooi.dglabunlocker.hooks.AbstractHook;
+import sakura.kooi.dglabunlocker.hooks.preload.HookDisableForceUpdate;
 import sakura.kooi.dglabunlocker.hooks.preload.HookUpdateClientSide;
 
 public class HookRegistry {
@@ -33,6 +34,7 @@ public class HookRegistry {
             FeatureImportWave.class
     );
     public static final List<Class<? extends AbstractHook<?>>> preloadHooks = List.of(
+            HookDisableForceUpdate.class,
             HookUpdateClientSide.class
     );
 
