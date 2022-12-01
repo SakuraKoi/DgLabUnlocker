@@ -64,17 +64,17 @@ public class FeatureImportWave extends ClickableFeature implements HookActivityR
             if (data != null) {
                 Uri uri = data.getData();
                 try {
-                    ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
-                    FileInputStream fileInputStream = new FileInputStream(pfd.getFileDescriptor());
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                    int nRead;
-                    byte[] block = new byte[16384];
-                    while ((nRead = fileInputStream.read(block, 0, block.length)) != -1) {
-                        buffer.write(block, 0, nRead);
+                    try (ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r")) {
+                        try (FileInputStream fileInputStream = new FileInputStream(pfd.getFileDescriptor())) {
+                            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                            int nRead;
+                            byte[] block = new byte[16384];
+                            while ((nRead = fileInputStream.read(block, 0, block.length)) != -1) {
+                                buffer.write(block, 0, nRead);
+                            }
+                            handleImportedData(buffer.toByteArray());
+                        }
                     }
-                    fileInputStream.close();
-                    pfd.close();
-                    handleImportedData(buffer.toByteArray());
                 } catch (IOException e) {
                     Log.e("DgLabUnlocker", "An error occurred while reading wave list", e);
                     Toast.makeText(context, "读取波形列表失败", Toast.LENGTH_LONG).show();

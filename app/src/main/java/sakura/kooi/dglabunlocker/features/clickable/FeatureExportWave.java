@@ -115,12 +115,12 @@ public class FeatureExportWave extends ClickableFeature implements HookActivityR
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String pendingJson = gson.toJson(cleanupWaves(gson, pendingWaves));
                 try {
-                    ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-                    FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-                    fileOutputStream.write(pendingJson.getBytes(StandardCharsets.UTF_8));
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                    pfd.close();
+                    try (ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w")) {
+                        try (FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor())) {
+                            fileOutputStream.write(pendingJson.getBytes(StandardCharsets.UTF_8));
+                            fileOutputStream.flush();
+                        }
+                    }
                     Toast.makeText(context, "成功导出了 " + pendingWaves.size() + " 个波形", Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     Log.e("DgLabUnlocker", "An error occurred while writing wave list", e);
