@@ -8,6 +8,7 @@ exemptLabels:
   - 'Status: In Progress'
   - 'Status: Unplanned'
   - 'Status: Needs review'
+  - 'Type: Pinned'
 # Label to use when marking an issue as stale
 staleLabel: 'Status: Archived'
 # Comment to post when marking an issue as stale. Set to `false` to disable
