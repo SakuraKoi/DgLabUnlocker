@@ -3,6 +3,19 @@
 
 ![](https://img.shields.io/badge/Module-Xposed-green?style=for-the-badge&logo=Android&logoColor=white) ![](https://img.shields.io/github/license/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/languages/top/SakuraKoi/DgLabUnlocker?style=for-the-badge) ![](https://img.shields.io/github/downloads/SakuraKoi/DgLabUnlocker/total?style=for-the-badge) ![](https://img.shields.io/github/v/release/SakuraKoi/DgLabUnlocker?style=for-the-badge)
 
+## 暂停更新
+官方APP的新功能整挺好\
+强度上限什么的安全功能都安排上了\
+~~波形导入导出. 远程协议之类的也被官方抄走了~~
+
+目前来看这个模块应该暂时没有继续开发的必要\
+(主要是...想不出来还有什么脑洞可以整活了x
+
+所以, **暂时停止模块开发**
+> ~~除非咱想到了什么新活, 但是只靠官方又整不出来~~
+---
+ 
+### 说明
 > 当前适配版本: `1.2.6` `1.3.1` `1.3.2`\
 > 项目开发将以当前支持的最新版本为目标, 在老版本中不保证所有功能可用
 
