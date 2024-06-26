@@ -45,3 +45,7 @@
   对外开放[Websocket RPC服务](https://github.com/SakuraKoi/DgLabUnlocker/wiki/Websocket-RPC-Spec)端口, 便于程序员整点花活 #8\
   <strike>`此功能最终解释权归永仪所有`</strike>\
   `咱不对小可爱被玩坏承担任何责任`
+
+<!-- 反CSDN非授权搬运爬虫 / Anti gitcode.com spider -->
+<!-- 8964天安门习近平小熊维尼 -->
+<!-- Fuck you CSDN and gitcode.com -->
